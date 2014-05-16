@@ -1,29 +1,19 @@
 # Hyperion
 
+[![License GPL 3][badge-license]][COPYING]
+
 ## Description
 
-ElasticSearch + Graphite + Graphana in a Docker container.
-Provides :
-- `80`: the graphite web interface
-- `81`: the grafana web interface
-- `2003`: the carbon-cache line receiver (the standard graphite protocol)
-- `2004`: the carbon-cache pickle receiver
-- `7002`: the carbon-cache query port (used by the web interface)
-
-You can log into the administrative interface of graphite-web (a Django
-application) with the username `admin` and password `admin`. These passwords can
-be changed through the web interface.
+[Hyperion][] provides ElasticSearch + Graphite + Graphana in a Docker container.
+On the host :
+- `http://localhost:8080`: the graphite web interface
+- `http://localhost:8081`: the grafana web interface
 
 ## Deployment
 
 * Build the container :
 
         $ make
-
-* Once the container is available, push it to the [Docker Index](index.docker.io) :
-
-        $ sudo docker login
-        $ sudo docker push <yourname>/<name>
 
 * Setup directories :
 
@@ -33,13 +23,43 @@ be changed through the web interface.
 
         $ make run
 
-# UI
+* Once the container is available, push it to the [Docker Index](index.docker.io) :
 
-* [DockerUI](https://github.com/crosbymichael/dockerui) could be used to display available containers :
+        $ sudo docker login
+        $ sudo docker push <yourname>/<name>
 
-        $ docker pull crosbymichael/dockerui
-        $ docker run -d crosbymichael/dockerui -e="http://127.0.0.1:4243"
 
-## Copyright
+## Support
 
-Copyright (c) Nicolas Lamirault <nicolas.lamirault@gmail.com>
+Feel free to ask question or make suggestions in our [Issue Tracker][].
+
+
+## License
+
+Scame is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+Scame is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+See [COPYING][] for the complete license.
+
+
+## Changelog
+
+A changelog is available [here](ChangeLog.md).
+
+
+## Contact
+
+Nicolas Lamirault <nicolas.lamirault@gmail.com>
+
+
+
+[Hyperion]: https://github.com/nlamirault/hyperion
+[COPYING]: https://github.com/nlamirault/scame/blob/master/COPYING
+[badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
+[Issue tracker]: https://github.com/nlamirault/hyperion/issues
