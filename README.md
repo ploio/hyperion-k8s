@@ -12,6 +12,22 @@ On the host :
 
 ## Deployment
 
+* Get the container from the Docker index :
+
+        $ docker pull nlamirault/hyperion
+
+* Launch the container :
+
+        $ sudo docker run -d \
+            -v /var/docker/$(NAME)/elasticsearch:/var/lib/elasticsearch \
+		    -v /var/docker/$(NAME)/graphite:/var/lib/graphite/storage/whisper \
+		    -v /var/docker/$(NAME)/supervisor:/var/log/supervisor \
+		    -p 8081:81 -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
+		    --name hyperion nlamirault/hyperion
+
+
+## Development
+
 * Build the container :
 
         $ make
