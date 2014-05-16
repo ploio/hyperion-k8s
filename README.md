@@ -4,7 +4,8 @@
 
 ## Description
 
-[Hyperion][] provides ElasticSearch + Graphite + Graphana in a Docker container.
+[Hyperion][] provides ElasticSearch + Graphite + StatsD + Graphana in a
+[Docker][] container.
 On the host :
 - `http://localhost:8080`: the graphite web interface
 - `http://localhost:8081`: the grafana web interface
@@ -60,6 +61,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 
 [Hyperion]: https://github.com/nlamirault/hyperion
+[Docker]: https://www.docker.io
 [COPYING]: https://github.com/nlamirault/scame/blob/master/COPYING
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
