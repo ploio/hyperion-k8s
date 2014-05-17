@@ -10,9 +10,11 @@
 * [Graphite][]
 * [Carbon][]
 * [Statsd][]
-in a [Docker][] container. On the host :
-- `http://localhost:8080`: the graphite web interface
-- `http://localhost:8081`: the grafana web interface
+
+in a [Docker][] container.
+On the host :
+* `http://localhost:8080`: the graphite web interface
+* `http://localhost:8081`: the grafana web interface
 
 ## Deployment
 
