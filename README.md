@@ -4,9 +4,13 @@
 
 ## Description
 
-[Hyperion][] provides ElasticSearch + Graphite + StatsD + Graphana in a
-[Docker][] container.
-On the host :
+[Hyperion][] provides :
+* [Nginx][]
+* [Elasticsearch][]
+* [Graphite][]
+* [Carbon][]
+* [Statsd][]
+in a [Docker][] container. On the host :
 - `http://localhost:8080`: the graphite web interface
 - `http://localhost:8081`: the grafana web interface
 
@@ -19,11 +23,23 @@ On the host :
 * Launch the container :
 
         $ sudo docker run -d \
-            -v /var/docker/$(NAME)/elasticsearch:/var/lib/elasticsearch \
-		    -v /var/docker/$(NAME)/graphite:/var/lib/graphite/storage/whisper \
-		    -v /var/docker/$(NAME)/supervisor:/var/log/supervisor \
+            -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch \
+		    -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper \
+		    -v /var/docker/hyperion/supervisor:/var/log/supervisor \
 		    -p 8081:81 -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
 		    --name hyperion nlamirault/hyperion
+
+* [Docker][] commands :
+```bash
+docker attach hyperion # attaches to the running container
+<CTL-P><CTL-Q>         # detaches from the container
+
+docker stop hyperion   # stops the container
+
+docker start hyperion  # starts the container (after it's been stopped)
+
+docker rm hyperion     # removes the container
+```
 
 
 ## Development
@@ -81,3 +97,9 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [COPYING]: https://github.com/nlamirault/scame/blob/master/COPYING
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
+
+[Nginx]: http://nginx.org
+[Elasticsearch]: http://www.elasticsearch.org/
+[Graphite]: http://graphite.readthedocs.org/en/latest
+[Carbon]: http://graphite.readthedocs.org/en/latest/carbon-daemons.html
+[Statsd]: https://github.com/etsy/statsd/wiki
