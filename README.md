@@ -14,8 +14,13 @@
 in a [Docker][] container.
 On the host :
 * `http://localhost:8080`: the graphite web interface
-* `http://localhost:8081`: the grafana web interface
+* `http://localhost:8080/elasticsearch`: the Elasticsearch web interface
+* `http://localhost:8080/grafana`: the grafana web interface
 
+Some [Elasticsearch][] plugins are available:
+* [ElasticSearchHead][]: `http://localhost:8082/_plugin/head/`
+* [ElasticHQ][]: `http://localhost:8082/_plugin/HQ/`
+* [Kopf][]: `http://localhost:8082/_plugin/kopf`
 
 ## Deployment
 
@@ -108,3 +113,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Graphite]: http://graphite.readthedocs.org/en/latest
 [Carbon]: http://graphite.readthedocs.org/en/latest/carbon-daemons.html
 [Statsd]: https://github.com/etsy/statsd/wiki
+
+[ElasticSearchHead]: http://mobz.github.io/elasticsearch-head/
+[ElasticHQ]: http://www.elastichq.org
+[Kopf]: https://github.com/lmenezes/elasticsearch-kopf

@@ -41,6 +41,6 @@ run:
 		-v $(DOCKER_HYPERION)/graphite:/var/lib/graphite/storage/whisper \
 		-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
 		-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
-		-p 8080:80 \
+		-p 8080:80 -p 8082:9200 \
 		-p 8125:8125/udp -p 2003:2003/tcp \
 		--name $(NAME) $(CONTAINER)
