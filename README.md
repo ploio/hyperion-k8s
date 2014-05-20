@@ -39,6 +39,13 @@ Some [Elasticsearch][] plugins are available:
 		    -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
 		    --name hyperion nlamirault/hyperion
 
+* Test using the [Statsd][] client [hyperion_client.py][]
+
+        $ ./hyperion_client.py
+
+See metrics on `http://localhost:8082/grafana`.
+
+
 * [Docker][] commands :
 ```bash
 docker attach hyperion # attaches to the running container
@@ -117,3 +124,5 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [ElasticSearchHead]: http://mobz.github.io/elasticsearch-head/
 [ElasticHQ]: http://www.elastichq.org
 [Kopf]: https://github.com/lmenezes/elasticsearch-kopf
+
+[hyperion_client]: https://github.com/nlamirault/hyperion/blob/master/client/hyperion_client.py
