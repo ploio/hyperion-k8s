@@ -16,7 +16,7 @@ run apt-get -y update
 run apt-get -y install python-django-tagging python-simplejson python-memcache \
                python-ldap python-cairo python-django python-twisted   \
                python-pysqlite2 python-support python-pip gunicorn     \
-	       supervisor nginx-light nodejs git wget curl collectd
+	       supervisor nginx-light nodejs git wget curl
 
 # Elasticsearch
 # fake fuse
@@ -37,9 +37,6 @@ run /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
 
 # Install statsd
 run mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
-
-# Install collectd
-RUN adduser --system --group --no-create-home collectd
 
 # Install Whisper, Carbon and Graphite-Web
 run pip install whisper
@@ -65,9 +62,6 @@ add ./elasticsearch/run /usr/local/bin/run_elasticsearch
 
 # statsd
 add ./statsd/config.js /src/statsd/config.js
-
-# collectd
-ADD collectd/collectd.conf /etc/collectd/
 
 # Whisper, Carbon and Graphite-Web
 add ./graphite/initial_data.json /var/lib/graphite/webapp/graphite/initial_data.json
