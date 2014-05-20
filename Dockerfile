@@ -31,6 +31,9 @@ run  apt-get install libfuse2 &&\
 run cd ~ && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.1.1.deb
 run cd ~ && dpkg -i elasticsearch-1.1.1.deb && rm elasticsearch-1.1.1.deb
 run apt-get -y install openjdk-7-jre
+run /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
+run /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
+run /usr/share/elasticsearch/bin/plugin -install karmi/elasticsearch-paramedic
 
 # Install statsd
 run mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
