@@ -16,6 +16,7 @@ On the host :
 * `http://localhost:8080`: the graphite web interface
 * `http://localhost:8081`: the grafana web interface
 
+
 ## Deployment
 
 * Get the container from the Docker index :
@@ -24,11 +25,13 @@ On the host :
 
 * Launch the container :
 
+        $ sudo mkdir -p /var/docker/hyperion/{elasticsearch,graphite,supervisor,nginx}
         $ sudo docker run -d \
             -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch \
 		    -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper \
 		    -v /var/docker/hyperion/supervisor:/var/log/supervisor \
-		    -p 8081:81 -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
+   		    -v /var/docker/hyperion/nginx:/var/log/nginx \
+		    -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
 		    --name hyperion nlamirault/hyperion
 
 * [Docker][] commands :

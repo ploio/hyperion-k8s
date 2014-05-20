@@ -82,30 +82,52 @@ run cd /var/lib/graphite/webapp/graphite && python manage.py syncdb --noinput
 add ./grafana/config.js /src/grafana/config.js
 #add ./grafana/scripted.json /src/grafana/app/dashboards/default.json
 
-# Supervisord
+# Nginx
 add ./nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Supervisord
 add ./supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Public
+# Ports
 # ------
 
 # graphite
-expose	81
+expose	8000
+
 # grafana
-expose  80
+#expose  81
+
+# nginx
+expose 80
+
+# elasticsearch HTTP
+expose 9200
+# elasticsearch transport
+EXPOSE 9300
+
 # Carbon line receiver port
 expose	2003
 # Carbon pickle receiver port
 expose	2004
 # Carbon cache query port
 expose	7002
+
 # Statsd UDP port
 expose	8125/udp
 # Statsd Management port
 expose	8126
 
+
+# Volumes
+# --------
+
 volume ["/var/lib/elasticsearch"]
 volume ["/var/lib/storage/whisper"]
 volume ["/var/lib/log/supervisor"]
+volume ["/var/lib/log/nginx"]
+
+
+# Launch
+# -------
 
 cmd ["/usr/bin/supervisord"]

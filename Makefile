@@ -15,25 +15,32 @@
 
 NAME="hyperion"
 CONTAINER="nlamirault/hyperion"
+DOCKER_HYPERION="/var/docker/$(NAME)"
 
 all: build
 
-clean:
-	sudo docker kill $(NAME)
-	sudo docker rm $(NAME)
-
 setup:
-	sudo mkdir -p /var/docker/$(NAME)/elasticsearch
-	sudo mkdir -p /var/docker/$(NAME)/graphite
-	sudo mkdir -p /var/docker/$(NAME)/supervisor
+	sudo mkdir -p $(DOCKER_HYPERION)/elasticsearch
+	sudo mkdir -p $(DOCKER_HYPERION)/graphite
+	sudo mkdir -p $(DOCKER_HYPERION)/supervisor
+	sudo mkdir -p $(DOCKER_HYPERION)/nginx
 
 build:
 	sudo docker build -t $(CONTAINER) .
 
+stop:
+	sudo docker kill $(NAME)
+
+clean: stop
+	sudo docker rm $(NAME)
+
 run:
+	sudo chmod -R 777 $(DOCKER_HYPERION)/elasticsearch
 	sudo docker run -d \
-		-v /var/docker/$(NAME)/elasticsearch:/var/lib/elasticsearch \
-		-v /var/docker/$(NAME)/graphite:/var/lib/graphite/storage/whisper \
-		-v /var/docker/$(NAME)/supervisor:/var/log/supervisor \
-		-p 8081:81 -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
+		-v $(DOCKER_HYPERION)/elasticsearch:/var/lib/elasticsearch \
+		-v $(DOCKER_HYPERION)/graphite:/var/lib/graphite/storage/whisper \
+		-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
+		-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
+		-p 8080:80 \
+		-p 8125:8125/udp -p 2003:2003/tcp \
 		--name $(NAME) $(CONTAINER)
