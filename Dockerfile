@@ -13,9 +13,8 @@ RUN apt-get -y install software-properties-common
 RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get -y update
 
-RUN apt-get -y install python-django-tagging python-simplejson python-memcache \
-               python-ldap python-cairo python-django python-twisted \
-               python-pysqlite2 python-support python-pip gunicorn \
+RUN apt-get -y install build-essential python-dev python-pip python-virtualenv \
+               libffi-dev libcairo2 python-pip gunicorn \
 	       supervisor nginx-light nodejs git wget curl
 
 # Elasticsearch
@@ -38,6 +37,10 @@ RUN /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
 # Install statsd
 RUN mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
 
+# Install Graphite dependencies
+RUN pip install 'Twisted<12.0'
+RUN pip install django==1.4.9 django-tagging
+
 # Install Whisper, Carbon and Graphite-Web
 RUN pip install whisper
 RUN pip install --install-option="--prefix=/var/lib/graphite" \
@@ -59,7 +62,7 @@ RUN mkdir -p /src/grafana && cd /src/grafana && \
 ADD ./hyperion /src/hyperion
 
 # Elasticsearch
-ADD ./elasticsearch/RUN /usr/local/bin/RUN_elasticsearch
+ADD ./elasticsearch/run /usr/local/bin/run_elasticsearch
 #RUN chown -R elasticsearch:elasticsearch /var/lib/elasticsearch
 #RUN mkdir -p /var/lib/elasticsearch/elasticsearch && chown elasticsearch:elasticsearch /tmp/elasticsearch
 
