@@ -96,6 +96,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Nginx]: http://nginx.org
 [Elasticsearch]: http://www.elasticsearch.org/
 [Graphite]: http://graphite.readthedocs.org/en/latest
+[Grafana]: http://grafana.org/
 [Carbon]: http://graphite.readthedocs.org/en/latest/carbon-daemons.html
 [Statsd]: https://github.com/etsy/statsd/wiki
 
