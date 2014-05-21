@@ -14,7 +14,7 @@ RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get -y update
 
 RUN apt-get -y install build-essential python-dev python-pip python-virtualenv \
-               libffi-dev libcairo2 python-pip gunicorn \
+               libffi-dev libcairo2 python-cairo gunicorn \
 	       supervisor nginx-light nodejs git wget curl
 
 # Elasticsearch

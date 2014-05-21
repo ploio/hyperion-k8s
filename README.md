@@ -1,10 +1,11 @@
 # Hyperion
 
 [![License GPL 3][badge-license]][COPYING]
+[![wercker status](https://app.wercker.com/status/a6dff1d550ed9c6aa3c466045bf1d51f/s "wercker status")](https://app.wercker.com/project/bykey/a6dff1d550ed9c6aa3c466045bf1d51f)
 
 ## Description
 
-[Hyperion][] is a [Docker][] image, which provides on the host :
+[Hyperion][] is a [Docker][] image (Ubuntu 14.04 based), which provides on the host :
 * `http://localhost:8080`: [Hyperion][] web description
 * `http://localhost:8080/grafana`: the [Grafana][] web interface
 * `http://localhost:8080/graphite`: the [Graphite][] web interface
