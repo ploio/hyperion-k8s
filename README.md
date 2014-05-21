@@ -104,4 +104,4 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [ElasticHQ]: http://www.elastichq.org
 [Kopf]: https://github.com/lmenezes/elasticsearch-kopf
 
-[hyperion_client]: https://github.com/nlamirault/hyperion/blob/master/client/hyperion_client.py
+[hyperion_client.py]: https://github.com/nlamirault/hyperion/blob/master/client/hyperion_client.py
