@@ -54,7 +54,7 @@ See metrics on `http://localhost:8082/grafana`.
 
         $ make run
 
-* [Hyperion][] is a *Trusted Build* on the [Docker Index][https://index.docker.io/u/nlamirault/hyperion/]
+* [Hyperion][] is a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion)
 
 
 ## Support
