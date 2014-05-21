@@ -1,21 +1,21 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
-RUN echo 'deb http://us.archive.ubuntu.com/ubuntu/ precise universe' >> /etc/apt/sources.list
+# RUN echo 'deb http://us.archive.ubuntu.com/ubuntu/ precise universe' >> /etc/apt/sources.list
 RUN apt-get -y update
 RUN apt-get -y upgrade
 
-#RUN apt-get -y install software-properties-common
 # Install package  that provides ADD-apt-repository
-RUN apt-get install -y python-software-properties
+RUN apt-get -y install software-properties-common
+#RUN apt-get install -y python-software-properties
 
 # Dependencies
-RUN ADD-apt-repository -y ppa:chris-lea/node.js
+RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get -y update
 
 RUN apt-get -y install python-django-tagging python-simplejson python-memcache \
-               python-ldap python-cairo python-django python-twisted   \
-               python-pysqlite2 python-support python-pip gunicorn     \
+               python-ldap python-cairo python-django python-twisted \
+               python-pysqlite2 python-support python-pip gunicorn \
 	       supervisor nginx-light nodejs git wget curl
 
 # Elasticsearch
