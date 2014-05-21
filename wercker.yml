@@ -1,0 +1,15 @@
+box: wercker-labs/docker
+build:
+    steps:
+        - script:
+            name: docker version
+            code: |
+              sudo docker version
+        - script:
+            name: docker build
+            code: |
+              make
+        - script:
+            name: list images
+            code: |
+                sudo docker images
