@@ -54,10 +54,7 @@ See metrics on `http://localhost:8082/grafana`.
 
         $ make run
 
-* Once the container is available, push it to the [Docker Index](index.docker.io) :
-
-        $ sudo docker login
-        $ sudo docker push <yourname>/<name>
+* [Hyperion][] is a *Trusted Build* on the [Docker Index](index.docker.io): `https://index.docker.io/u/nlamirault/hyperion/`
 
 
 ## Support
