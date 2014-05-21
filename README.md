@@ -15,6 +15,8 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://localhost:8082/_plugin/HQ/`
 * [Kopf][]: `http://localhost:8082/_plugin/kopf`
 
+Is's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion)
+
 ## Deployment
 
 * Get the container from the Docker index :
@@ -53,8 +55,6 @@ See metrics on `http://localhost:8082/grafana`.
 * Start the container :
 
         $ make run
-
-* [Hyperion][] is a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion)
 
 
 ## Support
