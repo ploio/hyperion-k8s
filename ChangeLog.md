@@ -1,8 +1,9 @@
 Hyperion ChangeLog
 ======================
 
-# Version 0.2.0 (IN PROGRESS)
+# Version 0.2.0 (2014-05-21)
 
+- Add Hyperion description file
 - Add ElasticSearch plugins
 - Configure Nginx
 - Add a Statsd client to sent metric to hyperion

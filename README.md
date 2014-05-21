@@ -4,18 +4,11 @@
 
 ## Description
 
-[Hyperion][] provides :
-* [Nginx][]
-* [Elasticsearch][]
-* [Graphite][]
-* [Carbon][]
-* [Statsd][]
-
-in a [Docker][] container.
-On the host :
-* `http://localhost:8080`: the graphite web interface
-* `http://localhost:8080/elasticsearch`: the Elasticsearch web interface
-* `http://localhost:8080/grafana`: the grafana web interface
+[Hyperion][] is a [Docker][] image, which provides on the host :
+* `http://localhost:8080`: [Hyperion][] web description
+* `http://localhost:8080/grafana`: the [Grafana][] web interface
+* `http://localhost:8080/graphite`: the [Graphite][] web interface
+* `http://localhost:8080/elasticsearch`: the [Elasticsearch][] web interface
 
 Some [Elasticsearch][] plugins are available:
 * [ElasticSearchHead][]: `http://localhost:8082/_plugin/head/`
@@ -36,7 +29,8 @@ Some [Elasticsearch][] plugins are available:
 		    -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper \
 		    -v /var/docker/hyperion/supervisor:/var/log/supervisor \
    		    -v /var/docker/hyperion/nginx:/var/log/nginx \
-		    -p 8080:80 -p 8125:8125/udp -p 2003:2003/tcp \
+		    -p 8080:80 -p 8082:9200 \
+            -p 8125:8125/udp -p 2003:2003/tcp \
 		    --name hyperion nlamirault/hyperion
 
 * Test using the [Statsd][] client [hyperion_client.py][]
@@ -44,19 +38,6 @@ Some [Elasticsearch][] plugins are available:
         $ ./hyperion_client.py
 
 See metrics on `http://localhost:8082/grafana`.
-
-
-* [Docker][] commands :
-```bash
-docker attach hyperion # attaches to the running container
-<CTL-P><CTL-Q>         # detaches from the container
-
-docker stop hyperion   # stops the container
-
-docker start hyperion  # starts the container (after it's been stopped)
-
-docker rm hyperion     # removes the container
-```
 
 
 ## Development
@@ -67,7 +48,7 @@ docker rm hyperion     # removes the container
 
 * Setup directories :
 
-        $ sudo mkdir -p /var/docker/hyperion/{elasticsearch,graphite,supervisor}
+        $ sudo mkdir -p /var/docker/hyperion/{elasticsearch,graphite,supervisor,nginx}
 
 * Start the container :
 
