@@ -15,7 +15,7 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://localhost:8082/_plugin/HQ/`
 * [Kopf][]: `http://localhost:8082/_plugin/kopf`
 
-Is's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion)
+It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion)
 
 ## Deployment
 
