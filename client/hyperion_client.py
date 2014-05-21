@@ -78,6 +78,5 @@ while True:
             bits = (threshold, name)
             message = "Threshold of %s reached for %s" % bits
             print message
-            raven_client.captureMessage(message)
 
     time.sleep(1)
