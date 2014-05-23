@@ -83,7 +83,7 @@ RUN cd /var/lib/graphite/webapp/graphite && python manage.py syncdb --noinput
 
 # Grafana
 ADD ./grafana/config.js /src/grafana/config.js
-ADD ./grafana/hyperion.json /src/grafana/app/dashboards/default.json
+#ADD ./grafana/hyperion.json /src/grafana/app/dashboards/default.json
 
 # Nginx
 ADD ./nginx/nginx.conf /etc/nginx/nginx.conf
