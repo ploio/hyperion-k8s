@@ -122,7 +122,7 @@ ADD ./logstash/nginx.conf /src/logstash/conf.d/nginx.conf
 
 # Kibana
 ADD ./kibana/config.js /src/kibana/config.js
-
+ADD ./kibana/hyperion.json /src/kibana/app/dashboards/default.json
 
 # Ports
 # ------

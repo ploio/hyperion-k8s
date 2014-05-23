@@ -1,7 +1,14 @@
 Hyperion ChangeLog
 ======================
 
-# Version 0.3.0 (IN PROGRESS)
+# Version 0.4.0 (IN PROGRESS)
+
+- Configure Logstash to manage nginx logs
+- Add Kibana
+- Add Logstash
+- Add Redis
+
+# Version 0.3.0 (2014-05-23)
 
 - Add Hyperion default dashboard for Grafana
 - Update base image to Ubuntu 14.04
