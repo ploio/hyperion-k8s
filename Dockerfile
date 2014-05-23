@@ -66,6 +66,12 @@ RUN mkdir -p /src/logstash && \
     wget -q https://download.elasticsearch.org/logstash/logstash/logstash-1.4.1.tar.gz && \
     tar xzf logstash-1.4.1.tar.gz --strip-components=1 && rm logstash-1.4.1.tar.gz
 
+# Install Kibana
+RUN mkdir -p /src/kibana && \
+    cd /src/kibana && \
+    wget -q https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz && \
+    tar xzf kibana-3.1.0.tar.gz --strip-components=1 && rm kibana-3.1.0.tar.gz
+
 
 # Configuration
 # -------------
@@ -113,6 +119,9 @@ ADD ./logstash/hyperion.conf /src/logstash/conf.d/hyperion.conf
 ADD ./logstash/elasticsearch.conf /src/logstash/conf.d/elasticsearch.conf
 ADD ./logstash/nginx.conf /src/logstash/conf.d/nginx.conf
 #ADD ./logstash/indexer.conf /src/logstash/conf.d/indexer.conf
+
+# Kibana
+ADD ./kibana/config.js /src/kibana/config.js
 
 
 # Ports
