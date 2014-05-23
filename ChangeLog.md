@@ -1,6 +1,12 @@
 Hyperion ChangeLog
 ======================
 
+# Version 0.3.0 (IN PROGRESS)
+
+- Add Hyperion default dashboard for Grafana
+- Update base image to Ubuntu 14.04
+- Add Wercker configuration
+
 # Version 0.2.0 (2014-05-21)
 
 - Add Hyperion description file
