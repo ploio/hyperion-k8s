@@ -13,17 +13,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME="hyperion"
-CONTAINER="nlamirault/hyperion"
-DOCKER_HYPERION="/var/docker/$(NAME)"
+NAME=hyperion
+CONTAINER=nlamirault/hyperion
+DOCKER_HYPERION=/var/docker/$(NAME)
 
 all: build
 
 setup:
+	@echo "Creates $(DOCKER_HYPERION) directories on host"
 	sudo mkdir -p $(DOCKER_HYPERION)/elasticsearch
 	sudo mkdir -p $(DOCKER_HYPERION)/graphite
 	sudo mkdir -p $(DOCKER_HYPERION)/supervisor
 	sudo mkdir -p $(DOCKER_HYPERION)/nginx
+	sudo mkdir -p $(DOCKER_HYPERION)/redis
+	sudo chmod -R 777 $(DOCKER_HYPERION)/elasticsearch
+
+destroy:
+	@echo "Destroying $(DOCKER_HYPERION) directory on host"
+	sudo rm -fr $(DOCKER_HYPERION)
+
+reset: destroy setup
 
 build:
 	sudo docker build -t $(CONTAINER) .
@@ -41,6 +50,7 @@ run:
 		-v $(DOCKER_HYPERION)/graphite:/var/lib/graphite/storage/whisper \
 		-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
 		-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
-		-p 8080:80 -p 8082:9200 \
-		-p 8125:8125/udp -p 2003:2003/tcp \
+		-v $(DOCKER_HYPERION)/redis:/var/lib/redis \
+		-p 8080:80 -p 8082:9200 -p 6379:6379 -p 8126:8126 \
+		-p 8125:8125/udp -p 2003:2003/tcp  \
 		--name $(NAME) $(CONTAINER)
