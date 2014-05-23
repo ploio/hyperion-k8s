@@ -1,0 +1,3 @@
+*.pyc
+.tox/
+hyperion.egg-info/
