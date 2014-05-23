@@ -19,12 +19,20 @@ from hyperiontests import hyperion
 
 class TestElasticsearch(hyperion.HyperionTestCase):
 
-    def test_can_retrieve_elasticsearch_status(self):
-        response = self.http_get("elasticsearch/")
+    def _elasticsearch_request(self, uri):
+        response = self.http_get(uri)
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/json; charset=UTF-8",
                          response.headers.get("Content-Type"))
         content = response.json()
         print(content)
+        return content
+
+    def test_can_retrieve_elasticsearch_status(self):
+        content = self._elasticsearch_request('elasticsearch')
         self.assertEqual(200, content['status'])
         self.assertEqual("1.1.1", content['version']['number'])
+
+    def test_can_retrieve_nodes(self):
+        content = self._elasticsearch_request('elasticsearch/_nodes/_local')
+        self.assertEqual("elasticsearch", content['cluster_name'])
