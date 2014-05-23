@@ -55,11 +55,16 @@ RUN mkdir -p /src/grafana && cd /src/grafana && \
     wget http://grafanarel.s3.amazonaws.com/grafana-1.5.4.tar.gz && \
     tar xzvf grafana-1.5.4.tar.gz --strip-components=1 && rm grafana-1.5.4.tar.gz
 
-
 # Install Redis
 RUN apt-get install -y redis-server
 RUN mkdir -p /src/redis
 RUN mkdir -p /var/lib/redis
+
+# Install Logstash
+RUN mkdir -p /src/logstash && \
+    cd /src/logstash && \
+    wget -q https://download.elasticsearch.org/logstash/logstash/logstash-1.4.1.tar.gz && \
+    tar xzf logstash-1.4.1.tar.gz --strip-components=1 && rm logstash-1.4.1.tar.gz
 
 
 # Configuration
@@ -70,6 +75,7 @@ ADD ./hyperion /src/hyperion
 
 # Elasticsearch
 ADD ./elasticsearch/run /usr/local/bin/run_elasticsearch
+ADD ./elasticsearch/logging.yml /usr/share/elasticsearch/config
 #RUN chown -R elasticsearch:elasticsearch /var/lib/elasticsearch
 #RUN mkdir -p /var/lib/elasticsearch/elasticsearch && chown elasticsearch:elasticsearch /tmp/elasticsearch
 
@@ -99,9 +105,14 @@ ADD ./nginx/nginx.conf /etc/nginx/nginx.conf
 ADD ./supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Redis
-# Redis
 ADD ./redis/redis.conf /src/redis/redis.conf
 
+# Logstash
+RUN mkdir /src/logstash/conf.d
+ADD ./logstash/hyperion.conf /src/logstash/conf.d/hyperion.conf
+ADD ./logstash/elasticsearch.conf /src/logstash/conf.d/elasticsearch.conf
+ADD ./logstash/nginx.conf /src/logstash/conf.d/nginx.conf
+#ADD ./logstash/indexer.conf /src/logstash/conf.d/indexer.conf
 
 
 # Ports
@@ -144,6 +155,7 @@ VOLUME ["/var/lib/elasticsearch"]
 VOLUME ["/var/lib/storage/whisper"]
 VOLUME ["/var/lib/log/supervisor"]
 VOLUME ["/var/lib/log/nginx"]
+VOLUME ["/var/lib/redis"]
 
 
 # Launch
