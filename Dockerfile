@@ -55,6 +55,13 @@ RUN mkdir -p /src/grafana && cd /src/grafana && \
     wget http://grafanarel.s3.amazonaws.com/grafana-1.5.4.tar.gz && \
     tar xzvf grafana-1.5.4.tar.gz --strip-components=1 && rm grafana-1.5.4.tar.gz
 
+
+# Install Redis
+RUN apt-get install -y redis-server
+RUN mkdir -p /src/redis
+RUN mkdir -p /var/lib/redis
+
+
 # Configuration
 # -------------
 
@@ -91,6 +98,12 @@ ADD ./nginx/nginx.conf /etc/nginx/nginx.conf
 # Supervisord
 ADD ./supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Redis
+# Redis
+ADD ./redis/redis.conf /src/redis/redis.conf
+
+
+
 # Ports
 # ------
 
@@ -119,6 +132,9 @@ EXPOSE	7002
 EXPOSE	8125/udp
 # Statsd Management port
 EXPOSE	8126
+
+# Redis
+EXPOSE 6379
 
 
 # Volumes
