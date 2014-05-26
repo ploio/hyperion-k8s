@@ -20,34 +20,32 @@ It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamiraul
 
 ## Deployment
 
-* Get the container from the Docker index :
+Get the container from the Docker index and launch it (Cf [Docker](http://docs.docker.io/) documentation).
 
-        $ docker pull nlamirault/hyperion
+You could use this [script](client/hyperion_client.py) to manage Hyperion container:
+```bash
+$ client/hyperion.sh help
+Usage: client/hyperion.sh <command>
+Commands:
+  pull      :    Pull the Hyperion image from the registry
+  start     :    Start Hyperion container
+  stop      :    Stop Hyperion container
+  help      :    Display this help
+```
 
-* Launch the container :
-
-        $ sudo mkdir -p /var/docker/hyperion/{elasticsearch,graphite,supervisor,nginx}
-        $ sudo docker run -d \
-            -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch \
-		    -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper \
-		    -v /var/docker/hyperion/supervisor:/var/log/supervisor \
-   		    -v /var/docker/hyperion/nginx:/var/log/nginx \
-		    -p 8080:80 -p 8082:9200 \
-            -p 8125:8125/udp -p 2003:2003/tcp \
-		    --name hyperion nlamirault/hyperion
-
-* Test using the [Statsd][] client [hyperion_client.py][]
+* A simple [Statsd][] client [hyperion_client.py](client/hyperion_client.py) to check [Hyperion][] installation :
 
         $ ./hyperion_client.py
 
-See metrics on `http://localhost:8082/grafana`.
+See metrics on `http://localhost:9090/grafana`.
 
+* A [Redis][] database is provided. So you could use [log shippers](http://cookbook.logstash.net/recipes/log-shippers) to sent logs to [Hyperion][].
 
 ## Development
 
 * Build the container :
 
-        $ make
+        $ make clean && make
 
 * Setup directories :
 
@@ -55,7 +53,11 @@ See metrics on `http://localhost:8082/grafana`.
 
 * Start the container :
 
-        $ make run
+        $ make start
+
+* Launch unit tests :
+
+        $ tox
 
 
 ## Support
@@ -89,20 +91,18 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 
 [Hyperion]: https://github.com/nlamirault/hyperion
-[Docker]: https://www.docker.io
 [COPYING]: https://github.com/nlamirault/scame/blob/master/COPYING
-[badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
 
+[badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
+
+[Docker]: https://www.docker.io
 [Nginx]: http://nginx.org
 [Elasticsearch]: http://www.elasticsearch.org/
 [Graphite]: http://graphite.readthedocs.org/en/latest
 [Grafana]: http://grafana.org/
 [Carbon]: http://graphite.readthedocs.org/en/latest/carbon-daemons.html
 [Statsd]: https://github.com/etsy/statsd/wiki
-
 [ElasticSearchHead]: http://mobz.github.io/elasticsearch-head/
 [ElasticHQ]: http://www.elastichq.org
 [Kopf]: https://github.com/lmenezes/elasticsearch-kopf
-
-[hyperion_client.py]: https://github.com/nlamirault/hyperion/blob/master/client/hyperion_client.py
