@@ -37,20 +37,11 @@ reset: destroy setup
 build:
 	sudo docker build -t $(CONTAINER) .
 
+start:
+	client/hyperion.sh start
+
 stop:
-	sudo docker kill $(NAME)
+	client/hyperion.sh stop
 
-clean: stop
-	sudo docker rm $(NAME)
-
-run:
-	sudo chmod -R 777 $(DOCKER_HYPERION)/elasticsearch
-	sudo docker run -d \
-		-v $(DOCKER_HYPERION)/elasticsearch:/var/lib/elasticsearch \
-		-v $(DOCKER_HYPERION)/graphite:/var/lib/graphite/storage/whisper \
-		-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
-		-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
-		-v $(DOCKER_HYPERION)/redis:/var/lib/redis \
-		-p 8080:80 -p 8082:9200 -p 6379:6379 -p 8126:8126 \
-		-p 8125:8125/udp -p 2003:2003/tcp  \
-		--name $(NAME) $(CONTAINER)
+clean:
+	client/hyperion.sh clean
