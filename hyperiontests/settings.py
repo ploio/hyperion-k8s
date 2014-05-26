@@ -13,19 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import redis
+HYPERION_WEB = 9090
 
-from hyperiontests import hyperion
-from hyperiontests import settings
+HYPERION_ES = 9092
 
-
-class TestRedis(hyperion.HyperionTestCase):
-
-    def test_can_retrieve_informations(self):
-        redis_client = redis.StrictRedis(host='localhost',
-                                         port=settings.HYPERION_REDIS,
-                                         db=0)
-        content = redis_client.info()
-        #print(content)
-        self.assertEqual('2.8.4', content['redis_version'])
-        self.assertEqual('/src/redis/redis.conf', content['config_file'])
+HYPERION_REDIS = 9379

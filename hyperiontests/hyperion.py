@@ -20,13 +20,14 @@ import docker
 import requests
 from requests import exceptions
 
+from hyperiontests import settings
+
 
 logger = logging.getLogger(__name__)
 
 
 class HyperionTestCase(unittest.TestCase):
 
-    _host = "http://localhost:8080"
     tmp_imgs = []
     tmp_containers = []
 
@@ -40,6 +41,7 @@ class HyperionTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = docker.Client()
+        self._host = "http://localhost:%s" % settings.HYPERION_WEB
 
     def http_get(self, uri):
         """Perform a HTTP GET request.
