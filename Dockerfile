@@ -118,7 +118,7 @@ RUN mkdir /src/logstash/conf.d
 ADD ./logstash/hyperion.conf /src/logstash/conf.d/hyperion.conf
 ADD ./logstash/elasticsearch.conf /src/logstash/conf.d/elasticsearch.conf
 ADD ./logstash/nginx.conf /src/logstash/conf.d/nginx.conf
-#ADD ./logstash/indexer.conf /src/logstash/conf.d/indexer.conf
+ADD ./logstash/indexer.conf /src/logstash/conf.d/indexer.conf
 
 # Kibana
 ADD ./kibana/config.js /src/kibana/config.js
