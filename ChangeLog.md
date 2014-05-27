@@ -3,6 +3,9 @@ Hyperion ChangeLog
 
 # Version 0.4.0 (IN PROGRESS)
 
+- Add logstash Redis indexer
+- `FIX` French timezone on Graphite configuration
+- Initialize unit tests
 - Configure Logstash to manage nginx logs
 - Add Kibana
 - Add Logstash

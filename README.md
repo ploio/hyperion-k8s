@@ -5,7 +5,7 @@
 
 ## Description
 
-[Hyperion][] is a [Docker][] image (Ubuntu 14.04 based), which provides on the host :
+[Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based), which provides on the host :
 * `http://localhost:8080`: [Hyperion][] web description
 * `http://localhost:8080/grafana`: the [Grafana][] web interface
 * `http://localhost:8080/graphite`: the [Graphite][] web interface
@@ -16,7 +16,9 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://localhost:8082/_plugin/HQ/`
 * [Kopf][]: `http://localhost:8082/_plugin/kopf`
 
-It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion)
+It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion).
+
+
 
 ## Deployment
 
