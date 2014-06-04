@@ -1,35 +1,34 @@
 FROM ubuntu:14.04
 MAINTAINER Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
-# RUN echo 'deb http://us.archive.ubuntu.com/ubuntu/ precise universe' >> /etc/apt/sources.list
-RUN apt-get -y update
-RUN apt-get -y upgrade
+RUN apt-get -y update && apt-get install -y software-properties-common
 
-# Install package  that provides ADD-apt-repository
-RUN apt-get -y install software-properties-common
-#RUN apt-get install -y python-software-properties
+RUN dpkg-reconfigure locales && \
+    locale-gen C.UTF-8 && \
+    /usr/sbin/update-locale LANG=C.UTF-8
+
+ENV LC_ALL C.UTF-8
 
 # Dependencies
 RUN add-apt-repository -y ppa:chris-lea/node.js
-RUN apt-get -y update
-
-RUN apt-get -y install build-essential python-dev python-pip python-virtualenv \
-               libffi-dev libcairo2 python-cairo gunicorn \
-	       supervisor nginx-light nodejs git wget curl
+RUN apt-get update && apt-get install -y \
+    build-essential python-dev python-pip python-virtualenv \
+    libffi-dev libcairo2 python-cairo gunicorn \
+    supervisor nginx-light nodejs git wget curl
 
 # Elasticsearch
 # fake fuse
-RUN  apt-get install libfuse2 &&\
-     cd /tmp ; apt-get download fuse &&\
-     cd /tmp ; dpkg-deb -x fuse_* . &&\
-     cd /tmp ; dpkg-deb -e fuse_* &&\
-     cd /tmp ; rm fuse_*.deb &&\
+RUN  apt-get install libfuse2 && \
+     cd /tmp ; apt-get download fuse && \
+     cd /tmp ; dpkg-deb -x fuse_* . && \
+     cd /tmp ; dpkg-deb -e fuse_* && \
+     cd /tmp ; rm fuse_*.deb && \
      cd /tmp ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst &&\
-     cd /tmp ; dpkg-deb -b . /fuse.deb &&\
+     cd /tmp ; dpkg-deb -b . /fuse.deb && \
      cd /tmp ; dpkg -i /fuse.deb
 RUN cd ~ && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.1.1.deb
 RUN cd ~ && dpkg -i elasticsearch-1.1.1.deb && rm elasticsearch-1.1.1.deb
-RUN apt-get -y install openjdk-7-jre
+RUN apt-get install -y openjdk-7-jre
 RUN /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
 RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
 RUN /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
