@@ -3,6 +3,7 @@ Hyperion ChangeLog
 
 # Version 0.4.0 (IN PROGRESS)
 
+- Add CoreOS support
 - Add logstash Redis indexer
 - `FIX` French timezone on Graphite configuration
 - Initialize unit tests
