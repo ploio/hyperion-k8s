@@ -6,15 +6,15 @@
 ## Description
 
 [Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based), which provides on the host :
-* `http://localhost:8080`: [Hyperion][] web description
-* `http://localhost:8080/grafana`: the [Grafana][] web interface
-* `http://localhost:8080/graphite`: the [Graphite][] web interface
-* `http://localhost:8080/elasticsearch`: the [Elasticsearch][] web interface
+* `http://localhost:9090`: [Hyperion][] web description
+* `http://localhost:9090/grafana`: the [Grafana][] web interface
+* `http://localhost:9090/graphite`: the [Graphite][] web interface
+* `http://localhost:9092/elasticsearch`: the [Elasticsearch][] web interface
 
 Some [Elasticsearch][] plugins are available:
-* [ElasticSearchHead][]: `http://localhost:8082/_plugin/head/`
-* [ElasticHQ][]: `http://localhost:8082/_plugin/HQ/`
-* [Kopf][]: `http://localhost:8082/_plugin/kopf`
+* [ElasticSearchHead][]: `http://localhost:9092/_plugin/head/`
+* [ElasticHQ][]: `http://localhost:9092/_plugin/HQ/`
+* [Kopf][]: `http://localhost:9092/_plugin/kopf`
 
 It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion).
 
@@ -100,11 +100,12 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 [Docker]: https://www.docker.io
 [Nginx]: http://nginx.org
-[Elasticsearch]: http://www.elasticsearch.org/
+[Elasticsearch]: http://www.elasticsearch.org
+[Redis]: http://www.redis.io
 [Graphite]: http://graphite.readthedocs.org/en/latest
 [Grafana]: http://grafana.org/
 [Carbon]: http://graphite.readthedocs.org/en/latest/carbon-daemons.html
 [Statsd]: https://github.com/etsy/statsd/wiki
-[ElasticSearchHead]: http://mobz.github.io/elasticsearch-head/
+[ElasticSearchHead]: http://mobz.github.io/elasticsearch-head
 [ElasticHQ]: http://www.elastichq.org
 [Kopf]: https://github.com/lmenezes/elasticsearch-kopf

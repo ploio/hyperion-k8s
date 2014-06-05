@@ -53,6 +53,7 @@ hyperion_help() {
     echo "  pull      :    Pull the Hyperion image from the registry"
     echo "  start     :    Start Hyperion container"
     echo "  stop      :    Stop Hyperion container"
+    echo "  clean     :    Remove Hyperion container"
     echo "  help      :    Display this help"
 }
 
