@@ -16,14 +16,14 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
 * [Kopf][]: `http://xxx:9092/_plugin/kopf`
 
-A [Redis][] database is provided. So you could use [log shippers](http://cookbook.logstash.net/recipes/log-shippers) to sent logs to [Hyperion][].
-
 A simple [Statsd][] client [hyperion_client.py](client/hyperion_client.py) to check [Hyperion][] installation and send some metrics.
 
 It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion).
 
 
-## Local deployment
+## Deployment
+
+### Local
 
 Get the container from the Docker index and launch it (Cf [Docker documentation](http://docs.docker.io/)). You could use this [script](client/hyperion.sh) to help you :
 ```bash
@@ -48,7 +48,7 @@ Commands:
 * Go to `http://localhost:9090/`
 
 
-## Virtualbox deployment
+### Virtualbox
 
 A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a VM.
 
@@ -66,6 +66,27 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
         $ ./hyperion_client.py -s 10.1.2.3 -p 8125
 
 * Go to `http://10.1.2.3:9090/`
+
+
+## Usage
+
+You could [Hyperion][] to collect event and logs from hosts.
+
+### Fluentd
+
+Using this file [fluent.conf][], [Fluentd][] send logs :
+
+    $ gem install fluentd
+    $ gem install fluent-plugin-elasticsearch
+    $ fluentd -c fluent.conf
+
+### Heka
+
+Using this file [hekad.toml][], [Heka][] send logs :
+
+    $ wget https://github.com/mozilla-services/heka/releases/download/v0.5.2/heka_0.5.2_amd64.deb
+    $ dpkg -i heka_0.5.2_amd64.deb
+    $ hekad -config=hekad.toml
 
 
 ## Development
@@ -120,6 +141,8 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Hyperion]: https://github.com/nlamirault/hyperion
 [COPYING]: https://github.com/nlamirault/scame/blob/master/COPYING
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
+[fluent.conf]: https://github.com/nlamirault/scame/blob/master/logs/fluent.conf
+[hekad.toml]: https://github.com/nlamirault/scame/blob/master/logs/hekad.toml
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
 
@@ -135,6 +158,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [ElasticSearchHead]: http://mobz.github.io/elasticsearch-head
 [ElasticHQ]: http://www.elastichq.org
 [Kopf]: https://github.com/lmenezes/elasticsearch-kopf
-
 [Virtualbox]: https://www.virtualbox.org
 [Vagrant]: http://downloads.vagrantup.com
+[Fluent]: http://fluentd.org/
+[Heka]: http://hekad.readthedocs.org/en/latest/
