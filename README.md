@@ -53,8 +53,8 @@ Commands:
 A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a VM.
 
 * Install dependencies :
-- [Virtualbox][] 4.3.10 or greater.
-- [Vagrant][] 1.6 or greeter
+** [Virtualbox][] 4.3.10 or greater.
+** [Vagrant][] 1.6 or greeter
 
 * Launch VM:
 
@@ -74,7 +74,7 @@ You could [Hyperion][] to collect event and logs from hosts.
 
 ### Fluentd
 
-Using this file [fluent.conf][], [Fluentd][] send logs :
+Using this file [fluent.conf][] for [Fluentd][] and send logs :
 
     $ gem install fluentd
     $ gem install fluent-plugin-elasticsearch
@@ -82,7 +82,7 @@ Using this file [fluent.conf][], [Fluentd][] send logs :
 
 ### Heka
 
-Using this file [hekad.toml][], [Heka][] send logs :
+Using this file [hekad.toml][] for [Heka][] and send logs :
 
     $ wget https://github.com/mozilla-services/heka/releases/download/v0.5.2/heka_0.5.2_amd64.deb
     $ dpkg -i heka_0.5.2_amd64.deb
@@ -139,10 +139,10 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 
 [Hyperion]: https://github.com/nlamirault/hyperion
-[COPYING]: https://github.com/nlamirault/scame/blob/master/COPYING
+[COPYING]: https://github.com/nlamirault/hyperion/blob/master/COPYING
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
-[fluent.conf]: https://github.com/nlamirault/scame/blob/master/logs/fluent.conf
-[hekad.toml]: https://github.com/nlamirault/scame/blob/master/logs/hekad.toml
+[fluent.conf]: https://github.com/nlamirault/hyperion/blob/master/logs/fluent.conf
+[hekad.toml]: https://github.com/nlamirault/hyperion/blob/master/logs/hekad.toml
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg?style=flat
 
@@ -160,5 +160,5 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Kopf]: https://github.com/lmenezes/elasticsearch-kopf
 [Virtualbox]: https://www.virtualbox.org
 [Vagrant]: http://downloads.vagrantup.com
-[Fluent]: http://fluentd.org/
+[Fluentd]: http://fluentd.org/
 [Heka]: http://hekad.readthedocs.org/en/latest/
