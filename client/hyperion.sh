@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright (C) 2014  Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +26,7 @@ hyperion_pull() {
 }
 
 hyperion_start() {
-    sudo mkdir -p $HYPERION_DIR/{elasticsearch,graphite,supervisor,nginx}
+    sudo mkdir -p $HYPERION_DIR/{elasticsearch,graphite,supervisor,nginx,redis}
     sudo chmod -R 777 $HYPERION_DIR/elasticsearch
     ID=$(sudo docker run -d \
               -v $HYPERION_DIR/elasticsearch:/var/lib/elasticsearch \
