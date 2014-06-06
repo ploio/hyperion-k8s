@@ -52,9 +52,7 @@ Commands:
 
 A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a VM.
 
-* Install dependencies :
-** [Virtualbox][] 4.3.10 or greater.
-** [Vagrant][] 1.6 or greeter
+* Install dependencies : [Virtualbox][] (>= 4.3.10), [Vagrant][] (>= 1.6)
 
 * Launch VM:
 
@@ -70,7 +68,7 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
 
 ## Usage
 
-You could [Hyperion][] to collect event and logs from hosts.
+You could use [Hyperion][] to collect event and logs from hosts.
 
 ### Fluentd
 
