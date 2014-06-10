@@ -34,7 +34,10 @@ RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
 RUN /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
 
 # Install statsd
-RUN mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
+#RUN mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
+RUN mkdir /src/statsd && cd /src/statsd && \
+    wget https://github.com/etsy/statsd/archive/v0.7.1.tar.gz && \
+    tar xzvf v0.7.1.tar.gz --strip-components=1 && rm v0.7.1.tar.gz
 
 # Install Graphite dependencies
 RUN pip install 'Twisted<12.0'
