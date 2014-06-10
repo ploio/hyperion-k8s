@@ -7,17 +7,18 @@
 
 [Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based) containing :
 * `http://xxx:9090`: [Hyperion][] web description
-* `http://xxx:9092/elasticsearch`: the [Elasticsearch][] (v1.1.1) web interface
-* `http://xxx:9090/grafana`: the [Grafana][] (v1.5.4) web interface
-* `http://xxx:9090/graphite`: the [Graphite][] (v3.1.0) web interface
-
+* `http://xxx:9092/elasticsearch/`: the [Elasticsearch][] (v1.1.1) web interface
+* `http://xxx:9090/grafana/`: the [Grafana][] (v1.5.4) web interface
+* `http://xxx:9090/graphite/`: the [Graphite][] (v3.1.0) web interface
 
 Some [Elasticsearch][] plugins are available:
 * [ElasticSearchHead][]: `http://xxx:9092/_plugin/head/`
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
-* [Kopf][]: `http://xxx:9092/_plugin/kopf`
+* [Kopf][]: `http://xxx:9092/_plugin/kopf/`
 
 A simple [Statsd][] (v0.7.1) client [hyperion_client.py](client/hyperion_client.py) to check [Hyperion][] installation and send some metrics.
+
+[Supervisor][] is used to manage processes.
 
 It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion).
 
@@ -59,6 +60,7 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
 
         $ vagrant up
         $ vagrant ssh
+        $ ./hyperion.sh pull && ./hyperion.sh start
 
 * Test your installation:
 
@@ -161,3 +163,4 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Vagrant]: http://downloads.vagrantup.com
 [Fluentd]: http://fluentd.org/
 [Heka]: http://hekad.readthedocs.org/en/latest/
+[Supervisor]: http://supervisord.org

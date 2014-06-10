@@ -31,6 +31,6 @@ Vagrant.configure('2') do |config|
   config.vm.provision :file, :source => "coreos/user-data", :destination => "/tmp/vagrantfile-user-data"
   config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
   config.vm.provision :file, :source => "client/hyperion.sh", :destination => "/home/core/hyperion.sh"
-#  config.vm.provision :shell, :inline => "/home/core/hyperion.sh pull", :privileged => true
+  #config.vm.provision :shell, :inline => "/home/core/hyperion.sh pull", :privileged => true
 
 end
