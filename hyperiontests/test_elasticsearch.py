@@ -31,7 +31,7 @@ class TestElasticsearch(hyperion.HyperionTestCase):
     def test_can_retrieve_elasticsearch_status(self):
         content = self._elasticsearch_request('elasticsearch')
         self.assertEqual(200, content['status'])
-        self.assertEqual("1.1.1", content['version']['number'])
+        self.assertEqual("1.2.1", content['version']['number'])
 
     def test_can_retrieve_nodes(self):
         content = self._elasticsearch_request('elasticsearch/_nodes/_local')

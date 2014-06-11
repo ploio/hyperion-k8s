@@ -7,7 +7,7 @@
 
 [Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based) containing :
 * `http://xxx:9090`: [Hyperion][] web description
-* `http://xxx:9092/elasticsearch/`: the [Elasticsearch][] (v1.1.1) web interface
+* `http://xxx:9092/elasticsearch/`: the [Elasticsearch][] (v1.2.1) web interface
 * `http://xxx:9090/grafana/`: the [Grafana][] (v1.5.4) web interface
 * `http://xxx:9090/graphite/`: the [Graphite][] (v3.1.0) web interface
 

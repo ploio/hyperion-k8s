@@ -26,8 +26,8 @@ RUN  apt-get install libfuse2 && \
      cd /tmp ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst &&\
      cd /tmp ; dpkg-deb -b . /fuse.deb && \
      cd /tmp ; dpkg -i /fuse.deb
-RUN cd ~ && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.1.1.deb
-RUN cd ~ && dpkg -i elasticsearch-1.1.1.deb && rm elasticsearch-1.1.1.deb
+ADD https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.deb /elasticsearch-1.2.1.deb
+RUN dpkg -i elasticsearch-1.2.1.deb && rm elasticsearch-1.2.1.deb
 RUN apt-get install -y openjdk-7-jre
 RUN /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
 RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
@@ -35,7 +35,7 @@ RUN /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
 
 # Install statsd
 #RUN mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
-RUN mkdir /src/statsd && cd /src/statsd && \
+RUN mkdir -p /src/statsd && cd /src/statsd && \
     wget https://github.com/etsy/statsd/archive/v0.7.1.tar.gz && \
     tar xzvf v0.7.1.tar.gz --strip-components=1 && rm v0.7.1.tar.gz
 
