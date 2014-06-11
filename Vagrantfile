@@ -10,7 +10,7 @@ Vagrant.configure('2') do |config|
   config.vm.hostname = "Hyperion"
   config.vm.network :private_network, :ip => '10.1.2.3'
   config.vm.synced_folder ".", "/home/core/hyperion", type: "rsync"
-  config.vm.synced_folder "/var/docker/hyperion", "/var/docker/hyperion", id: "core", :nfs => true,  :mount_options   => ['nolock,vers=3,udp']
+  #config.vm.synced_folder "/var/docker/hyperion", "/var/docker/hyperion", id: "core", :nfs => true,  :mount_options   => ['nolock,vers=3,udp']
 
   config.ssh.forward_agent = true
   config.ssh.forward_x11 = true
