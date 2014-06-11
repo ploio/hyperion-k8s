@@ -79,7 +79,8 @@ RUN mkdir -p /src/kibana && \
 # -------------
 
 # hyperion
-ADD ./hyperion /src/hyperion
+#ADD ./hyperion /src/hyperion
+ADD ./coreos/hyperion.service /etc/systemd/system/hyperion.service
 
 # Elasticsearch
 ADD ./elasticsearch/run /usr/local/bin/run_elasticsearch

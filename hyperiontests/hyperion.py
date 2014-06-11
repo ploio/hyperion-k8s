@@ -41,7 +41,8 @@ class HyperionTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = docker.Client()
-        self._host = "http://localhost:%s" % settings.HYPERION_WEB
+        self._host = "http://%s:%s" % (settings.HYPERION_HOST,
+                                       settings.HYPERION_WEB)
 
     def http_get(self, uri):
         """Perform a HTTP GET request.

@@ -52,21 +52,37 @@ Commands:
 
 ### Virtualbox
 
-A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a VM.
+A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a virtual machine. This virtual machine is sharing volume `/var/docker/hyperion` between host and guest machine to store metrics.
 
-* Install dependencies : [Virtualbox][] (>= 4.3.10), [Vagrant][] (>= 1.6)
+* Install dependencies : [Virtualbox][] (>= 4.3.10), [Vagrant][] (>= 1.6), NFS server
 
 * Launch VM:
 
         $ vagrant up
-        $ vagrant ssh
-        $ ./hyperion.sh pull && ./hyperion.sh start
 
 * Test your installation:
 
         $ ./hyperion_client.py -s 10.1.2.3 -p 8125
 
 * Go to `http://10.1.2.3:9090/`
+
+* You could connect to your virtual machine by ssh to manage your installation using [CoreOS][] tools ([Etcd][] and [Fleet][]).
+
+        $ vagrant ssh
+        $ fleetctl list-units
+        UNIT			STATE		LOAD	ACTIVE	SUB	DESC		MACHINE
+        hyperion.service	launched	loaded	active	running	Hyperion	c1adaa61.../10.1.2.3
+        $ fleetctl status hyperion.service
+        ● hyperion.service - Hyperion
+        Loaded: loaded (/etc/systemd/system/hyperion.service; linked-runtime)
+        Active: active (running) since Wed 2014-06-11 11:07:42 UTC; 10min ago
+        Main PID: 3314 (docker)
+            CGroup: /system.slice/hyperion.service
+                    └─3314 /usr/bin/docker run -rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper -v /var/docker/hyperion/supervisor:/var/log/supervisor -v /var/docker/hyperion/nginx:/var/log/nginx -p 9090:80 -p 9092:9200 -p 9379:6379 -p 8125:8125/udp -p 2003:2003/tcp --name hyperion nlamirault/hyperion
+
+        Jun 10 22:07:44 hyperion docker[3314]: 2014-06-10 22:07:44,643 INFO spawned: 'carbon-cache' with pid 17
+        Jun 10 22:07:44 hyperion docker[3314]: 2014-06-10 22:07:44,657 INFO spawned: 'elasticsearch' with pid 18
+
 
 
 ## Usage
@@ -149,6 +165,8 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 [Docker]: https://www.docker.io
 [CoreOS]: http://coreos.com
+[Etcd]: http://coreos.com/using-coreos/etcd
+[Fleet]: http://coreos.com/using-coreos/clustering/
 [Nginx]: http://nginx.org
 [Elasticsearch]: http://www.elasticsearch.org
 [Redis]: http://www.redis.io
