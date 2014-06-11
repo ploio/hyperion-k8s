@@ -75,7 +75,7 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
         $ fleetctl status hyperion.service
         ● hyperion.service - Hyperion
         Loaded: loaded (/etc/systemd/system/hyperion.service; linked-runtime)
-        Active: active (running) since Wed 2014-06-11 11:07:42 UTC; 10min ago
+        Active: active (running) since Wed 2014-06-10 22:07:42 UTC; 10min ago
         Main PID: 3314 (docker)
             CGroup: /system.slice/hyperion.service
                     └─3314 /usr/bin/docker run -rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper -v /var/docker/hyperion/supervisor:/var/log/supervisor -v /var/docker/hyperion/nginx:/var/log/nginx -p 9090:80 -p 9092:9200 -p 9379:6379 -p 8125:8125/udp -p 2003:2003/tcp --name hyperion nlamirault/hyperion
@@ -132,12 +132,12 @@ Feel free to ask question or make suggestions in our [Issue Tracker][].
 
 ## License
 
-Scame is free software: you can redistribute it and/or modify it under the
+Hyperion is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later
 version.
 
-Scame is distributed in the hope that it will be useful, but WITHOUT ANY
+Hyperion is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
