@@ -16,19 +16,22 @@ RUN apt-get update && apt-get install -y \
     libffi-dev libcairo2 python-cairo gunicorn \
     supervisor nginx-light nodejs git wget curl
 
-# Elasticsearch
+# Install Elasticsearch
 # fake fuse
-RUN  apt-get install libfuse2 && \
-     cd /tmp ; apt-get download fuse && \
-     cd /tmp ; dpkg-deb -x fuse_* . && \
-     cd /tmp ; dpkg-deb -e fuse_* && \
-     cd /tmp ; rm fuse_*.deb && \
-     cd /tmp ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst &&\
-     cd /tmp ; dpkg-deb -b . /fuse.deb && \
-     cd /tmp ; dpkg -i /fuse.deb
-ADD https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.deb /elasticsearch-1.2.1.deb
-RUN dpkg -i elasticsearch-1.2.1.deb && rm elasticsearch-1.2.1.deb
-RUN apt-get install -y openjdk-7-jre
+# RUN  apt-get install libfuse2 && \
+#      cd /tmp ; apt-get download fuse && \
+#      cd /tmp ; dpkg-deb -x fuse_* . && \
+#      cd /tmp ; dpkg-deb -e fuse_* && \
+#      cd /tmp ; rm fuse_*.deb && \
+#      cd /tmp ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst &&\
+#      cd /tmp ; dpkg-deb -b . /fuse.deb && \
+#      cd /tmp ; dpkg -i /fuse.deb
+# ADD https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.deb /elasticsearch-1.2.1.deb
+# RUN dpkg -i elasticsearch-1.2.1.deb && rm elasticsearch-1.2.1.deb
+# RUN apt-get install -y openjdk-7-jre
+RUN mkdir -p /src/elasticsearch && cd /src/elasticsearch \
+    wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.tar.gz && \
+    tar xzf elasticsearch-1.2.1.tar.gz --strip-components=1 && rm elasticsearch-1.2.1.tar.gz
 RUN /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
 RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
 RUN /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
@@ -63,8 +66,7 @@ RUN mkdir -p /src/redis
 RUN mkdir -p /var/lib/redis
 
 # Install Logstash
-RUN mkdir -p /src/logstash && \
-    cd /src/logstash && \
+RUN mkdir -p /src/logstash && cd /src/logstash && \
     wget -q https://download.elasticsearch.org/logstash/logstash/logstash-1.4.1.tar.gz && \
     tar xzf logstash-1.4.1.tar.gz --strip-components=1 && rm logstash-1.4.1.tar.gz
 
@@ -80,11 +82,12 @@ RUN mkdir -p /src/kibana && \
 
 # hyperion
 #ADD ./hyperion /src/hyperion
-ADD ./coreos/hyperion.service /etc/systemd/system/hyperion.service
+#ADD ./coreos/hyperion.service /etc/systemd/system/hyperion.service
 
 # Elasticsearch
-ADD ./elasticsearch/run /usr/local/bin/run_elasticsearch
+#ADD ./elasticsearch/run /usr/local/bin/run_elasticsearch
 ADD ./elasticsearch/logging.yml /usr/share/elasticsearch/config
+ADD ./elasticsearch/elasticsearch.yml /src/elasticsearch/elasticsearch.yml
 #RUN chown -R elasticsearch:elasticsearch /var/lib/elasticsearch
 #RUN mkdir -p /var/lib/elasticsearch/elasticsearch && chown elasticsearch:elasticsearch /tmp/elasticsearch
 

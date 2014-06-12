@@ -1,6 +1,9 @@
 #cloud-config
 ---
 coreos:
+  update:
+    #reboot-strategy: etcd-lock
+    reboot-strategy: best-effort
   etcd:
     # generate a new token for each unique cluster from https://discovery.etcd.io/new
     # uncomment the following line and replace it with your discovery URL
@@ -77,6 +80,22 @@ coreos:
       Type=oneshot
       ExecStartPre=/usr/bin/rm /etc/motd
       ExecStart=/usr/bin/ln -s /run/hyperion/motd /etc/motd
+  # - name: hyperion.service
+  #   command: start
+  #   content: |
+  #     [Unit]
+  #     Description=hyperion
+  #     After=docker.service
+  #     Requires=docker.service
+
+  #     [Service]
+  #     ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper -v /var/docker/hyperion/supervisor:/var/log/supervisor -v /var/docker/hyperion/nginx:/var/log/nginx -p 9090:80 -p 9092:9200 -p 9379:6379 -p 8125:8125/udp -p 2003:2003/tcp --name hyperion nlamirault/hyperion
+  #     ExecStartPost=/usr/bin/etcdctl set /hyperion/host ${COREOS_PUBLIC_IPV4}
+  #     ExecStop=/usr/bin/docker stop hyperion
+  #     ExecStopPost=/usr/bin/etcdctl rm /hyperion/host
+
+  #     [X-Fleet]
+  #     X-Conflicts=hyperion.service
 write_files:
   - path: /run/hyperion/motd
     content: " \n\e[39mWelcome to Hyperion\t\t\tPowered by Core\e[38;5;45mO\e[38;5;206mS\e[39m\n\n"
