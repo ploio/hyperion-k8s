@@ -10,17 +10,16 @@
 * `http://xxx:9092/elasticsearch/`: the [Elasticsearch][] (v1.2.1) web interface
 * `http://xxx:9090/grafana/`: the [Grafana][] (v1.5.4) web interface
 * `http://xxx:9090/graphite/`: the [Graphite][] (v3.1.0) web interface
+* the [Statsd][] (v0.7.1) daemon on `8125` and `8126`
+
+[Supervisor][] is used to manage processes.
 
 Some [Elasticsearch][] plugins are available:
 * [ElasticSearchHead][]: `http://xxx:9092/_plugin/head/`
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
 * [Kopf][]: `http://xxx:9092/_plugin/kopf/`
 
-A simple [Statsd][] (v0.7.1) client [hyperion_client.py](client/hyperion_client.py) to check [Hyperion][] installation and send some metrics.
-
-[Supervisor][] is used to manage processes.
-
-It's a *Trusted Build* on the [Docker Index](https://index.docker.io/u/nlamirault/hyperion).
+It's a *Trusted Build* on the [Docker Hub](https://registry.hub.docker.com/u/nlamirault/hyperion).
 
 
 ## Deployment
@@ -43,7 +42,7 @@ Commands:
         $ ./hyperion.sh pull && ./hyperion.sh start
 
 
-* Test your local installation :
+* Test your local installation using [hyperion_client.py](client/hyperion_client.py):
 
         $ ./hyperion_client.py
 
@@ -60,7 +59,7 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
 
         $ vagrant up
 
-* Test your installation:
+* Test your installation using [hyperion_client.py](client/hyperion_client.py):
 
         $ ./hyperion_client.py -s 10.1.2.3 -p 8125
 
