@@ -3,6 +3,8 @@ Hyperion ChangeLog
 
 # Version 0.5.0 (IN PROGRESS)
 
+- [#7][] : Update Tox / Python tests configuration to test CoreOS hyperion
+- Change Elasticsearch setup using archive and no longer the Debian package
 - Update CoreOS setup using Etcd and Fleet
 - [#6][] : Add shared volume on Vagrant installation
 - [#4][] : Upgrade to Elasticsearch 1.2.1
