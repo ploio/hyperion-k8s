@@ -80,3 +80,5 @@ coreos:
 write_files:
   - path: /run/hyperion/motd
     content: " \n\e[39mWelcome to Hyperion\t\t\tPowered by Core\e[38;5;45mO\e[38;5;206mS\e[39m\n\n"
+  - path: /var/docker/hyperion
+    permissions: 0644
