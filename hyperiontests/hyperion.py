@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import os
 import unittest
 
 import docker
@@ -41,7 +42,8 @@ class HyperionTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = docker.Client()
-        self._host = "http://%s:%s" % (settings.HYPERION_HOST,
+        host = os.getenv('HYPERION_HOST', settings.HYPERION_HOST)
+        self._host = "http://%s:%s" % (host,
                                        settings.HYPERION_WEB)
 
     def http_get(self, uri):
