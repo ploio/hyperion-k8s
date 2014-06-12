@@ -1,6 +1,12 @@
 Hyperion ChangeLog
 ======================
 
+# Version 0.5.0 (IN PROGRESS)
+
+- Update CoreOS setup using Etcd and Fleet
+- [#6][] : Add shared volume on Vagrant installation
+- [#4][] : Upgrade to Elasticsearch 1.2.1
+
 # Version 0.4.0 (2014-06-05)
 
 - Add CoreOS support
@@ -34,3 +40,8 @@ Hyperion ChangeLog
 - Configure Graphite
 - Configure Graphana
 - Init project
+
+
+
+[#4]: https://github.com/nlamirault/hyperion/issues/4
+[#6]: https://github.com/nlamirault/hyperion/issues/6

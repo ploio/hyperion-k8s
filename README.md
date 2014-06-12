@@ -120,9 +120,10 @@ Using this file [hekad.toml][] for [Heka][] and send logs :
 
         $ make start
 
-* Launch unit tests :
+* You could launch unit tests using local installation or VM installation :
 
         $ tox
+        $ tox -evm
 
 
 ## Support
