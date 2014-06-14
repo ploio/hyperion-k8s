@@ -17,18 +17,6 @@ RUN apt-get update && apt-get install -y \
     supervisor nginx-light nodejs git wget curl
 
 # Install Elasticsearch
-# fake fuse
-# RUN  apt-get install libfuse2 && \
-#      cd /tmp ; apt-get download fuse && \
-#      cd /tmp ; dpkg-deb -x fuse_* . && \
-#      cd /tmp ; dpkg-deb -e fuse_* && \
-#      cd /tmp ; rm fuse_*.deb && \
-#      cd /tmp ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst &&\
-#      cd /tmp ; dpkg-deb -b . /fuse.deb && \
-#      cd /tmp ; dpkg -i /fuse.deb
-# ADD https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.deb /elasticsearch-1.2.1.deb
-# RUN dpkg -i elasticsearch-1.2.1.deb && rm elasticsearch-1.2.1.deb
-# RUN apt-get install -y openjdk-7-jre
 RUN mkdir -p /src/elasticsearch && cd /src/elasticsearch \
     wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.tar.gz && \
     tar xzf elasticsearch-1.2.1.tar.gz --strip-components=1 && rm elasticsearch-1.2.1.tar.gz
@@ -37,7 +25,6 @@ RUN /usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
 RUN /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
 
 # Install statsd
-#RUN mkdir /src && git clone https://github.com/etsy/statsd.git /src/statsd
 RUN mkdir -p /src/statsd && cd /src/statsd && \
     wget https://github.com/etsy/statsd/archive/v0.7.1.tar.gz && \
     tar xzvf v0.7.1.tar.gz --strip-components=1 && rm v0.7.1.tar.gz
@@ -75,6 +62,12 @@ RUN mkdir -p /src/kibana && \
     cd /src/kibana && \
     wget -q https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz && \
     tar xzf kibana-3.1.0.tar.gz --strip-components=1 && rm kibana-3.1.0.tar.gz
+
+# Install InfluxDB
+RUN mkdir -p /src/influxdb && \
+    cd /src/influxdb && \
+    wget -q http://s3.amazonaws.com/influxdb/influxdb-0.7.3.amd64.tar.gz && \
+    tar xzf influxdb-0.7.3.amd64.tar.gz --strip-components=1 && rm influxdb-0.7.3.amd64.tar.gz
 
 
 # Configuration
@@ -161,6 +154,9 @@ EXPOSE	8126
 # Redis
 EXPOSE 6379
 
+# InfluxDB
+EXPOSE 8086
+EXPOSE 8083
 
 # Volumes
 # --------
