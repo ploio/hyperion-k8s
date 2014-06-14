@@ -6,13 +6,12 @@
 ## Description
 
 [Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based) containing :
-* `http://xxx:9090`: [Hyperion][] web description
-* `http://xxx:9092/elasticsearch/`: the [Elasticsearch][] (v1.2.1) web interface
-* `http://xxx:9090/grafana/`: the [Grafana][] (v1.5.4) web interface
-* `http://xxx:9090/graphite/`: the [Graphite][] (v3.1.0) web interface
-* the [Statsd][] (v0.7.1) daemon on `8125` and `8126`
-
-[Supervisor][] is used to manage processes.
+* [Hyperion][] web description : `http://xxx:9090`
+* [Elasticsearch][] (v1.2.1) web interface : `http://xxx:9092/elasticsearch/`
+* [Grafana][] (v1.5.4) web interface : `http://xxx:9090/grafana/`
+* [Graphite][] (v3.1.0) web interface : `http://xxx:9090/graphite/`
+* [Statsd][] (v0.7.1) daemon on `8125` and `8126`
+* [Supervisor][] is used to manage processes.
 
 Some [Elasticsearch][] plugins are available:
 * [ElasticSearchHead][]: `http://xxx:9092/_plugin/head/`
@@ -40,7 +39,6 @@ Commands:
 * Install it:
 
         $ ./hyperion.sh pull && ./hyperion.sh start
-
 
 * Test your local installation using [hyperion_client.py](client/hyperion_client.py):
 
