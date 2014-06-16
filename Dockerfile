@@ -14,7 +14,7 @@ RUN add-apt-repository -y ppa:chris-lea/node.js
 RUN apt-get update && apt-get install -y \
     build-essential python-dev python-pip python-virtualenv \
     libffi-dev libcairo2 python-cairo gunicorn \
-    supervisor nginx-light nodejs git wget curl
+    supervisor nginx-light nodejs git wget curl openssh-server
 
 # Install Elasticsearch
 RUN \
@@ -104,7 +104,7 @@ RUN chmod 0664 /var/lib/graphite/storage/graphite.db
 RUN cd /var/lib/graphite/webapp/graphite && python manage.py syncdb --noinput
 
 # Grafana
-ADD ./grafana/graphite_config.js /src/grafana/config.js
+#ADD ./grafana/graphite_config.js /src/grafana/config.js
 ADD ./grafana/influxdb_config.js /src/grafana/config.js
 ADD ./grafana/hyperion.json /src/grafana/app/dashboards/default.json
 
@@ -130,6 +130,10 @@ ADD ./kibana/hyperion.json /src/kibana/app/dashboards/default.json
 
 # InfluxDB
 ADD ./influxdb/config.toml /src/influxdb/config.toml
+
+# SSHD
+RUN mkdir -p /var/run/sshd
+RUN echo 'root:hyperion' | chpasswd
 
 # Ports
 # ------
@@ -168,6 +172,9 @@ EXPOSE 8086
 EXPOSE 8083
 EXPOSE 8090
 EXPOSE 8099
+
+# SSHD
+EXPOSE 22
 
 # Volumes
 # --------

@@ -20,8 +20,8 @@ HYPERION_DIR="/var/docker/hyperion"
 HYPERION_WEB=9090
 HYPERION_ES=9092
 HYPERION_REDIS=9379
-HYPERION_INFLUXDB=9083
-HYPERION_INFLUXDB=9086
+HYPERION_INFLUXDB_UI=9083
+HYPERION_INFLUXDB_API=9086
 
 hyperion_pull() {
     sudo docker pull nlamirault/hyperion
@@ -42,7 +42,7 @@ hyperion_start() {
               -p $HYPERION_INFLUXDB_UI:8083 \
               -p $HYPERION_INFLUXDB_API:8086 \
               -p 8125:8125/udp -p 2003:2003/tcp \
-              -p 9222:22
+              -p 9222:22 \
               --name $NAME nlamirault/hyperion)
     echo "Hyperion ID : $ID"
 }
