@@ -16,6 +16,7 @@
 NAME=hyperion-elasticsearch
 CONTAINER=nlamirault/$(NAME)
 DOCKER_HYPERION=/var/docker/$(NAME)
+HYPERION_ES=9092
 
 all: help
 
@@ -29,6 +30,7 @@ help:
 setup:
 	@echo "Creates $(DOCKER_HYPERION) directories on host"
 	sudo mkdir -p $(DOCKER_HYPERION)/elasticsearch
+	sudo mkdir -p $(DOCKER_HYPERION)/nginx
 	sudo chmod -R 777 $(DOCKER_HYPERION)/elasticsearch
 
 destroy:
@@ -38,16 +40,16 @@ destroy:
 reset: destroy setup
 
 build:
-	sudo docker build -t $(CONTAINER) .
+	docker build -t $(CONTAINER) .
 
 start:
-	sudo docker run -d \
+	docker run \
 	-v $(DOCKER_HYPERION)/elasticsearch:/var/lib/elasticsearch \
-	-v $(HYPERION_ES):9200 \
+	-p $(HYPERION_ES):9200 \
 	--name $(NAME) $(CONTAINER)
 
 stop:
-	sudo docker stop $(CONTAINER)
+	docker stop $(NAME)
 
 clean:
-	sudo docker rm $(CONTAINER)
+	docker rm $(NAME)

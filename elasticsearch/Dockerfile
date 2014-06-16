@@ -10,6 +10,10 @@ RUN apt-get -y update && apt-get install -y software-properties-common
 RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
 
 # Dependencies
+RUN apt-get update && apt-get install -y \
+    supervisor wget
+
+# Dependencies
 RUN \
   echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
   echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections && \
