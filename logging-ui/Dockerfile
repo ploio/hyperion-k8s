@@ -11,16 +11,7 @@ RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
 
 # Dependencies
 RUN apt-get update && apt-get install -y \
-    supervisor nginx-light wget redis-server
-
-# Install Redis
-RUN mkdir -p /src/redis
-RUN mkdir -p /var/lib/redis
-
-# Install Logstash
-RUN mkdir -p /src/logstash && cd /src/logstash && \
-    wget -q https://download.elasticsearch.org/logstash/logstash/logstash-1.4.1.tar.gz && \
-    tar xzf logstash-1.4.1.tar.gz --strip-components=1 && rm logstash-1.4.1.tar.gz
+    supervisor nginx-light wget
 
 # Install Kibana
 RUN mkdir -p /src/kibana && \
@@ -37,13 +28,6 @@ ADD ./nginx.conf /etc/nginx/nginx.conf
 # Supervisord
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Logstash
-RUN mkdir -p /src/logstash/conf.d
-ADD ./hyperion.conf /src/logstash/conf.d/hyperion.conf
-ADD ./elasticsearch.conf /src/logstash/conf.d/elasticsearch.conf
-ADD ./nginx.conf /src/logstash/conf.d/nginx.conf
-ADD ./indexer.conf /src/logstash/conf.d/indexer.conf
-
 # Kibana
 ADD ./config.js /src/kibana/config.js
 ADD ./hyperion.json /src/kibana/app/dashboards/default.json
@@ -54,12 +38,12 @@ ADD ./hyperion.json /src/kibana/app/dashboards/default.json
 # nginx
 EXPOSE 80
 
+
 # Volumes
 # --------
 
 VOLUME ["/var/lib/log/supervisor"]
 VOLUME ["/var/lib/log/nginx"]
-VOLUME ["/var/lib/redis"]
 
 
 # Launch
