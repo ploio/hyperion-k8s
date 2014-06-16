@@ -5,9 +5,15 @@
 
 ## Description
 
-[Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based) containing :
-* [Hyperion][] web description : `http://xxx:9090`
-* [Elasticsearch][] (v1.2.1) web interface : `http://xxx:9092/elasticsearch/`
+[Hyperion][] is an application which provides a monitoring and log collector solution. The stack is :
+* [CoreOS][] : Linux-based operating system aimed at large-scale server deployments
+* [Docker][] : an open platform for distributed applications
+* [Confd][] : the configuration management tool built on top of etcd
+* [Etcd][]: a highly-available key value store for shared configuration and service discovery
+* [Fleet][]: a Distributed init System (on top-of Systemd)
+
+Components :
+* [Elasticsearch][] (v1.2.1) web interface : `http://xxx:9092/`
 * [Grafana][] (v1.5.4) web interface : `http://xxx:9090/grafana/`
 * [Graphite][] (v3.1.0) web interface : `http://xxx:9090/graphite/`
 * [Statsd][] (v0.7.1) daemon on `8125` and `8126`
@@ -19,36 +25,8 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
 * [Kopf][]: `http://xxx:9092/_plugin/kopf/`
 
-It's a *Trusted Build* on the [Docker Hub](https://registry.hub.docker.com/u/nlamirault/hyperion).
-
 
 ## Deployment
-
-### Local
-
-Get the container from the Docker index and launch it (Cf [Docker documentation](http://docs.docker.io/)). You could use this [script](client/hyperion.sh) to help you :
-```bash
-$ client/hyperion.sh help
-Usage: client/hyperion.sh <command>
-Commands:
-  pull      :    Pull the Hyperion image from the registry
-  start     :    Start Hyperion container
-  stop      :    Stop Hyperion container
-  help      :    Display this help
-```
-
-* Install it:
-
-        $ ./hyperion.sh pull && ./hyperion.sh start
-
-* Test your local installation using [hyperion_client.py](client/hyperion_client.py):
-
-        $ ./hyperion_client.py
-
-* Go to `http://localhost:9090/`
-
-
-### Virtualbox
 
 A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a virtual machine. This virtual machine is sharing volume `/var/docker/hyperion` between host and guest machine to store metrics.
 
@@ -58,7 +36,7 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
 
         $ vagrant up
 
-* Test your installation using [hyperion_client.py](client/hyperion_client.py):
+* Test your installation using [hyperion_client.py](addons/hyperion_client.py):
 
         $ ./hyperion_client.py -s 10.1.2.3 -p 8125
 
@@ -69,18 +47,14 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
         $ vagrant ssh
         $ fleetctl list-units
         UNIT			STATE		LOAD	ACTIVE	SUB	DESC		MACHINE
-        hyperion.service	launched	loaded	active	running	Hyperion	c1adaa61.../10.1.2.3
-        $ fleetctl status hyperion.service
-        ● hyperion.service - Hyperion
-        Loaded: loaded (/etc/systemd/system/hyperion.service; linked-runtime)
-        Active: active (running) since Wed 2014-06-10 22:07:42 UTC; 10min ago
-        Main PID: 3314 (docker)
-            CGroup: /system.slice/hyperion.service
-                    └─3314 /usr/bin/docker run -rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper -v /var/docker/hyperion/supervisor:/var/log/supervisor -v /var/docker/hyperion/nginx:/var/log/nginx -p 9090:80 -p 9092:9200 -p 9379:6379 -p 8125:8125/udp -p 2003:2003/tcp --name hyperion nlamirault/hyperion
-
-        Jun 10 22:07:44 hyperion docker[3314]: 2014-06-10 22:07:44,643 INFO spawned: 'carbon-cache' with pid 17
-        Jun 10 22:07:44 hyperion docker[3314]: 2014-06-10 22:07:44,657 INFO spawned: 'elasticsearch' with pid 18
-
+        hyperion-elasticsearch.service	launched	loaded	active	running	hyperion elasticsearch	5b239548.../10.1.2.3
+        $ fleetctl status hyperion-elasticsearch.service
+        ● hyperion-elasticsearch.service - hyperion elasticsearch
+          Loaded: loaded (/run/fleet/units/hyperion-elasticsearch.service; linked-runtime)
+          Active: active (running) since Mon 2014-06-16 20:40:13 UTC; 3min 26s ago
+        Main PID: 3570 (docker)
+          CGroup: /system.slice/hyperion-elasticsearch.service
+                  └─3570 /usr/bin/docker run --rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/supervisor:/var/log/supervisor -p 9092:9200 -e HOST_IP= --name hyperion-elasticsearch nlamirault/hyperion-elasticsearch
 
 
 ## Usage
@@ -165,7 +139,8 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Docker]: https://www.docker.io
 [CoreOS]: http://coreos.com
 [Etcd]: http://coreos.com/using-coreos/etcd
-[Fleet]: http://coreos.com/using-coreos/clustering/
+[Confd]: https://github.com/kelseyhightower/confd
+[Fleet]: https://github.com/coreos/fleet
 [Nginx]: http://nginx.org
 [Elasticsearch]: http://www.elasticsearch.org
 [Redis]: http://www.redis.io

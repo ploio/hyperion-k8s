@@ -1,0 +1,14 @@
+[Unit]
+Description=hyperion monitoring metrics
+After=docker.service
+Requires=docker.service
+
+[Service]
+#ExecStartPre=/usr/bin/docker pull nlamirault/hyperion-monitoring-metrics
+ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/supervisor:/var/log/supervisor /var/docker/hyperion/influxdb:/var/lib/influxdb -p 9183:8083 -p 9196:8086 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-monitoring-metrics nlamirault/hyperion-monitoring-metrics
+ExecStartPost=/usr/bin/etcdctl set /hyperion/host/monitoring-metrics ${COREOS_PUBLIC_IPV4}
+ExecStop=/usr/bin/docker stop hyperion-monitoring-metrics
+ExecStopPost=/usr/bin/etcdctl rm /hyperion/host/monitoring-metrics
+
+[X-Fleet]
+X-Conflicts=hyperion-monitoring-metrics.service

@@ -15,10 +15,8 @@
 
 MAIN=hyperion
 DOCKER_HYPERION=/var/docker/$(MAIN)
-NAME=$(MAIN)-monitoring
+NAME=$(MAIN)-monitoring-metrics
 CONTAINER=nlamirault/$(NAME)
-
-HYPERION_WEB=9190
 HYPERION_INFLUXDB_UI=9191
 HYPERION_INFLUXDB_API=9192
 
@@ -49,9 +47,7 @@ build:
 start:
 	docker run \
 	-v $(DOCKER_HYPERION)/supervisor:/var/lib/supervisor \
-	-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
 	-v $(DOCKER_HYPERION)/influxdb:/var/lib/influxdb \
-	-p $(HYPERION_WEB):80 \
 	-p $(HYPERION_INFLUXDB_UI):8083 \
 	-p $(HYPERION_INFLUXDB_API):8086 \
 	--name $(NAME) $(CONTAINER)

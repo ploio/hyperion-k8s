@@ -1,0 +1,14 @@
+[Unit]
+Description=hyperion monitoring ui
+After=docker.service
+Requires=docker.service
+
+[Service]
+#ExecStartPre=/usr/bin/docker pull nlamirault/hyperion-monitoring-ui
+ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/supervisor:/var/log/supervisor /var/docker/hyperion/nginx:/var/log/nginx -p 9190:80 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-monitoring-ui nlamirault/hyperion-monitoring-ui
+ExecStartPost=/usr/bin/etcdctl set /hyperion/host/monitoring-ui ${COREOS_PUBLIC_IPV4}
+ExecStop=/usr/bin/docker stop hyperion-monitoring-ui
+ExecStopPost=/usr/bin/etcdctl rm /hyperion/host/monitoring-ui
+
+[X-Fleet]
+X-Conflicts=hyperion-monitoring-ui.service
