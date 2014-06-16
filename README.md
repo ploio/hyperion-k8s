@@ -12,6 +12,7 @@
 * [Graphite][] (v3.1.0) web interface : `http://xxx:9090/graphite/`
 * [Statsd][] (v0.7.1) daemon on `8125` and `8126`
 * [Supervisor][] is used to manage processes.
+* [InfluxDB][] (v0.7.3) web interface : `http://xxx:8083`
 
 Some [Elasticsearch][] plugins are available:
 * [ElasticSearchHead][]: `http://xxx:9092/_plugin/head/`

@@ -75,7 +75,6 @@ RUN mkdir -p /src/influxdb && \
     wget -q http://s3.amazonaws.com/influxdb/influxdb-0.7.3.amd64.tar.gz && \
     tar xzf influxdb-0.7.3.amd64.tar.gz --strip-components=1 && rm influxdb-0.7.3.amd64.tar.gz
 
-
 # Configuration
 # -------------
 
@@ -105,7 +104,8 @@ RUN chmod 0664 /var/lib/graphite/storage/graphite.db
 RUN cd /var/lib/graphite/webapp/graphite && python manage.py syncdb --noinput
 
 # Grafana
-ADD ./grafana/config.js /src/grafana/config.js
+ADD ./grafana/graphite_config.js /src/grafana/config.js
+ADD ./grafana/influxdb_config.js /src/grafana/config.js
 ADD ./grafana/hyperion.json /src/grafana/app/dashboards/default.json
 
 # Nginx
@@ -127,6 +127,9 @@ ADD ./logstash/indexer.conf /src/logstash/conf.d/indexer.conf
 # Kibana
 ADD ./kibana/config.js /src/kibana/config.js
 ADD ./kibana/hyperion.json /src/kibana/app/dashboards/default.json
+
+# InfluxDB
+ADD ./influxdb/config.toml /src/influxdb/config.toml
 
 # Ports
 # ------
@@ -163,6 +166,8 @@ EXPOSE 6379
 # InfluxDB
 EXPOSE 8086
 EXPOSE 8083
+EXPOSE 8090
+EXPOSE 8099
 
 # Volumes
 # --------
@@ -172,6 +177,7 @@ VOLUME ["/var/lib/storage/whisper"]
 VOLUME ["/var/lib/log/supervisor"]
 VOLUME ["/var/lib/log/nginx"]
 VOLUME ["/var/lib/redis"]
+VOLUME ["/var/lib/influxdb"]
 
 
 # Launch

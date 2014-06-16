@@ -20,23 +20,29 @@ HYPERION_DIR="/var/docker/hyperion"
 HYPERION_WEB=9090
 HYPERION_ES=9092
 HYPERION_REDIS=9379
+HYPERION_INFLUXDB=9083
+HYPERION_INFLUXDB=9086
 
 hyperion_pull() {
     sudo docker pull nlamirault/hyperion
 }
 
 hyperion_start() {
-    sudo mkdir -p $HYPERION_DIR/{elasticsearch,graphite,supervisor,nginx,redis}
+    sudo mkdir -p $HYPERION_DIR/{elasticsearch,graphite,supervisor,nginx,redis,influxdb}
     sudo chmod -R 777 $HYPERION_DIR/elasticsearch
     ID=$(sudo docker run -d \
               -v $HYPERION_DIR/elasticsearch:/var/lib/elasticsearch \
               -v $HYPERION_DIR/graphite:/var/lib/graphite/storage/whisper \
               -v $HYPERION_DIR/supervisor:/var/log/supervisor \
               -v $HYPERION_DIR/nginx:/var/log/nginx \
+              -v $HYPERION_DIR/influxdb:/var/lib/influxdb \
               -p $HYPERION_WEB:80 \
               -p $HYPERION_ES:9200 \
               -p $HYPERION_REDIS:6379 \
+              -p $HYPERION_INFLUXDB_UI:8083 \
+              -p $HYPERION_INFLUXDB_API:8086 \
               -p 8125:8125/udp -p 2003:2003/tcp \
+              -p 9222:22
               --name $NAME nlamirault/hyperion)
     echo "Hyperion ID : $ID"
 }
