@@ -17,7 +17,14 @@ NAME=hyperion
 CONTAINER=nlamirault/hyperion
 DOCKER_HYPERION=/var/docker/$(NAME)
 
-all: build
+all: help
+
+help:
+	@echo " -- Hyperion --"
+	@echo "   setup     : Creates directories used by Hyperion"
+	@echo "   build     : Make the Docker image"
+	@echo "   start     : Start a container"
+	@echo "   stop      : Stop the container"
 
 setup:
 	@echo "Creates $(DOCKER_HYPERION) directories on host"
