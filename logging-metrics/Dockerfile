@@ -22,7 +22,6 @@ RUN mkdir -p /src/logstash && cd /src/logstash && \
     wget -q https://download.elasticsearch.org/logstash/logstash/logstash-1.4.1.tar.gz && \
     tar xzf logstash-1.4.1.tar.gz --strip-components=1 && rm logstash-1.4.1.tar.gz
 
-
 # Configuration
 # -------------
 
