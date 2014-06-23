@@ -18,7 +18,20 @@ RUN mkdir -p /src/grafana && cd /src/grafana && \
     wget http://grafanarel.s3.amazonaws.com/grafana-1.5.4.tar.gz && \
     tar xzvf grafana-1.5.4.tar.gz --strip-components=1 && rm grafana-1.5.4.tar.gz
 
-ADD ./influxdb_config.js /src/grafana/config.js
+# Install Confd
+RUN curl -L https://github.com/kelseyhightower/confd/releases/download/v0.4.1/confd_0.4.1_linux_amd64.tar.gz | tar xz && \
+    mv confd /usr/local/bin/confd && \
+    mkdir -p /etc/confd/conf.d && \
+    mkdir -p /etc/confd/templates
+
+
+# Configuration
+# ---------------
+
+# Setup usign confd
+#ADD ./influxdb_config.js /src/grafana/config.js
+ADD ./influxdb_config.js.tmpl /etc/confd/templates/influxdb_config.js.tmpl
+ADD ./influxdb_config.toml /etc/confd/conf.d/influxdb_config.toml
 
 # Nginx
 ADD ./nginx.conf /etc/nginx/nginx.conf

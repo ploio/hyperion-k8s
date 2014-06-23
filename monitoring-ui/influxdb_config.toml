@@ -1,0 +1,9 @@
+[template]
+keys        = [
+            "/hyperion/monitoring-metrics/host",
+            "/hyperion/monitoring-metrics/ui",
+            "/hyperion/monitoring-metrics/mgmt"
+            ]
+mode        = "0644"
+src         = "influxdb_config.js.tmpl"
+dest        = "/src/grafana/config.js"
