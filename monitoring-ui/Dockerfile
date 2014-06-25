@@ -24,10 +24,8 @@ RUN curl -L https://github.com/kelseyhightower/confd/releases/download/v0.4.1/co
     mkdir -p /etc/confd/conf.d && \
     mkdir -p /etc/confd/templates
 
-
 # Configuration
 # ---------------
-
 # Setup usign confd
 #ADD ./influxdb_config.js /src/grafana/config.js
 ADD ./influxdb_config.js.tmpl /etc/confd/templates/influxdb_config.js.tmpl
@@ -35,6 +33,14 @@ ADD ./influxdb_config.toml /etc/confd/conf.d/influxdb_config.toml
 
 # Nginx
 ADD ./nginx.conf /etc/nginx/nginx.conf
+
+# Create directories
+RUN mkdir -p /etc/confd/conf.d
+RUN mkdir -p /etc/confd/templates
+
+# Add confd files
+ADD ./nginx.conf.tmpl /etc/confd/templates/nginx.conf.tmpl
+ADD ./nginx.toml /etc/confd/conf.d/nginx.toml
 
 # Supervisord
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
