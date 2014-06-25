@@ -14,11 +14,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MAIN=hyperion
-DOCKER_HYPERION=/var/docker/$(MAIN)
+DOCKER_HYPERION=/var/docker/$(MAIN)2
 NAME=$(MAIN)-logging
 CONTAINER=nlamirault/$(NAME)
 
-HYPERION_WEB=9390
+HYPERION_REDIS=9379
 
 all: help
 
@@ -31,7 +31,7 @@ help:
 
 setup:
 	@echo "Creates $(DOCKER_HYPERION) directories on host"
-	sudo mkdir -p $(DOCKER_HYPERION)/nginx
+	sudo mkdir -p $(DOCKER_HYPERION)/redis
 	sudo mkdir -p $(DOCKER_HYPERION)/supervisor
 
 destroy:
@@ -45,9 +45,9 @@ build:
 
 start:
 	docker run \
-	-v $(DOCKER_HYPERION)/supervisor:/var/lib/supervisor \
-	-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
-	-p $(HYPERION_WEB):80 \
+	-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
+	-v $(DOCKER_HYPERION)/redis:/var/lib/redis \
+	-p $(HYPERION_REDIS):6379 \
 	--name $(NAME) $(CONTAINER)
 
 stop:
