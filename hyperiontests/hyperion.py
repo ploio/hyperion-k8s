@@ -48,13 +48,17 @@ class HyperionTestCase(unittest.TestCase):
         # self._host = "http://%s:%s" % (host, self.port)
         #settings.HYPERION_WEB)
 
-    def http_get(self, uri):
+    def http_get(self, uri, username=None, password=None):
         """Perform a HTTP GET request.
 
         :param uri: URL for the new Request object
         """
         try:
             print("GET: %s/%s" % (self._host, uri))
-            return requests.get('%s/%s' % (self._host, uri))
+            if username is not None and password is not None:
+                return requests.get('%s/%s' % (self._host, uri),
+                                    auth=(username, password))
+            else:
+                return requests.get('%s/%s' % (self._host, uri))
         except exceptions.RequestException as e:
             print ("\033[0;31m%s \033[00m: %s" % ("Error", e))

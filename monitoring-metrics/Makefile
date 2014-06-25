@@ -14,11 +14,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MAIN=hyperion
-DOCKER_HYPERION=/var/docker/$(MAIN)
+DOCKER_HYPERION=/var/docker/$(MAIN)2
 NAME=$(MAIN)-monitoring-metrics
 CONTAINER=nlamirault/$(NAME)
-HYPERION_INFLUXDB_UI=9191
-HYPERION_INFLUXDB_API=9192
+
+HYPERION_INFLUXDB_UI=8083
+HYPERION_INFLUXDB_API=8086
+HYPERION_INFLUXDB_RAFT=8090
+HYPERION_INFLUXDB_CLUSTER=9099
+
 
 all: help
 
@@ -46,10 +50,12 @@ build:
 
 start:
 	docker run \
-	-v $(DOCKER_HYPERION)/supervisor:/var/lib/supervisor \
+	-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
 	-v $(DOCKER_HYPERION)/influxdb:/var/lib/influxdb \
 	-p $(HYPERION_INFLUXDB_UI):8083 \
 	-p $(HYPERION_INFLUXDB_API):8086 \
+	-p $(HYPERION_INFLUXDB_RAFT):8090 \
+	-p $(HYPERION_INFLUXDB_CLUSTER):9099 \
 	--name $(NAME) $(CONTAINER)
 
 stop:

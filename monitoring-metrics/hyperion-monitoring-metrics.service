@@ -5,7 +5,7 @@ Requires=docker.service
 
 [Service]
 #ExecStartPre=/usr/bin/docker pull nlamirault/hyperion-monitoring-metrics
-ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/supervisor:/var/log/supervisor /var/docker/hyperion/influxdb:/var/lib/influxdb -p 9193:8083 -p 9196:8086 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-monitoring-metrics nlamirault/hyperion-monitoring-metrics
+ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/supervisor:/var/log/supervisor /var/docker/hyperion/influxdb:/var/lib/influxdb -p 9291:8083 -p 9292:8086 -p 9293:8090 -p 9294:9099 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-monitoring-metrics nlamirault/hyperion-monitoring-metrics
 ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/host ${COREOS_PUBLIC_IPV4}
 ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/ui 9193
 ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/mgmt 9196

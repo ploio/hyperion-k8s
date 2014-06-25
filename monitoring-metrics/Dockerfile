@@ -14,11 +14,12 @@ RUN apt-get update && apt-get install -y \
     supervisor wget
 
 # Install InfluxDB
-RUN mkdir -p /src/influxdb && \
-    cd /src/influxdb && \
-    wget -q http://s3.amazonaws.com/influxdb/influxdb-0.7.3.amd64.tar.gz && \
-    tar xzf influxdb-0.7.3.amd64.tar.gz --strip-components=1 && rm influxdb-0.7.3.amd64.tar.gz
-
+# RUN mkdir -p /src/influxdb && \
+#     cd /src/influxdb && \
+#     wget -q http://s3.amazonaws.com/influxdb/influxdb-0.7.3.amd64.tar.gz && \
+#     tar xzf influxdb-0.7.3.amd64.tar.gz --strip-components=1 && rm influxdb-0.7.3.amd64.tar.gz
+ADD http://s3.amazonaws.com/influxdb/influxdb_latest_amd64.deb /influxdb_latest_amd64.deb
+RUN dpkg -i /influxdb_latest_amd64.deb
 
 # Configuration
 # -------------
@@ -43,7 +44,7 @@ EXPOSE 8099
 # Volumes
 # --------
 
-VOLUME ["/var/lib/log/supervisor"]
+VOLUME ["/var/log/supervisor"]
 VOLUME ["/var/lib/influxdb"]
 
 
