@@ -15,9 +15,15 @@
 
 
 from hyperiontests import hyperion
+from hyperiontests import settings
 
 
 class TestElasticsearch(hyperion.HyperionTestCase):
+
+    def setUp(self):
+        super(TestElasticsearch, self).setUp()
+        self._host = "http://%s:%s" % (settings.HYPERION_HOST,
+                                       settings.HYPERION_ES)
 
     def _elasticsearch_request(self, uri):
         response = self.http_get(uri)
@@ -29,10 +35,10 @@ class TestElasticsearch(hyperion.HyperionTestCase):
         return content
 
     def test_can_retrieve_elasticsearch_status(self):
-        content = self._elasticsearch_request('elasticsearch')
+        content = self._elasticsearch_request('')
         self.assertEqual(200, content['status'])
         self.assertEqual("1.2.1", content['version']['number'])
 
     def test_can_retrieve_nodes(self):
-        content = self._elasticsearch_request('elasticsearch/_nodes/_local')
+        content = self._elasticsearch_request('/_nodes/_local')
         self.assertEqual("elasticsearch", content['cluster_name'])

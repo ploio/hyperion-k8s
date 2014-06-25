@@ -13,10 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-NAME=hyperion-elasticsearch
+MAIN=hyperion
+DOCKER_HYPERION=/var/docker/$(MAIN)2
+NAME=$(MAIN)-elasticsearch
 CONTAINER=nlamirault/$(NAME)
-DOCKER_HYPERION=/var/docker/$(NAME)
-HYPERION_ES=9092
+HYPERION_ES=9192
 
 all: help
 

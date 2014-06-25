@@ -14,14 +14,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import os
+#import os
 import unittest
 
 import docker
 import requests
 from requests import exceptions
 
-from hyperiontests import settings
+#from hyperiontests import settings
 
 
 logger = logging.getLogger(__name__)
@@ -31,6 +31,8 @@ class HyperionTestCase(unittest.TestCase):
 
     tmp_imgs = []
     tmp_containers = []
+    host = ''
+    port = ''
 
     @classmethod
     def setUpClass(cls):
@@ -42,9 +44,9 @@ class HyperionTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = docker.Client()
-        host = os.getenv('HYPERION_HOST', settings.HYPERION_HOST)
-        self._host = "http://%s:%s" % (host,
-                                       settings.HYPERION_WEB)
+        # host = os.getenv('HYPERION_HOST', settings.HYPERION_HOST)
+        # self._host = "http://%s:%s" % (host, self.port)
+        #settings.HYPERION_WEB)
 
     def http_get(self, uri):
         """Perform a HTTP GET request.
