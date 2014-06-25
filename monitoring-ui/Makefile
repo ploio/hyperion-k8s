@@ -17,7 +17,8 @@ MAIN=hyperion
 DOCKER_HYPERION=/var/docker/$(MAIN)
 NAME=$(MAIN)-monitoring-ui
 CONTAINER=nlamirault/$(NAME)
-HYPERION_WEB=9190
+
+HYPERION_WEB=9290
 
 all: help
 
@@ -44,7 +45,7 @@ build:
 
 start:
 	docker run \
-	-v $(DOCKER_HYPERION)/supervisor:/var/lib/supervisor \
+	-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
 	-v $(DOCKER_HYPERION)/nginx:/var/log/nginx \
 	-p $(HYPERION_WEB):80 \
 	--name $(NAME) $(CONTAINER)

@@ -47,3 +47,4 @@ Hyperion ChangeLog
 
 [#4]: https://github.com/nlamirault/hyperion/issues/4
 [#6]: https://github.com/nlamirault/hyperion/issues/6
+[#7]: https://github.com/nlamirault/hyperion/issues/7
