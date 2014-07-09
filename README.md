@@ -33,16 +33,16 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
 
 * Test your installation using [sysinfo_influxdb][]:
 
-        $ $GOPATH/bin/sysinfo_influxdb -h 10.1.2.3:8086 -u root -p root -d hyperion -v
+        $ $GOPATH/bin/sysinfo_influxdb -h 10.1.3.5:8086 -u root -p root -d hyperion -v
 
-* Go to `http://10.1.2.3:9090/`
+* Go to `http://10.1.3.5:9090/`
 
 * You could connect to your virtual machine by ssh to manage your installation using [CoreOS][] tools ([Etcd][] and [Fleet][]).
 
         $ vagrant ssh
         $ fleetctl list-units
         UNIT			STATE		LOAD	ACTIVE	SUB	DESC		MACHINE
-        hyperion.service	launched	loaded	active	running	Hyperion	c1adaa61.../10.1.2.3
+        hyperion.service	launched	loaded	active	running	Hyperion	c1adaa61.../10.1.3.5
         $ fleetctl status hyperion.service
         ● hyperion.service - Hyperion
         Loaded: loaded (/etc/systemd/system/hyperion.service; linked-runtime)

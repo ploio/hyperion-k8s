@@ -8,7 +8,7 @@ Vagrant.configure('2') do |config|
   config.vm.box_url = "http://storage.core-os.net/coreos/amd64-usr/324.2.0/coreos_production_vagrant.box"
 
   config.vm.hostname = "Hyperion"
-  config.vm.network :private_network, :ip => '10.1.2.3'
+  config.vm.network :private_network, :ip => '10.1.3.5'
   config.vm.synced_folder ".", "/home/core/hyperion", type: "rsync"
   # FIX: Virtualbox 100%CPU using it
   #config.vm.synced_folder "/var/docker/hyperion", "/var/docker/hyperion", id: "core", :nfs => true,  :mount_options   => ['nolock,vers=3,udp']
@@ -32,7 +32,9 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision :file, :source => "coreos/user-data", :destination => "/tmp/vagrantfile-user-data"
   config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
-  #config.vm.provision :file, :source => "client/hyperion.sh", :destination => "/home/core/hyperion.sh"
-  #config.vm.provision :shell, :inline => "/home/core/hyperion.sh pull", :privileged => true
+
+  config.vm.provision :file, :source => "elasticsearch/hyperion-elasticsearch.service", :destination => "/tmp/hyperion-elasticsearch.service"
+  config.vm.provision :shell, :inline => "mv /tmp/hyperion-elasticsearch.service /etc/systemd/system/hyperion-elasticsearch.service", :privileged => true
+  config.vm.provision :shell, :inline => "fleetctl start /etc/systemd/system/hyperion-elasticsearch.service", :privileged => true
 
 end
