@@ -30,11 +30,32 @@ Vagrant.configure('2') do |config|
     config.vbguest.auto_update = false
   end
 
-  config.vm.provision :file, :source => "coreos/user-data", :destination => "/tmp/vagrantfile-user-data"
-  config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
+  config.vm.provision :file,
+                      :source => "coreos/user-data",
+                      :destination => "/tmp/vagrantfile-user-data"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/",
+                      :privileged => true
 
-  config.vm.provision :file, :source => "elasticsearch/hyperion-elasticsearch.service", :destination => "/tmp/hyperion-elasticsearch.service"
-  config.vm.provision :shell, :inline => "mv /tmp/hyperion-elasticsearch.service /etc/systemd/system/hyperion-elasticsearch.service", :privileged => true
-  config.vm.provision :shell, :inline => "fleetctl start /etc/systemd/system/hyperion-elasticsearch.service", :privileged => true
+  config.vm.provision :file,
+                      :source => "elasticsearch/hyperion-elasticsearch.service",
+                      :destination => "/tmp/hyperion-elasticsearch.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/hyperion-elasticsearch.service /etc/systemd/system/hyperion-elasticsearch.service",
+                      :privileged => true
+  config.vm.provision :shell,
+                      :inline => "fleetctl start /etc/systemd/system/hyperion-elasticsearch.service",
+                      :privileged => true
+
+  config.vm.provision :file,
+                      :source => "monitoring-metrics/hyperion-monitoring-metrics.service",
+                      :destination => "/tmp/hyperion-monitoring-metrics.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/hyperion-monitoring-metrics.service /etc/systemd/system/hyperion-monitoring-metrics.service",
+                      :privileged => true
+  config.vm.provision :shell,
+                      :inline => "fleetctl start /etc/systemd/system/hyperion-monitoring-metrics.service",
+                      :privileged => true
+
 
 end

@@ -4,12 +4,12 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-#ExecStartPre=/usr/bin/docker pull nlamirault/hyperion-monitoring-metrics
-ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/supervisor:/var/log/supervisor /var/docker/hyperion/influxdb:/var/lib/influxdb -p 9291:8083 -p 9292:8086 -p 9293:8090 -p 9294:9099 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-monitoring-metrics nlamirault/hyperion-monitoring-metrics
+ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/influxdb:/var/lib/influxdb -v /var/docker/hyperion/supervisor:/var/log/supervisor -p 8083:8083 -p 8086:8086 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-monitoring-metrics nlamirault/hyperion-monitoring-metrics:0.6.0
 ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/host ${COREOS_PUBLIC_IPV4}
-ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/ui 9193
-ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/mgmt 9196
+ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/ui 8083
+ExecStartPost=/usr/bin/etcdctl set /hyperion/monitoring-metrics/mgmt 8086
 ExecStop=/usr/bin/docker stop hyperion-monitoring-metrics
+ExecStop=/usr/bin/docker rm hyperion-monitoring-metrics
 ExecStopPost=/usr/bin/etcdctl rm /hyperion/monitoring-metrics/host
 ExecStopPost=/usr/bin/etcdctl rm /hyperion/monitoring-metrics/ui
 ExecStopPost=/usr/bin/etcdctl rm /hyperion/monitoring-metrics/mgmt
