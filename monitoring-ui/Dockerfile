@@ -27,9 +27,14 @@ RUN mkdir -p /src/grafana && cd /src/grafana && \
 # Configuration
 # ---------------
 # Setup usign confd
-ADD ./influxdb_config.js /src/grafana/config.js
+#ADD ./influxdb_config.js /src/grafana/config.js
+
 #ADD ./influxdb_config.js.tmpl /etc/confd/templates/influxdb_config.js.tmpl
 #ADD ./influxdb_config.toml /etc/confd/conf.d/influxdb_config.toml
+
+# Grafana
+ADD ./grafana_config.js /src/grafana/config.js
+ADD ./hyperion.json /src/grafana/app/dashboards/default.json
 
 # Nginx
 ADD ./nginx.conf /etc/nginx/nginx.conf

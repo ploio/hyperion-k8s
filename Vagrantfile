@@ -57,5 +57,15 @@ Vagrant.configure('2') do |config|
                       :inline => "fleetctl start /etc/systemd/system/hyperion-monitoring-metrics.service",
                       :privileged => true
 
+  config.vm.provision :file,
+                      :source => "monitoring-ui/hyperion-monitoring-ui.service",
+                      :destination => "/tmp/hyperion-monitoring-ui.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/hyperion-monitoring-ui.service /etc/systemd/system/hyperion-monitoring-ui.service",
+                      :privileged => true
+  config.vm.provision :shell,
+                      :inline => "fleetctl start /etc/systemd/system/hyperion-monitoring-ui.service",
+                      :privileged => true
+
 
 end

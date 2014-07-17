@@ -14,6 +14,7 @@ function (Settings) {
      * For Basic authentication use: http://username:password@domain.com:9200
      */
     //elasticsearch: "http://"+window.location.hostname+":9200",
+      elasticsearch: "/elasticsearch",
 
     /**
      * graphite-web url:
@@ -24,12 +25,16 @@ function (Settings) {
      */
     //graphiteUrl: "http://"+window.location.hostname+":8080",
       datasources: {
-          influx: {
+          'InfluxDB': {
               default: true,
               type: 'influxdb',
-              url: 'http://' + window.location.hostname + ':8086/db/hyperion',
+              url: 'http://' + window.location.hostname+ ':8086/db/hyperion-lite',
               username: 'root',
               password: 'root',
+          },
+          'Graphite': {
+              type: 'graphite',
+              url: "/graphite"
           }
       },
 

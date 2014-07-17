@@ -7,7 +7,7 @@ Requires=docker.service
 ExecStart=/usr/bin/docker run --rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/supervisor:/var/log/supervisor -p 9092:9200 -e HOST_IP=${COREOS_PUBLIC_IPV4} --name hyperion-elasticsearch nlamirault/hyperion-elasticsearch:0.6.0
 ExecStartPost=/usr/bin/etcdctl set /hyperion/host/elasticsearch ${COREOS_PUBLIC_IPV4}
 ExecStop=/usr/bin/docker stop hyperion-elasticsearch
-ExecStop=/usr/bin/docker rm hyperion-elasticsearch
+ExecStop=/usr/bin/docker rm -f hyperion-elasticsearch
 ExecStopPost=/usr/bin/etcdctl rm /hyperion/host/elasticsearch
 
 [X-Fleet]
