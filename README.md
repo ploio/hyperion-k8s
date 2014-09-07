@@ -18,14 +18,18 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
 * [Kopf][]: `http://xxx:9092/_plugin/kopf/`
 
-It's a *Trusted Build* on the [Docker Hub](https://registry.hub.docker.com/u/nlamirault/hyperion).
-
 
 ## Deployment
 
-A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to use it in a virtual machine. This virtual machine is sharing volume `/var/docker/hyperion` between host and guest machine to store metrics.
+A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to
+use it in a virtual machine. This virtual machine is sharing volume
+`/var/docker/hyperion` between host and guest machine to store metrics.
 
-* Install dependencies : [Virtualbox][] (>= 4.3.10), [Vagrant][] (>= 1.6), NFS server
+* Install dependencies :
+
+** [Virtualbox][] (>= 4.3.10),
+** [Vagrant][] (>= 1.6),
+** NFS server
 
 * Launch VM:
 
@@ -37,7 +41,8 @@ A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to us
 
 * Go to `http://10.1.3.5:9090/`
 
-* You could connect to your virtual machine by ssh to manage your installation using [CoreOS][] tools ([Etcd][] and [Fleet][]).
+* You could connect to your virtual machine by ssh to manage your installation using
+[CoreOS][] tools ([Etcd][] and [Fleet][]).
 
         $ vagrant ssh
         $ fleetctl list-units

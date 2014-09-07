@@ -4,8 +4,8 @@
 Vagrant.configure('2') do |config|
   config.vm.box = 'hyperion'
 
-  config.vm.box = "coreos-324.2.0"
-  config.vm.box_url = "http://storage.core-os.net/coreos/amd64-usr/324.2.0/coreos_production_vagrant.box"
+  config.vm.box = "coreos-423..0"
+  config.vm.box_url = "http://storage.core-os.net/coreos/amd64-usr/423.0.0/coreos_production_vagrant.box"
 
   config.vm.hostname = "Hyperion"
   config.vm.network :private_network, :ip => '10.1.3.5'
@@ -39,6 +39,9 @@ Vagrant.configure('2') do |config|
   config.vm.provision :shell,
                       :inline => "mv /tmp/apiserver.service /etc/systemd/system/apiserver.service",
                       :privileged => true
+  config.vm.provision :shell,
+                      :inline => "fleetctl start /etc/systemd/system/apiserver.service",
+                      :privileged => true
 
   config.vm.provision :file,
                       :source => "kubernetes/units/controller-manager.service",
@@ -46,36 +49,9 @@ Vagrant.configure('2') do |config|
   config.vm.provision :shell,
                       :inline => "mv /tmp/controller-manager.service /etc/systemd/system/controller-manager.service",
                       :privileged => true
-
-  config.vm.provision :file,
-                      :source => "kubernetes/units/docker.service",
-                      :destination => "/tmp/docker.service"
   config.vm.provision :shell,
-                      :inline => "mv /tmp/docker.service /etc/systemd/system/docker.service",
+                      :inline => "fleetctl start /etc/systemd/system/controller-manager.service",
                       :privileged => true
-
-  config.vm.provision :file,
-                      :source => "kubernetes/units/download-kubernetes.service",
-                      :destination => "/tmp/download-kubernetes.service"
-  config.vm.provision :shell,
-                      :inline => "mv /tmp/download-kubernetes.service /etc/systemd/system/download-kubernetes.service",
-                      :privileged => true
-
-  config.vm.provision :file,
-                      :source => "kubernetes/units/kubelet.service",
-                      :destination => "/tmp/kubelet.service"
-  config.vm.provision :shell,
-                      :inline => "mv /tmp/kubelet.service /etc/systemd/system/kubelet.service",
-                      :privileged => true
-
-  config.vm.provision :file,
-                      :source => "kubernetes/units/proxy.service",
-                      :destination => "/tmp/proxy.service"
-  config.vm.provision :shell,
-                      :inline => "mv /tmp/proxy.service /etc/systemd/system/proxy.service",
-                      :privileged => true
-
-
 
   # Hyperion components
 

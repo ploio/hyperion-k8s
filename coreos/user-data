@@ -80,6 +80,100 @@ coreos:
       Type=oneshot
       ExecStartPre=/usr/bin/rm /etc/motd
       ExecStart=/usr/bin/ln -s /run/hyperion/motd /etc/motd
+   - name: kubernetes.target
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Kubernetes
+        Wants=etcd.service
+
+        [Install]
+        WantedBy=multi-user.target
+   - name: rudder.service
+      enable: yes
+      content: |
+        [Unit]
+        ConditionFileIsExecutable=/opt/bin/rudder
+        Description=Ruder service
+        Requires=etcd.service
+        After=etcd.service
+
+        [Service]
+        ExecStartPre=-/usr/bin/etcdctl mk /coreos.com/network/config '{"Network":"10.244.0.0/16"}'
+        ExecStart=/usr/bin/bash -c "/opt/bin/rudder -iface=${COREOS_PRIVATE_IPV4}"
+
+        [Install]
+        WantedBy=kubernetes.target
+   - name: download-kubernetes.service
+      enable: yes
+      content: |
+        [Unit]
+        After=network-online.target
+        Before=apiserver.service
+        Before=controller-manager.service
+        Before=kubelet.service
+        Before=proxy.service
+        Description=Download Kubernetes Binaries
+        Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+        Requires=network-online.target
+
+        [Service]
+        ExecStart=/usr/bin/wget -N -P /opt/bin http://storage.googleapis.com/kubernetes/apiserver
+        ExecStart=/usr/bin/wget -N -P /opt/bin http://storage.googleapis.com/kubernetes/controller-manager
+        ExecStart=/usr/bin/wget -N -P /opt/bin http://storage.googleapis.com/kubernetes/kubecfg
+        ExecStart=/usr/bin/wget -N -P /opt/bin http://storage.googleapis.com/kubernetes/kubelet
+        ExecStart=/usr/bin/wget -N -P /opt/bin http://storage.googleapis.com/kubernetes/proxy
+        ExecStart=/usr/bin/chmod +x /opt/bin/apiserver
+        ExecStart=/usr/bin/chmod +x /opt/bin/controller-manager
+        ExecStart=/usr/bin/chmod +x /opt/bin/kubecfg
+        ExecStart=/usr/bin/chmod +x /opt/bin/kubelet
+        ExecStart=/usr/bin/chmod +x /opt/bin/proxy
+        RemainAfterExit=yes
+        Type=oneshot
+
+        [Install]
+        WantedBy=kubernetes.target
+  - name: proxy.service
+      enable: yes
+      content: |
+        [Unit]
+        ConditionFileIsExecutable=/opt/bin/proxy
+        Description=Kubernetes Proxy
+        Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+        Requires=rudder.service
+        After=rudder.service
+
+        [Service]
+        ExecStart=/opt/bin/proxy --etcd_servers=http://127.0.0.1:4001 --logtostderr=true
+        Restart=always
+        RestartSec=2
+
+        [Install]
+        WantedBy=kubernetes.target
+    - name: kubelet.service
+      enable: yes
+      content: |
+        [Unit]
+        ConditionFileIsExecutable=/opt/bin/kubelet
+        Description=Kubernetes Kubelet
+        Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+        Requires=rudder.service
+        After=rudder.service
+
+        [Service]
+        EnvironmentFile=-/etc/environment
+        ExecStart=/bin/bash -c "/opt/bin/kubelet \
+          --address=0.0.0.0 \
+          --port=10250 \
+          --hostname_override=$COREOS_PRIVATE_IPV4 \
+          --etcd_servers=http://127.0.0.1:4001 \
+          --logtostderr=true"
+        Restart=always
+        RestartSec=2
+
+        [Install]
+        WantedBy=kubernetes.target
 write_files:
   - path: /run/hyperion/motd
     content: " \n\e[39mWelcome to Hyperion [0.6.0]\t\t\tPowered by Core\e[38;5;45mO\e[38;5;206mS\e[39m\n\n"
