@@ -30,6 +30,55 @@ Vagrant.configure('2') do |config|
     config.vbguest.auto_update = false
   end
 
+
+  # Kubernetes services
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/apiserver.service",
+                      :destination => "/tmp/apiserver.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/apiserver.service /etc/systemd/system/apiserver.service",
+                      :privileged => true
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/controller-manager.service",
+                      :destination => "/tmp/controller-manager.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/controller-manager.service /etc/systemd/system/controller-manager.service",
+                      :privileged => true
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/docker.service",
+                      :destination => "/tmp/docker.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/docker.service /etc/systemd/system/docker.service",
+                      :privileged => true
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/download-kubernetes.service",
+                      :destination => "/tmp/download-kubernetes.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/download-kubernetes.service /etc/systemd/system/download-kubernetes.service",
+                      :privileged => true
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/kubelet.service",
+                      :destination => "/tmp/kubelet.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/kubelet.service /etc/systemd/system/kubelet.service",
+                      :privileged => true
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/proxy.service",
+                      :destination => "/tmp/proxy.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/proxy.service /etc/systemd/system/proxy.service",
+                      :privileged => true
+
+
+
+  # Hyperion components
+
   config.vm.provision :file,
                       :source => "coreos/user-data",
                       :destination => "/tmp/vagrantfile-user-data"
