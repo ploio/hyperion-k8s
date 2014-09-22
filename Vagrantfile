@@ -4,8 +4,8 @@
 Vagrant.configure('2') do |config|
   config.vm.box = 'hyperion'
 
-  config.vm.box = "coreos-324.2.0"
-  config.vm.box_url = "http://storage.core-os.net/coreos/amd64-usr/324.2.0/coreos_production_vagrant.box"
+  config.vm.box = "coreos-410.0.0"
+  config.vm.box_url = "http://storage.core-os.net/coreos/amd64-usr/410.0.0/coreos_production_vagrant.box"
 
   config.vm.hostname = "Hyperion"
   config.vm.network :private_network, :ip => '10.1.3.5'
@@ -31,7 +31,14 @@ Vagrant.configure('2') do |config|
   end
 
 
-  # Kubernetes services
+  # Install services
+
+  config.vm.provision :file,
+                      :source => "kubernetes/units/download-kubernetes.service",
+                      :destination => "/tmp/download-kubernetes.service"
+  config.vm.provision :shell,
+                      :inline => "mv /tmp/download-kubernetes.service /etc/systemd/system/download-kubernetes.service",
+                      :privileged => true
 
   config.vm.provision :file,
                       :source => "kubernetes/units/apiserver.service",
@@ -39,9 +46,6 @@ Vagrant.configure('2') do |config|
   config.vm.provision :shell,
                       :inline => "mv /tmp/apiserver.service /etc/systemd/system/apiserver.service",
                       :privileged => true
-  # config.vm.provision :shell,
-  #                     :inline => "fleetctl start /etc/systemd/system/apiserver.service",
-  #                     :privileged => true
 
   config.vm.provision :file,
                       :source => "kubernetes/units/controller-manager.service",
@@ -49,47 +53,42 @@ Vagrant.configure('2') do |config|
   config.vm.provision :shell,
                       :inline => "mv /tmp/controller-manager.service /etc/systemd/system/controller-manager.service",
                       :privileged => true
-  # config.vm.provision :shell,
-  #                     :inline => "fleetctl start /etc/systemd/system/controller-manager.service",
-  #                     :privileged => true
-
-  # Hyperion components
 
   config.vm.provision :file,
-                      :source => "coreos/user-data",
-                      :destination => "/tmp/vagrantfile-user-data"
+                      :source => "kubernetes/units/kubelet.service",
+                      :destination => "/tmp/kubelet.service"
   config.vm.provision :shell,
-                      :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/",
+                      :inline => "mv /tmp/kubelet.service /etc/systemd/system/kubelet.service",
                       :privileged => true
 
   config.vm.provision :file,
-                      :source => "elasticsearch/hyperion-elasticsearch.service",
-                      :destination => "/tmp/hyperion-elasticsearch.service"
+                      :source => "kubernetes/units/proxy.service",
+                      :destination => "/tmp/proxy.service"
   config.vm.provision :shell,
-                      :inline => "mv /tmp/hyperion-elasticsearch.service /etc/systemd/system/hyperion-elasticsearch.service",
-                      :privileged => true
-  config.vm.provision :shell,
-                      :inline => "fleetctl start /etc/systemd/system/hyperion-elasticsearch.service",
+                      :inline => "mv /tmp/proxy.service /etc/systemd/system/proxy.service",
                       :privileged => true
 
-  config.vm.provision :file,
-                      :source => "monitoring-metrics/hyperion-monitoring-metrics.service",
-                      :destination => "/tmp/hyperion-monitoring-metrics.service"
+  # SystemD services
+
   config.vm.provision :shell,
-                      :inline => "mv /tmp/hyperion-monitoring-metrics.service /etc/systemd/system/hyperion-monitoring-metrics.service",
-                      :privileged => true
-  config.vm.provision :shell,
-                      :inline => "fleetctl start /etc/systemd/system/hyperion-monitoring-metrics.service",
+                      :inline => "systemctl start etcd",
                       :privileged => true
 
-  config.vm.provision :file,
-                      :source => "monitoring-ui/hyperion-monitoring-ui.service",
-                      :destination => "/tmp/hyperion-monitoring-ui.service"
   config.vm.provision :shell,
-                      :inline => "mv /tmp/hyperion-monitoring-ui.service /etc/systemd/system/hyperion-monitoring-ui.service",
+                      :inline => "systemctl start download-kubernetes",
+                      :privileged => true
+
+  config.vm.provision :shell,
+                      :inline => "systemctl start apiserver",
                       :privileged => true
   config.vm.provision :shell,
-                      :inline => "fleetctl start /etc/systemd/system/hyperion-monitoring-ui.service",
+                      :inline => "systemctl start controller-manager",
+                      :privileged => true
+  config.vm.provision :shell,
+                      :inline => "systemctl start kubelet",
+                      :privileged => true
+  config.vm.provision :shell,
+                      :inline => "systemctl start proxy",
                       :privileged => true
 
 
