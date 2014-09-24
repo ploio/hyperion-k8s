@@ -45,10 +45,41 @@ on a cluster of [CoreOS][] VMs:
 ** [Vagrant][] (>= 1.6),
 ** NFS server
 
-* Launch VM:
+* Help:
 
-        $ vagrant up
+        $ make
 
+* Creates the cluster :
+
+        $ make create
+
+* Management :
+
+        $ vagrant ssh master
+        $ kubecfg list minions
+        Minion identifier
+        ----------
+        10.245.1.101
+        10.245.1.102
+        $ kubecfg -c kubernetes/deploy/elasticsearch-pod.json create pods
+        [...]
+        $ kubecfg list pods
+        ID                     Image(s)                   Host                Labels                      Status
+        ----------             ----------                 ----------          ----------                  ----------
+        elasticsearch-master   dockerfile/elasticsearch   10.245.1.102/       name=elasticsearch-master   Running
+        $ curl http://10.245.1.102:9200
+        {
+            "status" : 200,
+            "name" : "Tempus",
+            "version" : {
+            "number" : "1.3.2",
+            "build_hash" : "dee175dbe2f254f3f26992f5d7591939aaefd12f",
+            "build_timestamp" : "2014-08-13T14:29:30Z",
+            "build_snapshot" : false,
+            "lucene_version" : "4.9"
+            },
+            "tagline" : "You Know, for Search"
+        }
 
 
 ## Support
@@ -91,6 +122,8 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 [Docker]: https://www.docker.io
 [CoreOS]: http://coreos.com
+[Kubernetes]: https://github.com/GoogleCloudPlatform/kubernetes
+
 [Etcd]: http://coreos.com/using-coreos/etcd
 [Fleet]: http://coreos.com/using-coreos/clustering/
 [Nginx]: http://nginx.org
