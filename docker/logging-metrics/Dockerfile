@@ -11,11 +11,11 @@ RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8
 
 # Dependencies
 RUN apt-get update && apt-get install -y \
-    supervisor wget redis-server openjdk-7-jre
+    supervisor wget openjdk-7-jre
 
 # Install Redis
-RUN mkdir -p /src/redis
-RUN mkdir -p /var/lib/redis
+# RUN mkdir -p /src/redis
+# RUN mkdir -p /var/lib/redis
 
 # Install Logstash
 RUN mkdir -p /src/logstash && cd /src/logstash && \
@@ -29,7 +29,7 @@ RUN mkdir -p /src/logstash && cd /src/logstash && \
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Redis
-ADD ./redis.conf /src/redis/redis.conf
+# ADD ./redis.conf /src/redis/redis.conf
 
 # Logstash
 RUN mkdir -p /src/logstash/conf.d
@@ -41,13 +41,13 @@ ADD ./indexer.conf /src/logstash/conf.d/indexer.conf
 # ------
 
 # Redis
-EXPOSE 6379
+# EXPOSE 6379
 
 # Volumes
 # --------
 
 VOLUME ["/var/log/supervisor"]
-VOLUME ["/var/lib/redis"]
+# VOLUME ["/var/lib/redis"]
 
 
 # Launch

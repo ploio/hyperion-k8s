@@ -5,8 +5,7 @@
 
 ## Description
 
-[Hyperion][] is a [Docker][] (>= 0.11) image (Ubuntu 14.04 based) containing :
-* [Hyperion][] web description : `http://xxx:9090`
+[Hyperion][] is a monitoring and logging system with :
 * [Elasticsearch][] (v1.2.1) web interface : `http://xxx:9092/elasticsearch/`
 * [Grafana][] (v1.5.4) web interface : `http://xxx:9090/grafana/`
 * [Graphite][] (v3.1.0) web interface : `http://xxx:9090/graphite/`
@@ -18,12 +17,27 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
 * [Kopf][]: `http://xxx:9092/_plugin/kopf/`
 
+## Kubernetes
+
+A `Vagrantfile` using [CoreOS][] (version 410.0.0) is provided if you want to
+use it in virtual machines. This installation creates a [Kubernetes][] system
+on a cluster of [CoreOS][] VMs:
+
+### Kubernetes master
+
+- maintains the state of the [Kubernetes][] server runtime
+- API server
+- Scheduler
+- Registries (minions, pod, service)
+- Storage
+
+### Kubernetes minions
+
+- Represents the Host where containers are created
+- Components : PODs, Kubelet, cAdvisor, Proxy
+
 
 ## Deployment
-
-A `Vagrantfile` using [CoreOS][] (version 324.2.0) is provided if you want to
-use it in a virtual machine. This virtual machine is sharing volume
-`/var/docker/hyperion` between host and guest machine to store metrics.
 
 * Install dependencies :
 
@@ -35,71 +49,6 @@ use it in a virtual machine. This virtual machine is sharing volume
 
         $ vagrant up
 
-* Test your installation using [sysinfo_influxdb][]:
-
-        $ $GOPATH/bin/sysinfo_influxdb -h 10.1.3.5:8086 -u root -p root -d hyperion -v
-
-* Go to `http://10.1.3.5:9090/`
-
-* You could connect to your virtual machine by ssh to manage your installation using
-[CoreOS][] tools ([Etcd][] and [Fleet][]).
-
-        $ vagrant ssh
-        $ fleetctl list-units
-        UNIT			STATE		LOAD	ACTIVE	SUB	DESC		MACHINE
-        hyperion.service	launched	loaded	active	running	Hyperion	c1adaa61.../10.1.3.5
-        $ fleetctl status hyperion.service
-        ● hyperion.service - Hyperion
-        Loaded: loaded (/etc/systemd/system/hyperion.service; linked-runtime)
-        Active: active (running) since Wed 2014-06-10 22:07:42 UTC; 10min ago
-        Main PID: 3314 (docker)
-            CGroup: /system.slice/hyperion.service
-                    └─3314 /usr/bin/docker run -rm -v /var/docker/hyperion/elasticsearch:/var/lib/elasticsearch -v /var/docker/hyperion/graphite:/var/lib/graphite/storage/whisper -v /var/docker/hyperion/supervisor:/var/log/supervisor -v /var/docker/hyperion/nginx:/var/log/nginx -p 9090:80 -p 9092:9200 -p 9379:6379 -p 8125:8125/udp -p 2003:2003/tcp --name hyperion nlamirault/hyperion
-
-        Jun 10 22:07:44 hyperion docker[3314]: 2014-06-10 22:07:44,643 INFO spawned: 'carbon-cache' with pid 17
-        Jun 10 22:07:44 hyperion docker[3314]: 2014-06-10 22:07:44,657 INFO spawned: 'elasticsearch' with pid 18
-
-
-
-## Usage
-
-You could use [Hyperion][] to collect event and logs from hosts.
-
-### Fluentd
-
-Using this file [fluent.conf][] for [Fluentd][] and send logs :
-
-    $ gem install fluentd
-    $ gem install fluent-plugin-elasticsearch
-    $ fluentd -c fluent.conf
-
-### Heka
-
-Using this file [hekad.toml][] for [Heka][] and send logs :
-
-    $ wget https://github.com/mozilla-services/heka/releases/download/v0.5.2/heka_0.5.2_amd64.deb
-    $ dpkg -i heka_0.5.2_amd64.deb
-    $ hekad -config=hekad.toml
-
-
-## Development
-
-* Build a container :
-
-        $ make clean && make build
-
-* Setup directories :
-
-        $ make setup
-
-* Start the container :
-
-        $ make start
-
-* You could launch unit tests using local installation or VM installation :
-
-        $ tox
-        $ tox -evm
 
 
 ## Support

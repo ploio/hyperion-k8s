@@ -2,3 +2,4 @@
 .tox/
 hyperion.egg-info/
 .vagrant/
+ssh.config
