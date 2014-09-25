@@ -15,6 +15,7 @@
 
 
 VAGRANT = vagrant
+DOCKER = "docker"
 
 NO_COLOR=\033[0m
 OK_COLOR=\033[32;01m
@@ -29,16 +30,18 @@ all: help
 
 help:
 	@echo -e "$(OK_COLOR) ==== Hyperion [$(VERSION)]====$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - destroy$(NO_COLOR)  : Destroy Hyperion cluster$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - status$(NO_COLOR)   : State of the Hyperion cluster$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - create$(NO_COLOR)   : Create the Hyperion cluster$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - start$(NO_COLOR)    : Start the Hyperion cluster$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - stop$(NO_COLOR)     : Stop the Hyperion cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - destroy$(NO_COLOR)        : Destroy Hyperion cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - status$(NO_COLOR)         : State of the Hyperion cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - create$(NO_COLOR)         : Create the Hyperion cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - start$(NO_COLOR)          : Start the Hyperion cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - stop$(NO_COLOR)           : Stop the Hyperion cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - docker$(NO_COLOR)         : Build the Docker images$(NO_COLOR)"
 
 .PHONY: destroy
 destroy:
 	@echo -e "$(OK_COLOR) [hyperion] Destroying cluster$(NO_COLOR)"
 	@$(VAGRANT) destroy -f
+	@rm -f ssh.config
 
 .PHONY: start
 start:
@@ -55,9 +58,28 @@ status:
 	@echo -e "$(OK_COLOR) [hyperion] State of the cluster$(NO_COLOR)"
 	@$(VAGRANT) status
 
-.PHONY: up
+.PHONY: create
 create:
 	@echo -e "$(OK_COLOR) [hyperion] Creates cluster$(NO_COLOR)"
 	@$(VAGRANT) up
 	@$(VAGRANT) ssh-config master > ssh.config
 	@ssh -f -nNT -L 8080:127.0.0.1:8080 -F ssh.config master
+
+.PHONY: docker-metrics
+docker-metrics:
+	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Metrics images$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR) Build Docker Monitoring Metrics $(NO_COLOR)"
+	@$(DOCKER) build -t hyperion/monitoring-metrics docker/monitoring-metrics/
+	@echo -e "$(WARN_COLOR) Build Docker Monitoring UI $(NO_COLOR)"
+	@$(DOCKER) build -t hyperion/monitoring-ui docker/monitoring-ui/
+
+.PHONY: docker-logging
+docker-logging:
+	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Logging images$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR) Build Docker Logging Metrics $(NO_COLOR)"
+	@$(DOCKER) build -t hyperion/logging-metrics docker/logging-metrics/
+	@echo -e "$(WARN_COLOR) Build Docker Logging UI $(NO_COLOR)"
+	@$(DOCKER) build -t hyperion/logging-ui docker/logging-ui/
+
+.PHONY: docker
+docker: docker-metrics docker-logging

@@ -5,7 +5,8 @@
 
 ## Description
 
-[Hyperion][] is a monitoring and logging system with :
+[Hyperion][] is a monitoring and logging system with. The stack :
+* [Kubernetes][]
 * [Elasticsearch][] (v1.2.1) web interface : `http://xxx:9092/elasticsearch/`
 * [Grafana][] (v1.5.4) web interface : `http://xxx:9090/grafana/`
 * [Graphite][] (v3.1.0) web interface : `http://xxx:9090/graphite/`
@@ -39,11 +40,7 @@ on a cluster of [CoreOS][] VMs:
 
 ## Deployment
 
-* Install dependencies :
-
-** [Virtualbox][] (>= 4.3.10),
-** [Vagrant][] (>= 1.6),
-** NFS server
+* Install dependencies : [Virtualbox][] (>= 4.3.10), [Vagrant][] (>= 1.6),
 
 * Help:
 
