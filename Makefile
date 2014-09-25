@@ -69,17 +69,17 @@ create:
 docker-metrics:
 	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Metrics images$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR) Build Docker Monitoring Metrics $(NO_COLOR)"
-	@$(DOCKER) build -t hyperion/monitoring-metrics docker/monitoring-metrics/
+	@$(DOCKER) build -t nlamirault/hyperion-monitoring-metrics docker/monitoring-metrics/
 	@echo -e "$(WARN_COLOR) Build Docker Monitoring UI $(NO_COLOR)"
-	@$(DOCKER) build -t hyperion/monitoring-ui docker/monitoring-ui/
+	@$(DOCKER) build -t nlamirault/hyperion-monitoring-ui docker/monitoring-ui/
 
 .PHONY: docker-logging
 docker-logging:
 	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Logging images$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR) Build Docker Logging Metrics $(NO_COLOR)"
-	@$(DOCKER) build -t hyperion/logging-metrics docker/logging-metrics/
+	@$(DOCKER) build -t nlamirault/hyperion-logging-metrics docker/logging-metrics/
 	@echo -e "$(WARN_COLOR) Build Docker Logging UI $(NO_COLOR)"
-	@$(DOCKER) build -t hyperion/logging-ui docker/logging-ui/
+	@$(DOCKER) build -t nlamirault/hyperion-logging-ui docker/logging-ui/
 
 .PHONY: docker
 docker: docker-metrics docker-logging

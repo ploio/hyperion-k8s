@@ -58,6 +58,9 @@ on a cluster of [CoreOS][] VMs:
         ----------
         10.245.1.101
         10.245.1.102
+
+* Deploy applications :
+
         $ kubecfg -c kubernetes/deploy/elasticsearch-pod.json create pods
         [...]
         $ kubecfg list pods
@@ -77,6 +80,14 @@ on a cluster of [CoreOS][] VMs:
             },
             "tagline" : "You Know, for Search"
         }
+
+        $ kubecfg -c kubernetes/deploy/monitoring-pod.json create pods
+
+        $ kubecfg -c kubernetes/deploy/logging-pod.json create pods
+
+
+
+
 
 
 ## Support

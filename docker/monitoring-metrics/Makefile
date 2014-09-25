@@ -48,6 +48,10 @@ reset: destroy setup
 build:
 	docker build -t $(CONTAINER) .
 
+publish:
+	docker login
+	docker push $(CONTAINER)
+
 start:
 	docker run \
 	-v $(DOCKER_HYPERION)/supervisor:/var/log/supervisor \
