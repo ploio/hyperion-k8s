@@ -62,6 +62,7 @@ status:
 create:
 	@echo -e "$(OK_COLOR) [hyperion] Creates cluster$(NO_COLOR)"
 	@$(VAGRANT) up
+	@rm -f ssh.config
 	@$(VAGRANT) ssh-config master > ssh.config
 	@ssh -f -nNT -L 8080:127.0.0.1:8080 -F ssh.config master
 

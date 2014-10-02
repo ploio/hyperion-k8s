@@ -18,11 +18,19 @@ Some [Elasticsearch][] plugins are available:
 * [ElasticHQ][]: `http://xxx:9092/_plugin/HQ/`
 * [Kopf][]: `http://xxx:9092/_plugin/kopf/`
 
+
+## CoreOS
+
+[CoreOS][] is a new linux distribution aimed at scalable deployments and
+[Docker][] support.
+[Fleet][] allows you to manage systemd based services on a cluster of machines.
+[Kubernetes][] will be installed using systemd services and launch them with
+[Fleet][].
+[Etcd][] is a highly-available key value store for shared configuration and
+service discovery
+
 ## Kubernetes
 
-A `Vagrantfile` using [CoreOS][] (version 410.0.0) is provided if you want to
-use it in virtual machines. This installation creates a [Kubernetes][] system
-on a cluster of [CoreOS][] VMs:
 
 ### Kubernetes master
 
@@ -39,6 +47,10 @@ on a cluster of [CoreOS][] VMs:
 
 
 ## Deployment
+
+A `Vagrantfile` using [CoreOS][] (version 410.0.0) is provided if you want to
+use it in virtual machines. This installation creates a [Kubernetes][] system
+on a cluster of [CoreOS][] VMs:
 
 * Install dependencies : [Virtualbox][] (>= 4.3.10), [Vagrant][] (>= 1.6),
 

@@ -9,10 +9,10 @@
             "containers": [
                 {
                     "name": "logging-metrics",
-                    "image": "hyperion-logging-metrics",
+                    "image": "nlamirault/hyperion-logging-metrics",
                 }, {
-	            "name": "logging-ui",
-                    "image": "hyperion-logging-ui",
+                    "name": "logging-ui",
+                    "image": "nlamirault/hyperion-logging-ui",
                     "ports": [{
                         "containerPort": 80,
                         "hostPort": 80
