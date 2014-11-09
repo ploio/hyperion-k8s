@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MAIN=hyperion
-DOCKER_HYPERION=/var/docker/$(MAIN)2
+DOCKER_HYPERION=/var/docker/$(MAIN)
 NAME=$(MAIN)-elasticsearch
 CONTAINER=nlamirault/$(NAME)
 HYPERION_ES=9192
