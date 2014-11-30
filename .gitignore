@@ -1,5 +1,6 @@
-*.pyc
-.tox/
-hyperion.egg-info/
 .vagrant/
 ssh.config
+etcdctl
+fleetctl
+kubecfg
+bin/
