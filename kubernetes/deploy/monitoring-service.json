@@ -1,0 +1,9 @@
+{
+  "id": "monitoringmaster",
+  "kind": "Service",
+  "apiVersion": "v1beta1",
+  "port": 10001,
+  "selector": {
+    "name": "hyperion-monitoring"
+  }
+}

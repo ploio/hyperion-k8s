@@ -6,7 +6,6 @@
 ## Description
 
 [Hyperion][] is a monitoring and logging system with. The stack :
-* [Kubernetes][]
 * [Elasticsearch][] (v1.2.1) web interface : `http://xxx:9092/elasticsearch/`
 * [Grafana][] (v1.5.4) web interface : `http://xxx:9090/grafana/`
 * [Graphite][] (v3.1.0) web interface : `http://xxx:9090/graphite/`
@@ -64,8 +63,7 @@ on a cluster of [CoreOS][] VMs:
 
 * Management :
 
-        $ vagrant ssh master
-        $ kubecfg list minions
+        $  kubernetes/bin/kubecfg list minions
         Minion identifier
         ----------
         10.245.1.101
@@ -73,32 +71,38 @@ on a cluster of [CoreOS][] VMs:
 
 * Deploy applications :
 
-        $ kubecfg -c kubernetes/deploy/elasticsearch-pod.json create pods
+        $ kubernetes/bin/kubecfg -c kubernetes/deploy/elasticsearch-pod.json create pods
         [...]
         $ kubecfg list pods
         ID                     Image(s)                   Host                Labels                      Status
         ----------             ----------                 ----------          ----------                  ----------
-        elasticsearch-master   dockerfile/elasticsearch   10.245.1.102/       name=elasticsearch-master   Running
-        $ curl http://10.245.1.102:9200
+        elasticsearch-master   dockerfile/elasticsearch   10.245.1.101/       name=elasticsearch-master   Running
+
+        $ kubernetes/bin/kubecfg -c kubernetes/deploy/elasticsearch-service.json create services
+        $ kubernetes/bin/kubecfg list services
+        ID                    Labels              Selector                    Port
+        ----------            ----------          ----------                  ----------
+        elasticsearchmaster                       name=elasticsearch-master   10000
+
+        $ curl http://10.245.1.101:9200
         {
             "status" : 200,
-            "name" : "Tempus",
+            "name" : "Ent",
             "version" : {
-            "number" : "1.3.2",
-            "build_hash" : "dee175dbe2f254f3f26992f5d7591939aaefd12f",
-            "build_timestamp" : "2014-08-13T14:29:30Z",
-            "build_snapshot" : false,
-            "lucene_version" : "4.9"
+                "number" : "1.3.2",
+                "build_hash" : "dee175dbe2f254f3f26992f5d7591939aaefd12f",
+                "build_timestamp" : "2014-08-13T14:29:30Z",
+                "build_snapshot" : false,
+                "lucene_version" : "4.9"
             },
             "tagline" : "You Know, for Search"
         }
 
-        $ kubecfg -c kubernetes/deploy/monitoring-pod.json create pods
+        $ kubernetes/bin/kubecfg -c kubernetes/deploy/monitoring-pod.json create pods
+        $ kubernetes/bin/kubecfg -c kubernetes/deploy/logging-pod.json create pods
 
-        $ kubecfg -c kubernetes/deploy/logging-pod.json create pods
-
-
-
+        $ kubecfg -c kubernetes/deploy/monitoring-service.json create services
+        $ kubecfg -c kubernetes/deploy/logging-service.json create services
 
 
 

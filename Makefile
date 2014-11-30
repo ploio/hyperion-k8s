@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+APP = hyperion
 
 VAGRANT = vagrant
 DOCKER = "docker"
@@ -29,7 +30,7 @@ VERSION=$(shell \
 all: help
 
 help:
-	@echo -e "$(OK_COLOR) ==== Hyperion [$(VERSION)]====$(NO_COLOR)"
+	@echo -e "$(OK_COLOR) ==== [$(APP)] [$(VERSION)]====$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR)  - destroy$(NO_COLOR)        : Destroy Hyperion cluster$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR)  - status$(NO_COLOR)         : State of the Hyperion cluster$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR)  - create$(NO_COLOR)         : Create the Hyperion cluster$(NO_COLOR)"
@@ -39,48 +40,62 @@ help:
 
 .PHONY: destroy
 destroy:
-	@echo -e "$(OK_COLOR) [hyperion] Destroying cluster$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Destroying cluster$(NO_COLOR)"
 	@$(VAGRANT) destroy -f
 	@rm -f ssh.config
 
 .PHONY: start
 start:
-	@echo -e "$(OK_COLOR) [hyperion] Starting cluster$(NO_COLOR)"
-	@$(VAGRANT) start
+	@echo -e "$(OK_COLOR)[$(APP)] Starting cluster$(NO_COLOR)"
+	@$(VAGRANT) up
 
 .PHONY: stop
 stop:
-	@echo -e "$(OK_COLOR) [hyperion] Stoping cluster$(NO_COLOR)"
-	@$(VAGRANT) stop
+	@echo -e "$(OK_COLOR)[$(APP)] Stoping cluster$(NO_COLOR)"
+	@$(VAGRANT) halt
 
 .PHONY: status
 status:
-	@echo -e "$(OK_COLOR) [hyperion] State of the cluster$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] State of the cluster$(NO_COLOR)"
 	@$(VAGRANT) status
 
 .PHONY: create
 create:
-	@echo -e "$(OK_COLOR) [hyperion] Creates cluster$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Creates cluster$(NO_COLOR)"
 	@$(VAGRANT) up
 	@rm -f ssh.config
 	@$(VAGRANT) ssh-config master > ssh.config
 	@ssh -f -nNT -L 8080:127.0.0.1:8080 -F ssh.config master
 
-.PHONY: docker-metrics
-docker-metrics:
-	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Metrics images$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR) Build Docker Monitoring Metrics $(NO_COLOR)"
-	@$(DOCKER) build -t nlamirault/hyperion-monitoring-metrics docker/monitoring-metrics/
-	@echo -e "$(WARN_COLOR) Build Docker Monitoring UI $(NO_COLOR)"
-	@$(DOCKER) build -t nlamirault/hyperion-monitoring-ui docker/monitoring-ui/
+# .PHONY: docker-metrics
+# docker-metrics:
+# 	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Metrics images$(NO_COLOR)"
+# 	@echo -e "$(WARN_COLOR) Build Docker Monitoring Metrics $(NO_COLOR)"
+# 	@$(DOCKER) build -t nlamirault/hyperion-monitoring-metrics docker/monitoring-metrics/
+# 	@echo -e "$(WARN_COLOR) Build Docker Monitoring UI $(NO_COLOR)"
+# 	@$(DOCKER) build -t nlamirault/hyperion-monitoring-ui docker/monitoring-ui/
 
-.PHONY: docker-logging
-docker-logging:
-	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Logging images$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR) Build Docker Logging Metrics $(NO_COLOR)"
-	@$(DOCKER) build -t nlamirault/hyperion-logging-metrics docker/logging-metrics/
-	@echo -e "$(WARN_COLOR) Build Docker Logging UI $(NO_COLOR)"
-	@$(DOCKER) build -t nlamirault/hyperion-logging-ui docker/logging-ui/
+# .PHONY: docker-logging
+# docker-logging:
+# 	@echo -e "$(OK_COLOR) [hyperion] Creates Docker Logging images$(NO_COLOR)"
+# 	@echo -e "$(WARN_COLOR) Build Docker Logging Metrics $(NO_COLOR)"
+# 	@$(DOCKER) build -t nlamirault/hyperion-logging-metrics docker/logging-metrics/
+# 	@echo -e "$(WARN_COLOR) Build Docker Logging UI $(NO_COLOR)"
+# 	@$(DOCKER) build -t nlamirault/hyperion-logging-ui docker/logging-ui/
 
-.PHONY: docker
-docker: docker-metrics docker-logging
+# .PHONY: docker
+# docker: docker-metrics docker-logging
+
+docker-build:
+	@echo -e "$(OK_COLOR)[$(APP)] Creates Docker image $image $(NO_COLOR)"
+	@$(DOCKER) build -t nlamirault/hyperion-$(image) docker/$(image)
+
+k8s-start:
+	@echo -e "$(OK_COLOR)[$(APP)] Kubernetes start $(NO_COLOR)"
+	./tools/start-pods.sh
+	./tools/start-services.sh
+
+k8s-stop:
+	@echo -e "$(OK_COLOR)[$(APP)] Kubernetes stop $(NO_COLOR)"
+	./tools/stop-pods.sh
+	./tools/stop-services.sh

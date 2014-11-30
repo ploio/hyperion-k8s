@@ -13,17 +13,11 @@
                 }, {
                     "name": "logging-ui",
                     "image": "nlamirault/hyperion-logging-ui",
-                    "ports": [{
-                        "containerPort": 80,
-                        "hostPort": 80
-                    }]
+                    "ports": [{ "containerPort": 80, "hostPort": 80 }]
                 }, {
                     "name": "logging-redis",
                     "image": "dockerfile/redis",
-                    "ports": [{
-                        "containerPort": 6379,
-                        "hostPort": 6379
-                    }]
+                    "ports": [{ "containerPort": 6379, "hostPort": 6379 }]
                 }
             ]
         },
