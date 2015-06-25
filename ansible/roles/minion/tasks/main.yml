@@ -1,0 +1,29 @@
+- name: Copy kube-proxy
+  copy: src=kube-proxy
+        dest=/usr/bin/kube-proxy
+        owner=root
+        group=root
+        mode=0755
+  sudo: yes
+
+- name: Create Kubernetes configuration directory
+  command: mkdir /etc/kubernetes creates=/etc/kubernetes
+
+- name: Install Kubernetes proxy conf
+  template: src=proxy
+            dest=/etc/kubernetes/proxy
+            owner=root
+            group=root
+            mode=0644
+
+- name: Systemd proxy.service
+  copy: src=kube-proxy.service
+            dest=/etc/systemd/system/kube-proxy.service
+            owner=root
+            group=root
+            mode=0644
+  notify: restart kube-proxy
+  tags:
+      - kubernetes
+
+- service: name=kube-proxy state=started

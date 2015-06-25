@@ -1,0 +1,6 @@
+---
+- hosts: hyperion_master
+  sudo: yes
+  roles:
+    - commons
+    - master

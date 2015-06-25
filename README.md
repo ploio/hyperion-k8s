@@ -20,11 +20,19 @@
 ## Deployment
 
 A `Vagrantfile` is provided if you want to use it in virtual machines.
-This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs:
+This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs
+
+[etcd][] : A highly available key-value store for shared configuration and service discovery.
+apiserver : Provides the API for Kubernetes orchestration.
+controller-manager : Enforces Kubernetes services.
+scheduler : Schedules containers on hosts.
+proxy : Provides network proxy services.
+kubelet : Processes a container manifest so the containers are launched according to how they are described.
 
 * Install dependencies :
-- [Virtualbox][] (>= 4.3.10),
-- [Vagrant][] (>= 1.6),
+- [virtualbox][] (>= 4.3.10),
+- [vagrant][] (>= 1.6),
+- [ansible][]
 
 * Help:
 
@@ -33,54 +41,31 @@ This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs:
 * Initialize environment:
 
         $ make init
-        $ . hyperionrc
 
 * Creates the cluster :
 
-        $ make create
+        $ vagrant up
 
-* Management :
+* Configure the cluster using [ansible][]
 
-        $ kubecfg list minions
-        Minion identifier
-        ----------
-        10.245.1.101
-        10.245.1.102
+        $ make configure
 
-* Deploy applications :
 
-        $ kubecfg -c k8s/elasticsearch-pod.json create pods
-        [...]
-        $ kubecfg list pods
-        ID                     Image(s)                   Host                Labels                      Status
-        ----------             ----------                 ----------          ----------                  ----------
-        elasticsearch-master   dockerfile/elasticsearch   10.245.1.101/       name=elasticsearch-master   Running
+## Usage
 
-        $ kubecfg -c k8s/elasticsearch-service.json create services
-        $ kubecfg list services
-        ID                    Labels              Selector                    Port
-        ----------            ----------          ----------                  ----------
-        elasticsearchmaster                       name=elasticsearch-master   10000
+* Check [Kubernetes][] status :
 
-        $ curl http://10.245.1.101:9200
-        {
-            "status" : 200,
-            "name" : "Ent",
-            "version" : {
-                "number" : "1.3.2",
-                "build_hash" : "dee175dbe2f254f3f26992f5d7591939aaefd12f",
-                "build_timestamp" : "2014-08-13T14:29:30Z",
-                "build_snapshot" : false,
-                "lucene_version" : "4.9"
-            },
-            "tagline" : "You Know, for Search"
-        }
+        $ curl http://10.245.1.100:8080/
 
-        $ kubecfg -c k8s/monitoring-pod.json create pods
-        $ kubecfg -c k8s/logging-pod.json create pods
 
-        $ kubecfg -c k8s/monitoring-service.json create services
-        $ kubecfg -c k8s/logging-service.json create services
+* You could use the ``kubectl`` binary to manage your cluster :
+
+        $ bin/kubectl -s 10.245.1.100:8080 version
+        Client Version: version.Info{Major:"0", Minor:"19", GitVersion:"v0.19.1", GitCommit:"bb63f031d4146c17113b059886aea66b09f6daf5", GitTreeState:"clean"}
+        Server Version: version.Info{Major:"0", Minor:"19", GitVersion:"v0.19.1", GitCommit:"bb63f031d4146c17113b059886aea66b09f6daf5", GitTreeState:"clean"}
+
+        $ bin/kubectl -s 10.245.1.100:8080 get nodes
+        NAME      LABELS    STATUS
 
 
 
@@ -107,3 +92,10 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [Hyperion]: https://github.com/nlamirault/hyperion
 [COPYING]: https://github.com/nlamirault/hyperion/blob/master/COPYING
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
+
+[kubernetes]: http://kubernetes.io/
+[etcd]: https://github.com/coreos/etcd
+
+[vagrant]: https://www.vagrantup.com
+[virtualbox]: https://www.virtualbox.org/
+[ansible]: http://www.ansible.com/

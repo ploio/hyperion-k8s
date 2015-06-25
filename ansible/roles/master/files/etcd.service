@@ -1,0 +1,12 @@
+[Unit]
+Description=Etcd Server
+After=network.target
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+ExecStart=/usr/bin/etcd --data-dir=/var/lib/etcd
+
+[Install]
+WantedBy=multi-user.target

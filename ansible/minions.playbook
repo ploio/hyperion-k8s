@@ -1,0 +1,6 @@
+---
+- hosts: hyperion_minions
+  sudo: yes
+  roles:
+    - commons
+    - minion
