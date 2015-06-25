@@ -4,6 +4,16 @@
 
 ## Description
 
+A `Vagrantfile` is provided if you want to use it in virtual machines.
+This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs
+
+Install dependencies :
+
+- [virtualbox][] (>= 4.3.10)
+- [vagrant][] (>= 1.6)
+- [ansible][]
+
+
 ### Kubernetes master
 
 - maintains the state of the [Kubernetes][] server runtime
@@ -17,10 +27,7 @@
 - Represents the Host where containers are created
 - Components : PODs, Kubelet, Proxy
 
-## Deployment
-
-A `Vagrantfile` is provided if you want to use it in virtual machines.
-This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs
+### Kubernetes components
 
 - [etcd][] : A highly available key-value store for shared configuration and service discovery.
 - apiserver : Provides the API for Kubernetes orchestration.
@@ -29,10 +36,10 @@ This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs
 - proxy : Provides network proxy services.
 - kubelet : Processes a container manifest so the containers are launched according to how they are described.
 
-* Install dependencies :
-- [virtualbox][] (>= 4.3.10),
-- [vagrant][] (>= 1.6),
-- [ansible][]
+
+
+## Deployment
+
 
 * Help:
 
