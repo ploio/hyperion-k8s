@@ -9,6 +9,13 @@
 - name: Create Kubernetes configuration directory
   command: mkdir /etc/kubernetes creates=/etc/kubernetes
 
+- name: Install Kubernetes config conf
+  template: src=config
+            dest=/etc/kubernetes/config
+            owner=root
+            group=root
+            mode=0644
+
 - name: Install Kubernetes proxy conf
   template: src=proxy
             dest=/etc/kubernetes/proxy
@@ -26,4 +33,23 @@
   tags:
       - kubernetes
 
+- name: Install Kubernetes kubelet conf
+  template: src=kubelet
+            dest=/etc/kubernetes/kubelet
+            owner=root
+            group=root
+            mode=0644
+
+- name: Systemd kubelet.service
+  copy: src=kube-kubelet.service
+            dest=/etc/systemd/system/kube-kubelet.service
+            owner=root
+            group=root
+            mode=0644
+  notify: restart kube-kubelet
+  tags:
+      - kubernetes
+
 - service: name=kube-proxy state=started
+
+- service: name=kubelet state=started

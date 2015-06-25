@@ -1,3 +1,6 @@
 ---
 - name: restart kube-proxy
   service: name=kube-proxy.service state=restarted enabled=yes
+
+- name: restart kubelet
+  service: name=kubeket.service state=restarted enabled=yes
