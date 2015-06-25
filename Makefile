@@ -67,8 +67,19 @@ k8s: configure
 	curl --silent -o $(OUTPUT)/kubectl -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kubectl && \
 		chmod +x $(OUTPUT)/kubectl
 
+.PHONY: prepare
+prepare:
+	cp $(OUTPUT)/etcd ansible/roles/master/files/
+	cp $(OUTPUT)/kube-apiserver ansible/roles/master/files/
+	cp $(OUTPUT)/kube-controller-manager ansible/roles/master/files/
+	cp $(OUTPUT)/kube-scheduler ansible/roles/master/files/
+	cp $(OUTPUT)/kube-proxy ansible/roles/minion/files/
+	cp $(OUTPUT)/kubelet ansible/roles/minion/files/
+
 .PHONY: init
 init: etcd k8s
+
+
 
 .PHONY: configure-master
 configure-master:
