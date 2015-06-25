@@ -22,12 +22,12 @@
 A `Vagrantfile` is provided if you want to use it in virtual machines.
 This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs
 
-[etcd][] : A highly available key-value store for shared configuration and service discovery.
-apiserver : Provides the API for Kubernetes orchestration.
-controller-manager : Enforces Kubernetes services.
-scheduler : Schedules containers on hosts.
-proxy : Provides network proxy services.
-kubelet : Processes a container manifest so the containers are launched according to how they are described.
+- [etcd][] : A highly available key-value store for shared configuration and service discovery.
+- apiserver : Provides the API for Kubernetes orchestration.
+- controller-manager : Enforces Kubernetes services.
+- scheduler : Schedules containers on hosts.
+- proxy : Provides network proxy services.
+- kubelet : Processes a container manifest so the containers are launched according to how they are described.
 
 * Install dependencies :
 - [virtualbox][] (>= 4.3.10),
