@@ -1,0 +1,18 @@
+###
+# kubernetes kubelet (node) config
+
+# The address for the info server to serve on (set to 0.0.0.0 or "" for all interfaces)
+KUBELET_ADDRESS="--address=0.0.0.0"
+
+# You may leave this blank to use the actual hostname
+KUBELET_HOSTNAME=""
+
+ETCD_AUTHORITY="{{ etcd_ip }}:4001"
+
+# location of the api-server
+# 8080 insecure port
+# 6443 secure port
+KUBELET_API_SERVER="--api_servers={{ master_ip }}:8080"
+
+# Add your own!
+KUBELET_ARGS=""
