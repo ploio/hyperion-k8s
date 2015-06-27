@@ -1,5 +1,5 @@
 ---
-- hosts: hyperion_minions
+- hosts: minions
   sudo: yes
   roles:
     - docker

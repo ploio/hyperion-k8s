@@ -30,6 +30,16 @@
         mode=0755
   sudo: yes
 
+- name: Create Etcd configuration directory
+  file: path=/etc/etcd state=directory
+
+- name: Install etcd conf
+  template: src=etcd.j2
+            dest=/etc/etcd/etcd.conf
+            owner=root
+            group=root
+            mode=0644
+
 - name: Install Kubernetes apiserver conf
   template: src=apiserver.j2
             dest=/etc/kubernetes/apiserver
@@ -90,6 +100,9 @@
   notify: restart kube-scheduler
   tags:
       - kubernetes
+
+- name: Enable etcd
+  service: name=etcd enabled=yes state=started
 
 - name: Enable apiserver
   service: name=kube-apiserver enabled=yes state=started

@@ -1,7 +1,7 @@
-[master]
+[masters]
 10.245.1.100
 
-[master:vars]
+[masters:vars]
 user= vagrant
 
 [minions]
