@@ -4,17 +4,13 @@
         owner=root
         group=root
         mode=0755
-  sudo: yes
 
-- name: Create Kubernetes configuration directory
-  command: mkdir /etc/kubernetes creates=/etc/kubernetes
-
-- name: Install Kubernetes config conf
-  template: src=config.j2
-            dest=/etc/kubernetes/config
-            owner=root
-            group=root
-            mode=0644
+- name: Copy kubelet
+  copy: src=kubelet
+        dest=/usr/bin/kubelet
+        owner=root
+        group=root
+        mode=0755
 
 - name: Install Kubernetes proxy conf
   template: src=proxy.j2

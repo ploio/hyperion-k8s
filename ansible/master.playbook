@@ -2,5 +2,6 @@
 - hosts: hyperion_master
   sudo: yes
   roles:
-    - docker 
+    - docker
+    - kubernetes
     - master

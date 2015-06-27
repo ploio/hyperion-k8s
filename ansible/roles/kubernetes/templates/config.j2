@@ -9,6 +9,7 @@
 #   kube-scheduler.service
 #   kubelet.service
 #   kube-proxy.service
+
 # logging to stderr means we get it in the systemd journal
 KUBE_LOGTOSTDERR="--logtostderr=true"
 
@@ -16,7 +17,7 @@ KUBE_LOGTOSTDERR="--logtostderr=true"
 KUBE_LOG_LEVEL="--v=0"
 
 # Should this cluster be allowed to run privileged docker containers
-KUBE_ALLOW_PRIV="--allow_privileged=false"
+KUBE_ALLOW_PRIV="--allow_privileged=true"
 
-# How the controller-manager, scheduler, and proxy find the apiserver
-KUBE_MASTER="--master=http://{{  }}:8080"
+# How the replication controller, scheduler, and proxy
+KUBE_MASTER="--master=https://{{ groups['masters'][0] }}:8080"
