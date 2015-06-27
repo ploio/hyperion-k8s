@@ -1,9 +1,0 @@
-- name: Create Kubernetes configuration directory
-  command: mkdir /etc/kubernetes creates=/etc/kubernetes
-
-- name: Install Kubernetes config conf
-  template: src=config.j2
-            dest=/etc/kubernetes/config
-            owner=root
-            group=root
-            mode=0644
