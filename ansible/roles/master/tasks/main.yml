@@ -34,28 +34,28 @@
   command: mkdir /etc/kubernetes creates=/etc/kubernetes
 
 - name: Install Kubernetes apiserver conf
-  template: src=apiserver
+  template: src=apiserver.j2
             dest=/etc/kubernetes/apiserver
             owner=root
             group=root
             mode=0644
 
 - name: Install Kubernetes controller-manager conf
-  template: src=controller-manager
+  template: src=controller-manager.j2
             dest=/etc/kubernetes/controller-manager
             owner=root
             group=root
             mode=0644
 
 - name: Install Kubernetes scheduler conf
-  template: src=scheduler
+  template: src=scheduler.j2
             dest=/etc/kubernetes/scheduler
             owner=root
             group=root
             mode=0644
 
 - name: Install Kubernetes config conf
-  template: src=config
+  template: src=config.j2
             dest=/etc/kubernetes/config
             owner=root
             group=root
