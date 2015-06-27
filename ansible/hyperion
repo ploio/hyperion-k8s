@@ -1,12 +1,15 @@
-[hyperion_master]
+[master]
 10.245.1.100
 
-[hyperion_master:vars]
+[master:vars]
 user= vagrant
 
-[hyperion_minions]
+[minions]
 10.245.1.101
 10.245.1.102
 
-[hyperion_minions:vars]
+[minions:vars]
 user= vagrant
+
+[etcd]
+10.245.1.100

@@ -101,8 +101,11 @@
   tags:
       - kubernetes
 
-- service: name=kube-apiserver state=started
+- name: Enable apiserver
+  service: name=kube-apiserver enabled=yes state=started
 
-- service: name=kube-controller-manager state=started
+- name: Enable controller-manager
+  service: name=kube-controller-manager enabled=yes state=started
 
-- service: name=kube-scheduler state=started
+- name: Enable scheduler
+  service: name=kube-scheduler enabled=yes state=started
