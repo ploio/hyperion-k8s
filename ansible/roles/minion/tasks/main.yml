@@ -37,12 +37,12 @@
             mode=0644
 
 - name: Systemd kubelet.service
-  copy: src=kube-kubelet.service
-            dest=/etc/systemd/system/kube-kubelet.service
+  copy: src=kubelet.service
+            dest=/etc/systemd/system/kubelet.service
             owner=root
             group=root
             mode=0644
-  notify: restart kube-kubelet
+  notify: restart kubelet
   tags:
       - kubernetes
 
