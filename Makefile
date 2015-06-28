@@ -79,12 +79,22 @@ prepare:
 .PHONY: init
 init: etcd k8s
 
+.PHONY: create
+create:
+	@echo -e "$(OK_COLOR)[$(APP)] Create Kubernetes cluster$(NO_COLOR)"
+	@vagrant up
+
+.PHONY: destroy
+destroy:
+	@echo -e "$(OK_COLOR)[$(APP)] Destroy Kubernetes cluster$(NO_COLOR)"
+	@vagrant destroy -f
+
 .PHONY: configure-master
 configure-master:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
-	@sudo ansible-playbook -i ansible/hyperion --private-key=.vagrant/machines/master/virtualbox/private_key -u vagrant ansible/master.yml
+	@ansible-playbook -vvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/master.yml
 
 .PHONY: configure-minions
 configure-minions:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
-	@sudo ansible-playbook -i ansible/hyperion ansible/minions.playbook --private-key=.vagrant/machines/minion-1/virtualbox/private_key -u vagrant ansible/minions.yml
+	@ansible-playbook -vvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/minions.yml

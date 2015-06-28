@@ -59,12 +59,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.network :private_network, ip: master_ip_addr
   end
 
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "ansible/master.yml"
-    ansible.inventory_path = "ansible/hyperion"
-    ansible.limit = "all"
-    ansible.verbose = "vv"
-  end
+  # config.vm.provision :ansible do |ansible|
+  #   ansible.playbook = "ansible/master.yml"
+  #   ansible.inventory_path = "ansible/hyperion"
+  #   ansible.limit = "all"
+  #   ansible.verbose = "vv"
+  # end
 
   (1..$number_of_minions).each do |i|
     config.vm.define "minion-#{i}" do |minion|
@@ -72,11 +72,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "ansible/minions.yml"
-    ansible.inventory_path = "ansible/hyperion"
-    ansible.limit = "all"
-    ansible.verbose = "vv"
-  end
+  # config.vm.provision :ansible do |ansible|
+  #   ansible.playbook = "ansible/minions.yml"
+  #   ansible.inventory_path = "ansible/hyperion"
+  #   ansible.limit = "all"
+  #   ansible.verbose = "vv"
+  # end
+
 
 end
