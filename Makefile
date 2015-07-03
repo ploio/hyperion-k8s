@@ -23,6 +23,13 @@ DOCKER = "docker"
 K8S_URI=https://storage.googleapis.com/kubernetes-release/release
 K8S_VERSION=0.19.1
 K8S_ARCH=linux/amd64
+K8S_BINARIES = \
+	kube-apiserver \
+	kube-proxy \
+	kube-scheduler \
+	kube-controller-manager \
+	kubelet \
+	kubectl
 
 ETCD_URI=https://github.com/coreos/etcd/releases/download
 ETCD_VERSION=2.0.12
@@ -61,18 +68,10 @@ etcd: configure
 .PHONY: k8s
 k8s: configure
 	@echo -e "$(OK_COLOR)[$(APP)] Install Kubernetes$(NO_COLOR)"
-	curl --silent -o $(OUTPUT)/kube-apiserver -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kube-apiserver && \
-		chmod +x $(OUTPUT)/kube-apiserver
-	curl --silent -o $(OUTPUT)/kube-proxy -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kube-proxy && \
-		chmod +x $(OUTPUT)/kube-proxy
-	curl --silent -o $(OUTPUT)/kube-scheduler -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kube-scheduler && \
-		chmod +x $(OUTPUT)/kube-scheduler
-	curl --silent -o $(OUTPUT)/kube-controller-manager -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kube-controller-manager && \
-		chmod +x $(OUTPUT)/kube-controller-manager
-	curl --silent -o $(OUTPUT)/kubelet -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kubelet && \
-		chmod +x $(OUTPUT)/kubelet
-	curl --silent -o $(OUTPUT)/kubectl -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/kubectl && \
-		chmod +x $(OUTPUT)/kubectl
+	for i in $(K8S_BINARIES); do \
+		curl --silent -o $(OUTPUT)/$$i -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/$$i; \
+		chmod +x $(OUTPUT)/$$i; \
+	done
 
 .PHONY: prepare
 prepare:
