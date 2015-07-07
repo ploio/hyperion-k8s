@@ -114,8 +114,8 @@ Initialize environment:
         $ bin/kubectl -s 10.245.1.100:8080 get nodes
         NAME      LABELS    STATUS
 
-        $ bin/kubectl -s 10.33.1.174:8080 cluster-info
-        Kubernetes master is running at 10.33.1.174:8080
+        $ bin/kubectl -s 10.245.1.100:8080 cluster-info
+        Kubernetes master is running at 10.245.1.100:8080
 
 
 
