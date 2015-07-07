@@ -67,9 +67,9 @@
             owner=root
             group=root
             mode=0644
-  notify: restart etcd
-  tags:
-      - kubernetes
+  # notify: restart etcd
+  # tags:
+  #     - kubernetes
 
 - name: Systemd kube-apiserver.service
   copy: src=kube-apiserver.service
@@ -77,9 +77,9 @@
             owner=root
             group=root
             mode=0644
-  notify: restart kube-apiserver
-  tags:
-      - kubernetes
+  # notify: restart kube-apiserver
+  # tags:
+  #     - kubernetes
 
 - name: Systemd kube-controller-manager.service
   copy: src=kube-controller-manager.service
@@ -87,9 +87,9 @@
             owner=root
             group=root
             mode=0644
-  notify: restart kube-apiserver
-  tags:
-      - kubernetes
+  # notify: restart kube-apiserver
+  # tags:
+  #     - kubernetes
 
 - name: Systemd kube-scheduler.service
   copy: src=kube-scheduler.service
@@ -97,18 +97,18 @@
             owner=root
             group=root
             mode=0644
-  notify: restart kube-scheduler
-  tags:
-      - kubernetes
+  # notify: restart kube-scheduler
+  # tags:
+  #     - kubernetes
 
-- name: Enable etcd
-  service: name=etcd enabled=yes state=started
+- name: Service etcd
+  service: name=etcd enabled=yes state=restarted
 
-- name: Enable apiserver
-  service: name=kube-apiserver enabled=yes state=started
+- name: Service apiserver
+  service: name=kube-apiserver enabled=yes state=restarted
 
-- name: Enable controller-manager
-  service: name=kube-controller-manager enabled=yes state=started
+- name: Service controller-manager
+  service: name=kube-controller-manager enabled=yes state=restarted
 
-- name: Enable scheduler
-  service: name=kube-scheduler enabled=yes state=started
+- name: Service scheduler
+  service: name=kube-scheduler enabled=yes state=restarted
