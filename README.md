@@ -36,26 +36,49 @@ Install dependencies :
 - proxy : Provides network proxy services.
 - kubelet : Processes a container manifest so the containers are launched according to how they are described.
 
-
-
 ## Deployment
 
+Initialize environment:
 
-* Help:
+    $ make init
 
-        $ make
-
-* Initialize environment:
-
-        $ make init
+### Local
 
 * Creates the cluster :
 
-        $ vagrant up
+        $ make create
 
-* Configure the cluster using [ansible][]
+* Configure the cluster :
 
-        $ make configure
+        $ make vagrant-master
+        $ make vagrant-minions
+
+* Destroy the cluster:
+
+        $ make destroy
+
+
+### Cloud
+
+* Setup an inventory file, like that :
+
+        ```bash
+        [masters]
+        10.1.1.1 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+
+        [minions]
+        10.1.1.11 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+        10.1.1.12 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+
+        [etcd]
+        10.1.1.1 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+        ```
+
+* Configure the cluster :
+
+        $ make master inventory=<inventory_filename>
+        $ make minions inventory=<inventory_filename>
+
 
 
 ## Usage
@@ -63,7 +86,24 @@ Install dependencies :
 * Check [Kubernetes][] status :
 
         $ curl http://10.245.1.100:8080/
+        {
+          "paths": [
+             "/api",
+             "/api/v1",
+             "/api/v1beta3",
+             "/healthz",
+             "/healthz/ping",
+             "/logs/",
+             "/metrics",
+             "/static/",
+             "/swagger-ui/",
+             "/swaggerapi/",
+             "/ui/",
+             "/version"
+           ]
+        }
 
+* You could see the dashboard on the master : `http://....:8080/ui`
 
 * You could use the ``kubectl`` binary to manage your cluster :
 
@@ -73,6 +113,10 @@ Install dependencies :
 
         $ bin/kubectl -s 10.245.1.100:8080 get nodes
         NAME      LABELS    STATUS
+
+        $ bin/kubectl -s 10.33.1.174:8080 cluster-info
+        Kubernetes master is running at 10.33.1.174:8080
+
 
 
 

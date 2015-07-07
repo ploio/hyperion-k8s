@@ -95,11 +95,6 @@ destroy:
 	@echo -e "$(OK_COLOR)[$(APP)] Destroy Kubernetes cluster$(NO_COLOR)"
 	@vagrant destroy -f
 
-.PHONY: setup
-setup:
-	@echo -e "$(OK_COLOR)[$(APP)] Setup Kubernetes cluster$(NO_COLOR)"
-	@ansible-playbook -vvvv -i ansible/hyperion ansible/setup.yml
-
 .PHONY: vagrant-master
 vagrant-master:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
