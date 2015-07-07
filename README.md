@@ -76,6 +76,20 @@ Install dependencies :
 
 
 
+## Debug
+
+### Ping all hosts
+
+    $ ansible all -m ping -i <inventory>
+
+### Check connection to hosts
+
+You could retrieve facts from hosts to check connections :
+
+    $ ansible all -m setup -a "filter=ansible_distribution*" -i <inventory>
+
+
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).

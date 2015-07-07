@@ -95,22 +95,27 @@ destroy:
 	@echo -e "$(OK_COLOR)[$(APP)] Destroy Kubernetes cluster$(NO_COLOR)"
 	@vagrant destroy -f
 
+.PHONY: setup
+setup:
+	@echo -e "$(OK_COLOR)[$(APP)] Setup Kubernetes cluster$(NO_COLOR)"
+	@ansible-playbook -vvvv -i ansible/hyperion ansible/setup.yml
+
 .PHONY: vagrant-master
 vagrant-master:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
-	@ansible-playbook -vvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/master.yml
+	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/master.yml
 
 .PHONY: vagrant-minions
 vagrant-minions:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
-	@ansible-playbook -vvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/minions.yml
+	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/minions.yml
 
 .PHONY: master
 master:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
-	@ansible-playbook -vvv -i $(inventory)  ansible/master.yml
+	@ansible-playbook -vvvv -i $(inventory)  ansible/master.yml
 
 .PHONY: minions
 minions:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
-	@ansible-playbook -vvv -i $(inventory) ansible/minions.yml
+	@ansible-playbook -vvvv -i $(inventory) ansible/minions.yml
