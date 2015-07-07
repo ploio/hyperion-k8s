@@ -1,0 +1,12 @@
+---
+- name: Copy Docker repo key
+  copy: src=docker-repo-key.asc dest=/root/docker-repo-key.asc
+
+- name: Add Docker repo key
+  apt_key: file=/root/docker-repo-key.asc state=present
+
+- name: Add Docker repo
+  apt_repository: repo='deb http://get.docker.io/ubuntu docker main'
+
+- name: Install Docker
+  apt: pkg=lxc-docker

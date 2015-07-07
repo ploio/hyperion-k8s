@@ -1,11 +1,12 @@
-- name: Copy Docker repo key
-  copy: src=docker-repo-key.asc dest=/root/docker-repo-key.asc
+---
+- include: debian.yml
+  when: ansible_os_family == "Debian"
 
-- name: Add Docker repo key
-  apt_key: file=/root/docker-repo-key.asc state=present
+- include: arch.yml
+  when: ansible_os_family == "Archlinux"
 
-- name: Add Docker repo
-  apt_repository: repo='deb http://get.docker.io/ubuntu docker main'
+# - include: centos.yml
+#   when: ansible_os_family == "CentOS"
 
-- name: Install Docker
-  apt: pkg=lxc-docker
+- name: Start docker service
+  service: name=docker state=started
