@@ -1,15 +1,15 @@
 [masters]
-10.245.1.100
+10.245.1.100    ansible_connection=ssh        ansible_ssh_user=vagrant
 
 [masters:vars]
 user= vagrant
 
 [minions]
-10.245.1.101
-10.245.1.102
+10.245.1.101    ansible_connection=ssh        ansible_ssh_user=vagrant
+10.245.1.102    ansible_connection=ssh        ansible_ssh_user=vagrant
 
 [minions:vars]
 user= vagrant
 
 [etcd]
-10.245.1.100
+10.245.1.100    ansible_connection=ssh        ansible_ssh_user=vagrant
