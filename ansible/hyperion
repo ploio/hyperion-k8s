@@ -4,11 +4,11 @@
 [masters:vars]
 user= vagrant
 
-[minions]
+[nodes]
 10.245.1.101    ansible_connection=ssh        ansible_ssh_user=vagrant
 10.245.1.102    ansible_connection=ssh        ansible_ssh_user=vagrant
 
-[minions:vars]
+[nodes:vars]
 user= vagrant
 
 [etcd]

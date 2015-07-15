@@ -1,5 +1,5 @@
 ---
-- hosts: minions
+- hosts: nodes
   sudo: yes
   roles:
     - docker
