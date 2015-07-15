@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http:#www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -100,10 +100,10 @@ vagrant-master:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
 	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/master.yml
 
-.PHONY: vagrant-minions
-vagrant-minions:
+.PHONY: vagrant-nodes
+vagrant-nodes:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
-	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/minions.yml
+	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/nodes.yml
 
 .PHONY: master
 master:
@@ -111,6 +111,11 @@ master:
 	@ansible-playbook -vvvv -i $(inventory)  ansible/master.yml
 
 .PHONY: minions
-minions:
+nodes:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
-	@ansible-playbook -vvvv -i $(inventory) ansible/minions.yml
+	@ansible-playbook -vvvv -i $(inventory) ansible/nodes.yml
+
+.PHONY: test
+test:
+	@echo -e "$(OK_COLOR)[$(APP)] Test Kubernetes $(NO_COLOR)"
+	@ansible-playbook -vvvv -i $(inventory) ansible/test.yml
