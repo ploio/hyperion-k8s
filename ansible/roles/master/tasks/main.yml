@@ -104,11 +104,11 @@
 - name: Service etcd
   service: name=etcd enabled=yes state=restarted
 
-- name: Service apiserver
+- name: Service kube-apiserver
   service: name=kube-apiserver enabled=yes state=restarted
 
-- name: Service controller-manager
+- name: Service kube-controller-manager
   service: name=kube-controller-manager enabled=yes state=restarted
 
-- name: Service scheduler
+- name: Service kube-scheduler
   service: name=kube-scheduler enabled=yes state=restarted

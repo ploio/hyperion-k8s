@@ -25,9 +25,9 @@
             owner=root
             group=root
             mode=0644
-  notify: restart kube-proxy
-  tags:
-      - kubernetes
+  # notify: restart kube-proxy
+  # tags:
+  #     - kubernetes
 
 - name: Install Kubernetes kubelet conf
   template: src=kubelet.j2
@@ -42,10 +42,12 @@
             owner=root
             group=root
             mode=0644
-  notify: restart kubelet
-  tags:
-      - kubernetes
+  # notify: restart kubelet
+  # tags:
+  #     - kubernetes
 
-- service: name=kube-proxy state=started
+- name: Service kube-proxy
+  service: name=kube-proxy state=restarted
 
-- service: name=kubelet state=started
+- name: Service kubelet
+  service: name=kubelet state=restarted
