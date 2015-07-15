@@ -1,6 +1,8 @@
 # Hyperion
 
 [![License Apache 2][badge-license]][LICENSE]
+![Version][badge-release]
+
 
 ## Description
 
@@ -19,10 +21,10 @@ Install dependencies :
 - maintains the state of the [Kubernetes][] server runtime
 - API server
 - Scheduler
-- Registries (minions, pod, service)
+- Registries (nodes, pod, service)
 - Storage
 
-### Kubernetes minions
+### Kubernetes nodes
 
 - Represents the Host where containers are created
 - Components : PODs, Kubelet, Proxy
@@ -51,7 +53,7 @@ Initialize environment:
 * Configure the cluster :
 
         $ make vagrant-master
-        $ make vagrant-minions
+        $ make vagrant-nodes
 
 * Destroy the cluster:
 
@@ -66,7 +68,7 @@ Initialize environment:
         [masters]
         10.1.1.1 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
 
-        [minions]
+        [nodes]
         10.1.1.11 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
         10.1.1.12 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
 
@@ -77,7 +79,7 @@ Initialize environment:
 * Configure the cluster :
 
         $ make master inventory=<inventory_filename>
-        $ make minions inventory=<inventory_filename>
+        $ make nodes inventory=<inventory_filename>
 
 
 
@@ -164,3 +166,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [vagrant]: https://www.vagrantup.com
 [virtualbox]: https://www.virtualbox.org/
 [ansible]: http://www.ansible.com/
+
+[badge-license]: https://img.shields.io/badge/license-Apache_2-green.svg
+[badge-release]: https://img.shields.io/github/release/nlamirault/hyperion.svg
+
