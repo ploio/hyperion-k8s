@@ -45,13 +45,13 @@ all: help
 
 help:
 	@echo -e "$(OK_COLOR) ==== [$(APP)] [$(VERSION)]====$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - init$(NO_COLOR)                         : Initialize environment$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - create$(NO_COLOR)                       : Creates the cluster$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - destroy$(NO_COLOR)                      : Destroy the cluster$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - vagrant-master$(NO_COLOR)               : Configure the master [vagrant]$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - vagrant-minions$(NO_COLOR)              : Configure the minions [vagrant]$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - master inventory=<filename>$(NO_COLOR)  : Configure the master $(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - minions inventory=<filename>$(NO_COLOR) : Configure the minions$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - init$(NO_COLOR)                        : Initialize environment$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - create$(NO_COLOR)                      : Creates the cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - destroy$(NO_COLOR)                     : Destroy the cluster$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - vagrant-master$(NO_COLOR)              : Configure the master [vagrant]$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - vagrant-nodes$(NO_COLOR)               : Configure the nodes [vagrant]$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - master inventory=<filename>$(NO_COLOR) : Configure the master $(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)  - nodes inventory=<filename>$(NO_COLOR)  : Configure the nodes$(NO_COLOR)"
 
 
 configure:
@@ -102,7 +102,7 @@ vagrant-master:
 
 .PHONY: vagrant-nodes
 vagrant-nodes:
-	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes nodes$(NO_COLOR)"
 	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/nodes.yml
 
 .PHONY: master
@@ -110,9 +110,9 @@ master:
 	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
 	@ansible-playbook -vvvv -i $(inventory)  ansible/master.yml
 
-.PHONY: minions
+.PHONY: nodes
 nodes:
-	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes minions$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes nodes$(NO_COLOR)"
 	@ansible-playbook -vvvv -i $(inventory) ansible/nodes.yml
 
 .PHONY: test
