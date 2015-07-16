@@ -116,10 +116,24 @@ Initialize environment:
         $ bin/kubectl -s 10.245.1.100:8080 get nodes
         NAME      LABELS    STATUS
 
+        $ bin/kubectl -s 10.245.1.100:8080 get namespaces
+        NAME      LABELS    STATUS
+        default   <none>    Active
+
         $ bin/kubectl -s 10.245.1.100:8080 cluster-info
         Kubernetes master is running at 10.245.1.100:8080
 
+* Creates namespaces :
 
+        $ bin/kubectl -s 10.245.1.100:8080 create -f namespaces/namespace-admin.json
+        $ bin/kubectl -s 10.245.1.100:8080 create -f namespaces/namespace-dev.json
+        $ bin/kubectl -s 10.245.1.100:8080 create -f namespaces/namespace-prod.json
+        $ bin/kubectl -s 10.245.1.100:8080 get namespaces
+        NAME      LABELS    STATUS
+        admin     name=admin   Active
+        default   <none>    Active
+        development   name=development   Active
+        production   name=production   Active
 
 
 ## Debug
@@ -169,4 +183,3 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 [badge-license]: https://img.shields.io/badge/license-Apache_2-green.svg
 [badge-release]: https://img.shields.io/github/release/nlamirault/hyperion.svg
-
