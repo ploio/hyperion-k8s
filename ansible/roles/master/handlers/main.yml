@@ -1,0 +1,12 @@
+---
+- name: restart etcd
+  service: name=etcd.service state=restarted enabled=yes
+
+- name: restart kube-apiserver
+  service: name=kube-apiserver.service state=restarted enabled=yes
+
+- name: restart kube-controller-manager
+  service: name=kube-controller-manager.service state=restarted enabled=yes
+
+- name: restart kube-scheduler
+  service: name=kube-scheduler.service state=restarted enabled=yes

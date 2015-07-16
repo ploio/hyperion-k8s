@@ -1,0 +1,12 @@
+---
+- include: debian.yml
+  when: ansible_os_family == "Debian"
+
+- include: arch.yml
+  when: ansible_os_family == "Archlinux"
+
+# - include: centos.yml
+#   when: ansible_os_family == "CentOS"
+
+- name: Start docker service
+  service: name=docker state=started

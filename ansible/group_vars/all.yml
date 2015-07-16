@@ -1,0 +1,33 @@
+# Account name of remote user. Ansible will use this user account to ssh into
+# the managed machines. The user must be able to use sudo without asking
+# for password unless ansible_sudo_pass is set
+# ansible_ssh_user: root
+
+# password for the ansible_ssh_user. If this is unset you will need to set up
+# ssh keys so a password is not needed.
+#ansible_ssh_pass: password
+
+# If a password is needed to sudo to root that password must be set here
+#ansible_sudo_pass: password
+
+# Kubernetes internal network for services.
+# Kubernetes services will get fake IP addresses from this range.
+# This range must not conflict with anything in your infrastructure. These
+# addresses do not need to be routable and must just be an unused block of space.
+kube_service_addresses: 10.254.0.0/16
+
+# This directory is where all the additional config stuff goes
+# the kubernetes normally puts in /srv/kubernets.
+# This puts them in a sane location.
+# Editting this value will almost surely break something. Don't
+# change it. Things like the systemd scripts are hard coded to
+# look in here. Don't do it.
+kube_config_dir: /etc/kubernetes
+
+# This is where all the cert scripts and certs will be located
+kube_cert_dir: "{{ kube_config_dir }}/certs"
+
+
+# This is the group that the cert creation scripts chgrp the
+# cert files to. Not really changable...
+kube_cert_group: kube-cert

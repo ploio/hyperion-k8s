@@ -1,0 +1,114 @@
+- name: Copy Etcd
+  copy: src=etcd
+        dest=/usr/bin/etcd
+        owner=root
+        group=root
+        mode=0755
+  sudo: yes
+
+- name: Copy kube-apiserver
+  copy: src=kube-apiserver
+        dest=/usr/bin/kube-apiserver
+        owner=root
+        group=root
+        mode=0755
+  sudo: yes
+
+- name: Copy kube-controller-manager
+  copy: src=kube-controller-manager
+        dest=/usr/bin/kube-controller-manager
+        owner=root
+        group=root
+        mode=0755
+  sudo: yes
+
+- name: Copy kube-scheduler
+  copy: src=kube-scheduler
+        dest=/usr/bin/kube-scheduler
+        owner=root
+        group=root
+        mode=0755
+  sudo: yes
+
+- name: Create Etcd configuration directory
+  file: path=/etc/etcd state=directory
+
+- name: Install etcd conf
+  template: src=etcd.j2
+            dest=/etc/etcd/etcd.conf
+            owner=root
+            group=root
+            mode=0644
+
+- name: Install Kubernetes apiserver conf
+  template: src=apiserver.j2
+            dest=/etc/kubernetes/apiserver
+            owner=root
+            group=root
+            mode=0644
+
+- name: Install Kubernetes controller-manager conf
+  template: src=controller-manager.j2
+            dest=/etc/kubernetes/controller-manager
+            owner=root
+            group=root
+            mode=0644
+
+- name: Install Kubernetes scheduler conf
+  template: src=scheduler.j2
+            dest=/etc/kubernetes/scheduler
+            owner=root
+            group=root
+            mode=0644
+
+- name: Systemd etcd.service
+  copy: src=etcd.service
+            dest=/etc/systemd/system/etcd.service
+            owner=root
+            group=root
+            mode=0644
+  # notify: restart etcd
+  # tags:
+  #     - kubernetes
+
+- name: Systemd kube-apiserver.service
+  copy: src=kube-apiserver.service
+            dest=/etc/systemd/system/kube-apiserver.service
+            owner=root
+            group=root
+            mode=0644
+  # notify: restart kube-apiserver
+  # tags:
+  #     - kubernetes
+
+- name: Systemd kube-controller-manager.service
+  copy: src=kube-controller-manager.service
+            dest=/etc/systemd/system/kube-controller-manager.service
+            owner=root
+            group=root
+            mode=0644
+  # notify: restart kube-apiserver
+  # tags:
+  #     - kubernetes
+
+- name: Systemd kube-scheduler.service
+  copy: src=kube-scheduler.service
+            dest=/etc/systemd/system/kube-scheduler.service
+            owner=root
+            group=root
+            mode=0644
+  # notify: restart kube-scheduler
+  # tags:
+  #     - kubernetes
+
+- name: Service etcd
+  service: name=etcd enabled=yes state=restarted
+
+- name: Service kube-apiserver
+  service: name=kube-apiserver enabled=yes state=restarted
+
+- name: Service kube-controller-manager
+  service: name=kube-controller-manager enabled=yes state=restarted
+
+- name: Service kube-scheduler
+  service: name=kube-scheduler enabled=yes state=restarted

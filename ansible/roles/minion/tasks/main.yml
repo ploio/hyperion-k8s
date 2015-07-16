@@ -1,0 +1,53 @@
+- name: Copy kube-proxy
+  copy: src=kube-proxy
+        dest=/usr/bin/kube-proxy
+        owner=root
+        group=root
+        mode=0755
+
+- name: Copy kubelet
+  copy: src=kubelet
+        dest=/usr/bin/kubelet
+        owner=root
+        group=root
+        mode=0755
+
+- name: Install Kubernetes proxy conf
+  template: src=proxy.j2
+            dest=/etc/kubernetes/proxy
+            owner=root
+            group=root
+            mode=0644
+
+- name: Systemd proxy.service
+  copy: src=kube-proxy.service
+            dest=/etc/systemd/system/kube-proxy.service
+            owner=root
+            group=root
+            mode=0644
+  # notify: restart kube-proxy
+  # tags:
+  #     - kubernetes
+
+- name: Install Kubernetes kubelet conf
+  template: src=kubelet.j2
+            dest=/etc/kubernetes/kubelet
+            owner=root
+            group=root
+            mode=0644
+
+- name: Systemd kubelet.service
+  copy: src=kubelet.service
+            dest=/etc/systemd/system/kubelet.service
+            owner=root
+            group=root
+            mode=0644
+  # notify: restart kubelet
+  # tags:
+  #     - kubernetes
+
+- name: Service kube-proxy
+  service: name=kube-proxy state=restarted
+
+- name: Service kubelet
+  service: name=kubelet state=restarted

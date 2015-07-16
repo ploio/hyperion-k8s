@@ -1,4 +1,8 @@
-*.pyc
-.tox/
-hyperion.egg-info/
 .vagrant/
+ansible/roles/master/files/etcd
+ansible/roles/master/files/kube-apiserver
+ansible/roles/master/files/kube-controller-manager
+ansible/roles/master/files/kube-scheduler
+ansible/roles/minion/files/kube-proxy
+ansible/roles/minion/files/kubelet
+bin/
