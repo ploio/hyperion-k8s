@@ -60,8 +60,8 @@ Install it :
 
 Read guides to creates the infrastructure :
 
-* [Digitalocean](https://github.com/nlamirault/hyperion/blob/master/infra/digitalocean/README.md)
-* [Google cloud](https://github.com/nlamirault/hyperion/blob/master/infra/google/README.md)
+* [Digitalocean](https://github.com/nlamirault/hyperion/blob/infra/digitalocean/README.md)
+* [Google cloud](https://github.com/nlamirault/hyperion/blob/infra/google/README.md)
 
 
 ## Deployment
