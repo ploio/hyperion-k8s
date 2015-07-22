@@ -1,0 +1,17 @@
+#
+# Hyperion Digital Ocean setup
+#
+
+do_token = "xxxxx"
+
+# Get keys using the following command
+# curl -X GET "https://api.digitalocean.com/v2/account/keys" -H "Authorization: Bearer $DO_TOKEN"
+
+# awk '{print $2}' ~/.ssh/id_rsa.pub | base64 -d | md5sum -b | sed 's/../&:/g; s/: .*$//'
+do_ssh_fingerprint = "xxxx"
+
+# Public key
+do_pub_key = "/home/user/.ssh/id_rsa.pub"
+
+# Private key for connecting via SSH
+do_pvt_key = "/home/user/.ssh/id_rsa"
