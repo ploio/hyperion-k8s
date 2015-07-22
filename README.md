@@ -36,9 +36,10 @@ Install dependencies :
 - controller-manager : Enforces Kubernetes services.
 - scheduler : Schedules containers on hosts.
 - proxy : Provides network proxy services.
-- kubelet : Processes a container manifest so the containers are launched according to how they are described.
+- kubelet : Processes a container manifest so the containers are launched according to
+how they are described.
 
-## Deployment
+## Infra
 
 Initialize environment:
 
@@ -50,6 +51,23 @@ Initialize environment:
 
         $ make create
 
+### Cloud
+
+Orchestrated provisioning is performed using [Terraform][].
+Install it :
+
+    $ make terraform
+
+Read guides to creates the infrastructure :
+
+* [Digitalocean](https://github.com/nlamirault/hyperion/blob/master/infra/digitalocean/README.md)
+* [Google cloud](https://github.com/nlamirault/hyperion/blob/master/infra/google/README.md)
+
+
+## Deployment
+
+### Local
+
 * Configure the cluster :
 
         $ make vagrant-master
@@ -59,21 +77,20 @@ Initialize environment:
 
         $ make destroy
 
-
 ### Cloud
 
 * Setup an inventory file, like that :
 
         ```bash
         [masters]
-        10.1.1.1 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+        x.x.x.x ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
 
         [nodes]
-        10.1.1.11 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
-        10.1.1.12 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+        x.x.x.x ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+        x.y.y.y ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
 
         [etcd]
-        10.1.1.1 ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
+        x.x.x.x ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
         ```
 
 * Configure the cluster :
@@ -85,9 +102,13 @@ Initialize environment:
 
 ## Usage
 
+* Setup your kubernetes master IP :
+
+        $ export K8S_MASTER=x.x.x.x
+
 * Check [Kubernetes][] status :
 
-        $ curl http://10.245.1.100:8080/
+        $ curl http://$(K8S_MASTER):8080/
         {
           "paths": [
              "/api",
@@ -105,35 +126,63 @@ Initialize environment:
            ]
         }
 
-* You could see the dashboard on the master : `http://....:8080/ui`
-
 * You could use the ``kubectl`` binary to manage your cluster :
 
-        $ bin/kubectl -s 10.245.1.100:8080 version
-        Client Version: version.Info{Major:"0", Minor:"19", GitVersion:"v0.19.1", GitCommit:"bb63f031d4146c17113b059886aea66b09f6daf5", GitTreeState:"clean"}
-        Server Version: version.Info{Major:"0", Minor:"19", GitVersion:"v0.19.1", GitCommit:"bb63f031d4146c17113b059886aea66b09f6daf5", GitTreeState:"clean"}
+        $ bin/kubectl -s $(K8S_MASTER):8080 version
+        Client Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.1", GitCommit:"6a5c06e3d1eb27a6310a09270e4a5fb1afa93e74", GitTreeState:"clean"}
+        Server Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.1", GitCommit:"6a5c06e3d1eb27a6310a09270e4a5fb1afa93e74", GitTreeState:"clean"}
 
-        $ bin/kubectl -s 10.245.1.100:8080 get nodes
+        $ bin/kubectl -s 10.245.1.10:8080 get cs
+        NAME                 STATUS    MESSAGE              ERROR
+        controller-manager   Healthy   ok                   nil
+        scheduler            Healthy   ok                   nil
+        etcd-0               Healthy   {"health": "true"}   nil
+
+        $ bin/kubectl -s $(K8S_MASTER):8080 get nodes
         NAME      LABELS    STATUS
 
-        $ bin/kubectl -s 10.245.1.100:8080 get namespaces
+        $ bin/kubectl -s $(K8S_MASTER):8080 get namespaces
         NAME      LABELS    STATUS
         default   <none>    Active
 
-        $ bin/kubectl -s 10.245.1.100:8080 cluster-info
-        Kubernetes master is running at 10.245.1.100:8080
+        $ bin/kubectl -s $(K8S_MASTER):8080 cluster-info
+        Kubernetes master is running at $(K8S_MASTER):8080
 
 * Creates namespaces :
 
-        $ bin/kubectl -s 10.245.1.100:8080 create -f namespaces/namespace-admin.json
-        $ bin/kubectl -s 10.245.1.100:8080 create -f namespaces/namespace-dev.json
-        $ bin/kubectl -s 10.245.1.100:8080 create -f namespaces/namespace-prod.json
-        $ bin/kubectl -s 10.245.1.100:8080 get namespaces
-        NAME      LABELS    STATUS
-        admin     name=admin   Active
-        default   <none>    Active
+        $ bin/kubectl -s $(K8S_MASTER):8080 create -f namespaces/namespace-admin.json
+        $ bin/kubectl -s $(K8S_MASTER):8080 create -f namespaces/namespace-dev.json
+        $ bin/kubectl -s $(K8S_MASTER):8080 create -f namespaces/namespace-prod.json
+        $ bin/kubectl -s $(K8S_MASTER):8080 get namespaces
+        NAME          LABELS             STATUS
+        default       <none>             Active
         development   name=development   Active
-        production   name=production   Active
+        kube-system   name=kube-system   Active
+        production    name=production    Active
+
+
+### Setup Kubernetes UI
+
+* Creates the replication controller and service :
+
+        $ bin/kubectl -s $(K8S_MASTER):8080 create -f services/kube-ui/kube-ui-rc.yaml --namespace=kube-system
+        $ bin/kubectl -s $(K8S_MASTER):8080 create -f -f services/kube-ui/kube-ui-svc.yaml --namespace=kube-system
+
+
+### Setup heapster
+
+* Create the pod :
+
+        $ bin/kubectl -s $(K8S_MASTER):8080 create --namespace=admin -f services/monitoring/influxdb-grafana-controller.json
+        $ bin/kubectl -s $(K8S_MASTER):8080 create --namespace=admin -f services/monitoring/heapster-controller.json
+        $ bin/kubectl -s $(K8S_MASTER):8080 --namespace=admin get pods
+        NAME                                         READY     STATUS    RESTARTS   AGE
+        monitoring-influx-grafana-controller-hc0uh   2/2       Running   0          4m
+
+* Create the monitoring services :
+
+
+
 
 
 ## Debug
@@ -176,6 +225,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 [kubernetes]: http://kubernetes.io/
 [etcd]: https://github.com/coreos/etcd
+[terraform]: https://terraform.io
 
 [vagrant]: https://www.vagrantup.com
 [virtualbox]: https://www.virtualbox.org/
