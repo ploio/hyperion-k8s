@@ -6,14 +6,14 @@
 
 ## Description
 
-A `Vagrantfile` is provided if you want to use it in virtual machines.
-This installation creates a [Kubernetes][] system on a cluster of Ubuntu VMs
+This installation creates a [Kubernetes][] cluster.
 
-Install dependencies :
+Dependencies :
 
 - [virtualbox][] (>= 4.3.10)
 - [vagrant][] (>= 1.6)
 - [ansible][]
+- [terraform][]
 
 
 ### Kubernetes master
