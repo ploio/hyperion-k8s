@@ -2,9 +2,9 @@
   "kind": "Namespace",
   "apiVersion": "v1",
   "metadata": {
-    "name": "admin",
+    "name": "kube-system",
     "labels": {
-      "name": "admin"
+      "name": "kube-system"
     }
   }
 }
