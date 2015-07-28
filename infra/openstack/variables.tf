@@ -1,3 +1,8 @@
+variable "hyperion_nb_nodes" {
+  description = "The number of nodes."
+  default = "2"
+}
+
 variable "openstack_access_key" {
   description = "Openstack username"
 }
@@ -41,19 +46,22 @@ variable "openstack_subnet_cidr_block" {
   default = "10.0.1.0/24"
 }
 
+# variable "openstack_neutron_router_gateway_network_id" {
+#     description = "The UUID of the network that will be used as WAN breakout for the neutron L3 Router"
+# }
+
 variable "openstack_floating_ip_pool_name" {
   description = "The name of the IP pool that floating IP's will be requested from."
+  default = "public"
 }
 
-variable "openstack_image" {
-  description = "The name of the image to base the launched instances."
+variable "openstack_image_id" {
+  description = "The ID the image to base the launched instances."
 }
 
 variable "openstack_instance_type_master" {
     description = "The machine type to use for the Hyperion master instance."
-    default = "m3.medium"
 }
 variable "openstack_instance_type_node" {
     description = "The machine type to use for the Hyperion nodes instance."
-    default = "m3.medium"
 }
