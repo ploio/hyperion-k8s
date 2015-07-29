@@ -20,7 +20,7 @@ resource "digitalocean_droplet" "hyperion-master" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
-      "sudo apt-get install -y python2"
+      "sudo apt-get install -y python2.7"
     ]
   }
 }
@@ -44,7 +44,7 @@ resource "digitalocean_droplet" "hyperion-nodes" {
     inline = [
       "sudo apt-get update",
       # "sudo apt-get -y upgrade",
-      "sudo apt-get install -y python2"
+      "sudo apt-get install -y python2.7"
     ]
   }
 }
