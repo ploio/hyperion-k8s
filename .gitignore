@@ -6,3 +6,8 @@ ansible/roles/master/files/kube-scheduler
 ansible/roles/minion/files/kube-proxy
 ansible/roles/minion/files/kubelet
 bin/
+
+terraform.tfvars
+*.tfplan*
+*.tfstate*
+

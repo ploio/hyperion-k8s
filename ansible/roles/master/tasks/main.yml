@@ -67,7 +67,7 @@
             owner=root
             group=root
             mode=0644
-  # notify: restart etcd
+  notify: restart etcd
   # tags:
   #     - kubernetes
 
@@ -77,7 +77,7 @@
             owner=root
             group=root
             mode=0644
-  # notify: restart kube-apiserver
+  notify: restart kube-apiserver
   # tags:
   #     - kubernetes
 
@@ -87,7 +87,7 @@
             owner=root
             group=root
             mode=0644
-  # notify: restart kube-apiserver
+  notify: restart kube-apiserver
   # tags:
   #     - kubernetes
 
@@ -97,7 +97,7 @@
             owner=root
             group=root
             mode=0644
-  # notify: restart kube-scheduler
+  notify: restart kube-scheduler
   # tags:
   #     - kubernetes
 
