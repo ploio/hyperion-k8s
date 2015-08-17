@@ -1,7 +1,7 @@
 # Hyperion
 
-[![License Apache 2][badge-license]][LICENSE](LICENSE)
-![Version][badge-release]
+[![License Apache 2][badge-license]][LICENSE]
+[![Version][badge-release]]
 
 
 ## Description
