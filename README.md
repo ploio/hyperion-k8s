@@ -1,8 +1,7 @@
 # Hyperion
 
 [![License Apache 2][badge-license]][LICENSE]
-[![Version][badge-release]]
-
+![Version][badge-release]
 
 ## Description
 
@@ -220,7 +219,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 
 [Hyperion]: https://github.com/nlamirault/hyperion
-[COPYING]: https://github.com/nlamirault/hyperion/blob/master/COPYING
+[LICENSE]: https://github.com/nlamirault/hyperion/blob/master/LICENSE
 [Issue tracker]: https://github.com/nlamirault/hyperion/issues
 
 [kubernetes]: http://kubernetes.io/
