@@ -1,19 +1,17 @@
 # Hyperion
 
-[![License Apache 2][badge-license]][LICENSE]
+[![License Apache 2][badge-license]][LICENSE][]
 ![Version][badge-release]
 
 ## Description
 
-This installation creates a [Kubernetes][] cluster.
+[hyperion][] creates a Cloud environment :
 
-Dependencies :
+- Orchestrated provisioning is performed using [Terraform][].
+- Applications managment is performed using [Kubernetes][]
+- Configuration is performed using [ansible][].
 
-- [virtualbox][] (>= 4.3.10)
-- [vagrant][] (>= 1.6)
-- [ansible][]
-- [terraform][]
-
+## Kubernetes
 
 ### Kubernetes master
 
@@ -44,15 +42,9 @@ Initialize environment:
 
     $ make init
 
-### Local
-
-* Creates the cluster :
-
-        $ make create
 
 ### Cloud
 
-Orchestrated provisioning is performed using [Terraform][].
 Install it :
 
     $ make terraform
@@ -61,6 +53,12 @@ Read guides to creates the infrastructure :
 
 * [Digitalocean](https://github.com/nlamirault/hyperion/blob/infra/digitalocean/README.md)
 * [Google cloud](https://github.com/nlamirault/hyperion/blob/infra/google/README.md)
+
+### Local
+
+* Creates the cluster :
+
+        $ make create
 
 
 ## Deployment
