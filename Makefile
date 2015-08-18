@@ -21,7 +21,7 @@ VAGRANT = vagrant
 DOCKER = "docker"
 
 K8S_URI=https://storage.googleapis.com/kubernetes-release/release
-K8S_VERSION=1.0.1
+K8S_VERSION=1.0.3
 K8S_ARCH=linux/amd64
 K8S_BINARIES = \
 	kube-apiserver \
@@ -35,7 +35,7 @@ ETCD_URI=https://github.com/coreos/etcd/releases/download
 ETCD_VERSION=2.1.1
 
 TERRAFORM_URI=https://dl.bintray.com/mitchellh/terraform
-TERRAFORM_VERSION=0.6.1
+TERRAFORM_VERSION=0.6.3
 TERRAFORM_ARCH=linux_amd64
 
 NO_COLOR=\033[0m
@@ -64,7 +64,7 @@ configure:
 etcd: configure
 	@echo -e "$(OK_COLOR)[$(APP)] Install Etcd$(NO_COLOR)"
 	@curl --silent -L -o /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz $(ETCD_URI)/v$(ETCD_VERSION)/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz && \
-		tar zxvf /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz -C /tmp/ && \
+		tar zxf /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz -C /tmp/ && \
 		cp -f /tmp/etcd-v$(ETCD_VERSION)-linux-amd64/etcdctl bin && \
 		cp -f /tmp/etcd-v$(ETCD_VERSION)-linux-amd64/etcd bin && \
 		rm -rf /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz /tmp/etcd-v$(ETCD_VERSION)-linux-amd64
@@ -94,7 +94,7 @@ prepare:
 	cp $(OUTPUT)/kubelet ansible/roles/minion/files/
 
 .PHONY: init
-init: etcd k8s prepare
+init: etcd k8s terraform prepare
 
 .PHONY: create
 create:
