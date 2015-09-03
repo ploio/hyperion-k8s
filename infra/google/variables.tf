@@ -15,6 +15,10 @@ variable "gce_ssh_user" {
   description = "SSH user."
 }
 
+variable "gce_ssh_public_key" {
+  description = "Path to the ssh key to use"
+}
+
 variable "gce_ssh_private_key_file" {
   description = "Path to the SSH private key file."
 }
@@ -36,7 +40,7 @@ variable "gce_ipv4_range" {
 
 variable "gce_image" {
   description = "The name of the image to base the launched instances."
-  default = "ubuntu-1404-trusty-v20150316"
+  default = "debian-8-jessie-v20150818"
 }
 
 variable "gce_machine_type_master" {
