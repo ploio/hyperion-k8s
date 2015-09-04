@@ -13,7 +13,7 @@
 # limitations under the License.
 
 APP = hyperion
-VERSION = 0.8.0
+VERSION = 0.8.1
 
 SHELL := /bin/bash
 
@@ -34,11 +34,11 @@ K8S_BINARIES = \
 ETCD_URI=https://github.com/coreos/etcd/releases/download
 ETCD_VERSION=2.1.1
 
-CALICO_URI=https://github.com/projectcalico/calico-docker/releases/download
-CALICO_VERSION=0.5.5
-
 DOCKER_URI=https://get.docker.com/builds/Linux/x86_64
 DOCKER_VERSION=1.6.2
+
+FLANNEL_URI=https://github.com/coreos/flannel/releases/download
+FLANNEL_VERSION=0.4.1
 
 TERRAFORM_URI=https://dl.bintray.com/mitchellh/terraform
 TERRAFORM_VERSION=0.6.3
@@ -58,11 +58,14 @@ help:
 	@echo -e "$(WARN_COLOR)- init$(NO_COLOR)    : Initialize environment$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR)- archive$(NO_COLOR) : Build K8S binaries archive$(NO_COLOR)"
 
+clean:
+	rm -fr output hyperion-*.tar.gz
+
 configure:
 	@mkdir -p ./bin
 
 etcd: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Etcd$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Download Etcd$(NO_COLOR)"
 	@curl --silent -L -o /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz $(ETCD_URI)/v$(ETCD_VERSION)/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz && \
 		tar zxf /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz -C /tmp/ && \
 		cp -f /tmp/etcd-v$(ETCD_VERSION)-linux-amd64/etcdctl bin && \
@@ -71,7 +74,7 @@ etcd: configure
 
 .PHONY: k8s
 k8s: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Kubernetes$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Download Kubernetes$(NO_COLOR)"
 	for i in $(K8S_BINARIES); do \
 		curl --silent -o $(OUTPUT)/$$i -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/$$i; \
 		chmod +x $(OUTPUT)/$$i; \
@@ -79,22 +82,24 @@ k8s: configure
 
 .PHONY: terraform
 terraform: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Terraform$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Download Terraform$(NO_COLOR)"
 	curl --silent -o /tmp/terraform-v${TERRAFORM_VERSION}.zip -L ${TERRAFORM_URI}/terraform_${TERRAFORM_VERSION}_$(TERRAFORM_ARCH).zip && \
 		unzip /tmp/terraform-v${TERRAFORM_VERSION}.zip -d $(OUTPUT) && \
 		rm -rf /tmp/terraform-v${TERRAFORM_VERSION}.zip
 
-.PHONY: calico
-calico: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Calico$(NO_COLOR)"
-	curl --silent -o $(OUTPUT)/calicoctl -L ${CALICO_URI}/v${CALICO_VERSION}/calicoctl
-	chmod +x $(OUTPUT)/calicoctl
-
 .PHONY: docker
 docker: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Docker$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Download Docker$(NO_COLOR)"
 	curl --silent -o $(OUTPUT)/docker -L ${DOCKER_URI}/docker-${DOCKER_VERSION}
 	chmod +x $(OUTPUT)/docker
+
+.PHONY: flannel
+flannel: configure
+	@echo -e "$(OK_COLOR)[$(APP)] Download Flannel$(NO_COLOR)"
+	curl --silent -o /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -L ${FLANNEL_URI}/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz && \
+		tar xvf /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -C /tmp/ && \
+		cp /tmp/flannel-${FLANNEL_VERSION}/flanneld $(OUTPUT)/flanneld && \
+		rm -fr /tmp/flannel-${FLANNEL_VERSION} /tmp/flannel-v${FLANNEL_VERSION}.tar.gz
 
 .PHONY: prepare
 prepare:
@@ -105,10 +110,10 @@ prepare:
 	cp $(OUTPUT)/kube-scheduler ansible/roles/master/files/
 	cp $(OUTPUT)/kube-proxy ansible/roles/minion/files/
 	cp $(OUTPUT)/kubelet ansible/roles/minion/files/
-	cp $(OUTPUT)/calicoctl ansible/roles/minion/files/
+	cp $(OUTPUT)/flanneld ansible/roles/minion/files/
 
 .PHONY: init
-init: etcd k8s terraform prepare
+init: etcd k8s terraform docker flannel prepare
 
 .PHONY: archive
 archive:
@@ -123,5 +128,6 @@ archive:
 	cp $(OUTPUT)/kube-proxy output
 	cp $(OUTPUT)/kubelet output
 	cp $(OUTPUT)/docker output
+	cp $(OUTPUT)/flanneld output
 	cd output && sha256sum * > CHECKSUM
 	tar -zcvf hyperion-$(VERSION).tar.gz -C output .
