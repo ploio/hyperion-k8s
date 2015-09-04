@@ -1,8 +1,8 @@
 resource "template_file" "kubernetes" {
   filename = "../kubernetes.env"
   vars {
-    api_servers = "http://${var.cluster_name}-hyperion-master.c.hyperion.internal:8080"
-    etcd_servers = "http://127.0.0.1:2379"
+    api_servers = "http://${var.cluster_name}-hyperion-master.c.${var.gce_project}.internal:8080"
+    etcd_servers = "http://${var.cluster_name}-hyperion-master.c.${var.gce_project}.internal:2379"
     flannel_backend = "${var.flannel_backend}"
     flannel_network = "${var.flannel_network}"
     portal_net = "${var.portal_net}"
@@ -27,20 +27,20 @@ resource "google_compute_firewall" "hyperion-network" {
     ports = ["1-65535"]
   }
   target_tags = ["hyperion"]
-}
 
+}
 resource "google_compute_address" "hyperion-master" {
   name = "hyperion-master"
 }
 
 resource "google_compute_instance" "hyperion-master" {
   zone = "${var.gce_zone}"
-  name = "hyperion-master"
-  tags = ["hyperion"]
-  description = "Hyperion master"
+  name = "${var.cluster_name}-master"
+  tags = ["kubernetes"]
+  description = "Kubernetes master"
   machine_type = "${var.gce_machine_type_master}"
   tags {
-    Name = "hyperion-master"
+    Name = "${var.cluster_name}-master"
   }
   disk {
     image = "${var.gce_image}"
@@ -92,12 +92,12 @@ resource "google_compute_instance" "hyperion-master" {
 resource "google_compute_instance" "hyperion-nodes" {
   count = "${var.hyperion_nb_nodes}"
   zone = "${var.gce_zone}"
-  name = "hyperion-node-${count.index}" // => `hyperion-node-{0,1,2}`
-  description = "Hyperion node ${count.index}"
-  tags = ["hyperion"]
+  name = "${var.cluster_name}-node-${count.index}" // => `xxx-node-{0,1,2}`
+  description = "Kubernetes node ${count.index}"
+  tags = ["kubernetes"]
   machine_type = "${var.gce_machine_type_node}"
   tags {
-    Name = "hyperion-nodes-${count.index}"
+    Name = "${var.cluster_name}-nodes-${count.index}"
   }
   disk {
     image = "${var.gce_image}"
