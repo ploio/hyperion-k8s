@@ -1,0 +1,15 @@
+{
+    "access_key": "xxx",
+    "secret_key": "xxx"
+    "account_id": "xxx",
+    "s3_bucket": "xxx",
+    "key_name": "xxx",
+    "region": "eu-west-1",
+    "ssh_public_key": "xxx",
+    "ssh_private_key_file": "xxx",
+    "source_ami": "ami-e31a6594",
+    "ssh_user": "admin",
+    "x509_cert_path": "xxx",
+    "x509_key_path": "xxx",
+    "instance_type": "t2.micro"
+}
