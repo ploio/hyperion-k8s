@@ -1,0 +1,47 @@
+{
+    "variables": {
+        "account_file": "",
+        "project_id": "",
+        "ssh_user": "",
+        "zone": "",
+        "source_image": "",
+        "machine_type": "",
+        "kube_binaries": "https://storage.googleapis.com/portefaix/hyperion-0.8.0.tar.gz",
+        "image_name": "hyperion-0-8-1-v20150904",
+        "image_description": "Kubernetes Base Image for Hyperion"
+    },
+    "builders": [
+        {
+            "type": "googlecompute",
+            "account_file": "{{user `account_file`}}",
+            "project_id": "{{user `project_id`}}",
+            "source_image": "{{user `source_image`}}",
+            "zone": "{{user `zone`}}",
+            "disk_size": 100,
+            "image_name": "{{user `image_name`}}",
+            "image_description": "{{user `image_description`}}",
+            "machine_type": "{{user `machine_type`}}",
+            "ssh_username": "{{user `ssh_user`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "../units",
+            "destination": "/tmp"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo mkdir -p /opt/bin",
+                "wget -N -O k8s.tar.gz {{user `kube_binaries`}}",
+                "sudo tar -xvf k8s.tar.gz -C /opt/bin",
+                "sudo chmod +x -R /opt/bin",
+                "sudo chown root:root -R /opt/bin",
+                "sudo mv /tmp/units/*.service /etc/systemd/system",
+                "sudo ls /etc/systemd/system/",
+                "rm -rf /tmp/units"
+            ]
+        }
+    ]
+}

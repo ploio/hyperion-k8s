@@ -6,8 +6,9 @@ ansible/roles/master/files/kube-scheduler
 ansible/roles/minion/files/kube-proxy
 ansible/roles/minion/files/kubelet
 bin/
+output/
+hyperion-*.tar.gz
 
 terraform.tfvars
 *.tfplan*
 *.tfstate*
-

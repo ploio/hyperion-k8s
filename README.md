@@ -7,9 +7,9 @@
 
 [hyperion][] creates a Cloud environment :
 
-- Orchestrated provisioning is performed using [Terraform][].
+- Identical machine images creation is performed using [Packer][]
+- Orchestrated provisioning is performed using [Terraform][]
 - Applications managment is performed using [Kubernetes][]
-- Configuration is performed using [ansible][].
 
 ## Kubernetes
 
@@ -36,76 +36,43 @@
 - kubelet : Processes a container manifest so the containers are launched according to
 how they are described.
 
-## Infra
+## Initialization
 
 Initialize environment:
 
     $ make init
 
+Create Kubernetes binaries archive :
 
-### Cloud
+    $ make archive
 
-Install it :
+## Machine image
 
-    $ make terraform
+Read guides to creates the machine for a cloud provider :
+
+* [Google cloud](https://github.com/portefaix/hyperion/blob/packer/google/README.md)
+
+## Cloud infratructure
 
 Read guides to creates the infrastructure :
 
-* [Digitalocean](https://github.com/nlamirault/hyperion/blob/infra/digitalocean/README.md)
-* [Google cloud](https://github.com/nlamirault/hyperion/blob/infra/google/README.md)
-
-### Local
-
-* Creates the cluster :
-
-        $ make create
-
-
-## Deployment
-
-### Local
-
-* Configure the cluster :
-
-        $ make vagrant-master
-        $ make vagrant-nodes
-
-* Destroy the cluster:
-
-        $ make destroy
-
-### Cloud
-
-* Setup an inventory file, like that :
-
-        ```bash
-        [masters]
-        x.x.x.x ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
-
-        [nodes]
-        x.x.x.x ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
-        x.y.y.y ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
-
-        [etcd]
-        x.x.x.x ansible_connection=ssh ansible_ssh_user=hyperion ansible_python_interpreter=/usr/bin/python2
-        ```
-
-* Configure the cluster :
-
-        $ make master inventory=<inventory_filename>
-        $ make nodes inventory=<inventory_filename>
-
+* [Google cloud](https://github.com/portefaix/hyperion/blob/infra/google/README.md)
+* [AWS](https://github.com/portefaix/hyperion/blob/infra/aws/README.md)
+* [Digitalocean](https://github.com/portefaix/hyperion/blob/infra/digitalocean/README.md)
+* [Openstack](https://github.com/portefaix/hyperion/blob/infra/openstack/README.md)
 
 
 ## Usage
 
-* Setup your kubernetes master IP :
+* Setup your Kubernetes configuration :
 
         $ export K8S_MASTER=x.x.x.x
+        $ kubectl config set-cluster hyperion \
+            --insecure-skip-tls-verify=true --server=$K8S_MASTER
 
 * Check [Kubernetes][] status :
 
-        $ curl http://$(K8S_MASTER):8080/
+        $ curl http://$K8S_MASTER:8080/
         {
           "paths": [
              "/api",
@@ -125,61 +92,46 @@ Read guides to creates the infrastructure :
 
 * You could use the ``kubectl`` binary to manage your cluster :
 
-        $ bin/kubectl -s $(K8S_MASTER):8080 version
-        Client Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.1", GitCommit:"6a5c06e3d1eb27a6310a09270e4a5fb1afa93e74", GitTreeState:"clean"}
-        Server Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.1", GitCommit:"6a5c06e3d1eb27a6310a09270e4a5fb1afa93e74", GitTreeState:"clean"}
+        $ bin/kubectl -s $K8S_MASTER:8080 version
+        Client Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.3", GitCommit:"61c6ac5f350253a4dc002aee97b7db7ff01ee4ca", GitTreeState:"clean"}
+        Server Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.3", GitCommit:"61c6ac5f350253a4dc002aee97b7db7ff01ee4ca", GitTreeState:"clean"}
 
-        $ bin/kubectl -s 10.245.1.10:8080 get cs
+        $ bin/kubectl -s $K8S_MASTER:8080 get cs
         NAME                 STATUS    MESSAGE              ERROR
         controller-manager   Healthy   ok                   nil
         scheduler            Healthy   ok                   nil
         etcd-0               Healthy   {"health": "true"}   nil
 
-        $ bin/kubectl -s $(K8S_MASTER):8080 get nodes
+        $ bin/kubectl -s $K8S_MASTER:8080 get nodes
         NAME      LABELS    STATUS
+        NAME          LABELS                               STATUS
+        x.x.x.x       kubernetes.io/hostname=x.x.x.x       Ready
+        x.x.x.x       kubernetes.io/hostname=x.x.x.x       Ready
 
-        $ bin/kubectl -s $(K8S_MASTER):8080 get namespaces
-        NAME      LABELS    STATUS
-        default   <none>    Active
+        $ bin/kubectl -s $K8S_MASTER:8080 cluster-info
+        Kubernetes master is running at x.x.x.x:8080
 
-        $ bin/kubectl -s $(K8S_MASTER):8080 cluster-info
-        Kubernetes master is running at $(K8S_MASTER):8080
 
 * Creates namespaces :
 
-        $ bin/kubectl -s $(K8S_MASTER):8080 create -f namespaces/namespace-admin.json
-        $ bin/kubectl -s $(K8S_MASTER):8080 create -f namespaces/namespace-dev.json
-        $ bin/kubectl -s $(K8S_MASTER):8080 create -f namespaces/namespace-prod.json
-        $ bin/kubectl -s $(K8S_MASTER):8080 get namespaces
+        $ bin/kubectl -s $K8S_MASTER:8080 create -f namespaces/namespace-admin.json
+        $ bin/kubectl -s $K8S_MASTER:8080 create -f namespaces/namespace-dev.json
+        $ bin/kubectl -s $K8S_MASTER:8080 create -f namespaces/namespace-prod.json
+
+        $ bin/kubectl -s $K8S_MASTER:8080 get namespaces
         NAME          LABELS             STATUS
+        admin         name=admin         Active
         default       <none>             Active
         development   name=development   Active
         kube-system   name=kube-system   Active
         production    name=production    Active
 
 
-### Setup Kubernetes UI
+# Services #
 
-* Creates the replication controller and service :
+[cAdvisor][] exposes a simple UI for on-machine containers on port `4194`
 
-        $ bin/kubectl -s $(K8S_MASTER):8080 create -f services/kube-ui/kube-ui-rc.yaml --namespace=kube-system
-        $ bin/kubectl -s $(K8S_MASTER):8080 create -f -f services/kube-ui/kube-ui-svc.yaml --namespace=kube-system
-
-
-### Setup heapster
-
-* Create the pod :
-
-        $ bin/kubectl -s $(K8S_MASTER):8080 create --namespace=admin -f services/monitoring/influxdb-grafana-controller.json
-        $ bin/kubectl -s $(K8S_MASTER):8080 create --namespace=admin -f services/monitoring/heapster-controller.json
-        $ bin/kubectl -s $(K8S_MASTER):8080 --namespace=admin get pods
-        NAME                                         READY     STATUS    RESTARTS   AGE
-        monitoring-influx-grafana-controller-hc0uh   2/2       Running   0          4m
-
-* Create the monitoring services :
-
-
-
+For others services, see [hyperion-services][]
 
 
 ## Debug
@@ -216,17 +168,21 @@ A [changelog](ChangeLog.md) is available
 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 
-[Hyperion]: https://github.com/nlamirault/hyperion
-[LICENSE]: https://github.com/nlamirault/hyperion/blob/master/LICENSE
-[Issue tracker]: https://github.com/nlamirault/hyperion/issues
+[hyperion]: https://github.com/portefaixhyperion
+[hyperion-services]: https://github.com/portefaix/hyperion-services
+[LICENSE]: https://github.com/portefaix/hyperion/blob/master/LICENSE
+[Issue tracker]: https://github.com/portefaix/hyperion/issues
 
 [kubernetes]: http://kubernetes.io/
 [etcd]: https://github.com/coreos/etcd
 [terraform]: https://terraform.io
+[terraform]: https://packer.io
+
 
 [vagrant]: https://www.vagrantup.com
 [virtualbox]: https://www.virtualbox.org/
-[ansible]: http://www.ansible.com/
+
+[cAdvisor]: https://github.com/google/cadvisor
 
 [badge-license]: https://img.shields.io/badge/license-Apache_2-green.svg
-[badge-release]: https://img.shields.io/github/release/nlamirault/hyperion.svg
+[badge-release]: https://img.shields.io/github/release/portefaix/hyperion.svg

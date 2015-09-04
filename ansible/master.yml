@@ -1,7 +1,0 @@
----
-- hosts: masters
-  sudo: yes
-  roles:
-    - docker
-    - kubernetes
-    - master
