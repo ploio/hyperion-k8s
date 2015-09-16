@@ -176,8 +176,7 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [kubernetes]: http://kubernetes.io/
 [etcd]: https://github.com/coreos/etcd
 [terraform]: https://terraform.io
-[terraform]: https://packer.io
-
+[packer]: https://packer.io
 
 [vagrant]: https://www.vagrantup.com
 [virtualbox]: https://www.virtualbox.org/
