@@ -69,6 +69,8 @@ Read guides to creates the infrastructure :
         $ export K8S_MASTER=x.x.x.x
         $ kubectl config set-cluster hyperion \
             --insecure-skip-tls-verify=true --server=${K8S_MASTER}
+		$ kubectl config set-context hyperion --cluster=hyperion
+		$ kubectl config use-context hyperion
 
 * Check [Kubernetes][] status :
 
@@ -92,23 +94,23 @@ Read guides to creates the infrastructure :
 
 * You could use the ``kubectl`` binary to manage your cluster :
 
-        $ bin/kubectl -s ${K8S_MASTER}:8080 version
+        $ bin/kubectl version
         Client Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.3", GitCommit:"61c6ac5f350253a4dc002aee97b7db7ff01ee4ca", GitTreeState:"clean"}
         Server Version: version.Info{Major:"1", Minor:"0", GitVersion:"v1.0.3", GitCommit:"61c6ac5f350253a4dc002aee97b7db7ff01ee4ca", GitTreeState:"clean"}
 
-        $ bin/kubectl -s ${K8S_MASTER}:8080 get cs
+        $ bin/kubectl get cs
         NAME                 STATUS    MESSAGE              ERROR
         controller-manager   Healthy   ok                   nil
         scheduler            Healthy   ok                   nil
         etcd-0               Healthy   {"health": "true"}   nil
 
-        $ bin/kubectl -s ${K8S_MASTER}:8080 get nodes
+        $ bin/kubectl get nodes
         NAME      LABELS    STATUS
         NAME          LABELS                               STATUS
         x.x.x.x       kubernetes.io/hostname=x.x.x.x       Ready
         x.x.x.x       kubernetes.io/hostname=x.x.x.x       Ready
 
-        $ bin/kubectl -s ${K8S_MASTER}:8080 cluster-info
+        $ bin/kubectl cluster-info
         Kubernetes master is running at x.x.x.x:8080
 
 
