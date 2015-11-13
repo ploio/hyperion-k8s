@@ -1,0 +1,96 @@
+{
+    "variables": {
+        "kube_binaries": "https://storage.googleapis.com/portefaix/hyperion-0.8.1.tar.gz",
+        "vm_name": "hyperion-core",
+        "disk_size": "2000",
+        "memory_size": "1024",
+        "cpus": "1",
+        "iso_checksum": "923cd1bfbfa62d78aecaa92d919ee54a95c8fca834b427502847228cf06155e7243875f59279b0bf6bfd1b579cbe2f1bc80528a265dafddee9a9d2a197ef3806",
+        "iso_checksum_type": "sha512",
+        "debian_version": "8.2.0",
+        "debian_arch": "amd64",
+        "atlas_token": "{{env `ATLAS_TOKEN`}}",
+        "atlas_username": "{{env `ATLAS_USERNAME`}}",
+        "atlas_name": "hyperion",
+        "version": "0.1.0"
+    },
+    "builders": [
+        {
+            "type": "virtualbox-iso",
+            "boot_command": [
+                "<esc><wait>",
+                "install <wait>",
+                "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+                "debian-installer=en_US <wait>",
+                "auto <wait>",
+                "locale=en_US <wait>",
+                "kbd-chooser/method=fr <wait>",
+                "keyboard-configuration/xkb-keymap=fr <wait>",
+                "netcfg/get_hostname={{ .Name }} <wait>",
+                "netcfg/get_domain=vagrantup.com <wait>",
+                "fb=false <wait>",
+                "debconf/frontend=noninteractive <wait>",
+                "console-setup/ask_detect=false <wait>",
+                "console-keymaps-at/keymap=us <wait>",
+                "<enter><wait>"
+            ],
+            "boot_wait": "10s",
+            "disk_size": "{{ user `disk_size` }}",
+            "guest_os_type": "Debian_64",
+            "http_directory": "http/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}",
+            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_url": "http://cdimage.debian.org/cdimage/release/{{ user `debian_version` }}/{{ user `debian_arch` }}/iso-cd/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}-netinst.iso",
+            "ssh_username": "vagrant",
+            "ssh_password": "vagrant",
+            "ssh_port": 22,
+            "ssh_wait_timeout": "10000s",
+            "shutdown_command": "sudo -S /sbin/shutdown -hP now",
+            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+            "virtualbox_version_file": ".vbox_version",
+            "vm_name": "{{ user `vm_name` }}",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "{{ user `memory_size` }}"],
+                ["modifyvm", "{{.Name}}", "--cpus", "{{ user `cpus` }}"]
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+            "scripts": [
+                "scripts/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}/update.sh",
+                "scripts/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}/sudoers.sh",
+                "scripts/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}/vagrant.sh",
+                "scripts/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}/vbguest.sh",
+                "scripts/debian-{{ user `debian_version` }}-{{ user `debian_arch` }}/cleanup.sh"
+            ]
+        }
+    ],
+    "push": {
+        "name": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+        "token": "{{user `atlas_name`}}",
+        "vcs": true
+    },
+    "post-processors": [
+        [
+            {
+                "type": "vagrant",
+                "compression_level": 9,
+                "output":"vagrant/debian/debian-{{ user `debian_version` }}-{{.Provider}}.box"
+            },
+            {
+                "type": "atlas",
+                "only": ["virtualbox-iso"],
+                "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+                "artifact_type": "vagrant.box",
+                "metadata": {
+                    "created_at": "{{timestamp}}",
+                    "version": "{{user `version`}}",
+                    "provider": "virtualbox"
+                }
+            }
+        ]
+    ]
+}
