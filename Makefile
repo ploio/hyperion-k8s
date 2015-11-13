@@ -40,9 +40,8 @@ DOCKER_VERSION=1.6.2
 FLANNEL_URI=https://github.com/coreos/flannel/releases/download
 FLANNEL_VERSION=0.4.1
 
-TERRAFORM_URI=https://dl.bintray.com/mitchellh/terraform
-TERRAFORM_VERSION=0.6.3
-TERRAFORM_ARCH=linux_amd64
+PACKER ?= packer
+TERRAFORM = ?= terraform
 
 NO_COLOR=\033[0m
 OK_COLOR=\033[32;01m
@@ -57,6 +56,7 @@ help:
 	@echo -e "$(OK_COLOR) ==== [$(APP)] [$(VERSION)]====$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR)- init$(NO_COLOR)    : Initialize environment$(NO_COLOR)"
 	@echo -e "$(WARN_COLOR)- archive$(NO_COLOR) : Build K8S binaries archive$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- build provider=xxx$(NO_COLOR)   : Build box for provider$(NO_COLOR)"
 
 clean:
 	rm -fr output hyperion-*.tar.gz
@@ -80,13 +80,6 @@ k8s: configure
 		chmod +x $(OUTPUT)/$$i; \
 	done
 
-.PHONY: terraform
-terraform: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Download Terraform$(NO_COLOR)"
-	curl --silent -o /tmp/terraform-v${TERRAFORM_VERSION}.zip -L ${TERRAFORM_URI}/terraform_${TERRAFORM_VERSION}_$(TERRAFORM_ARCH).zip && \
-		unzip /tmp/terraform-v${TERRAFORM_VERSION}.zip -d $(OUTPUT) && \
-		rm -rf /tmp/terraform-v${TERRAFORM_VERSION}.zip
-
 .PHONY: docker
 docker: configure
 	@echo -e "$(OK_COLOR)[$(APP)] Download Docker$(NO_COLOR)"
@@ -97,7 +90,7 @@ docker: configure
 flannel: configure
 	@echo -e "$(OK_COLOR)[$(APP)] Download Flannel$(NO_COLOR)"
 	curl --silent -o /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -L ${FLANNEL_URI}/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz && \
-		tar xvf /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -C /tmp/ && \
+		tar zxvf /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -C /tmp/ && \
 		cp /tmp/flannel-${FLANNEL_VERSION}/flanneld $(OUTPUT)/flanneld && \
 		rm -fr /tmp/flannel-${FLANNEL_VERSION} /tmp/flannel-v${FLANNEL_VERSION}.tar.gz
 
