@@ -1,6 +1,6 @@
 # Terraform templates for Openstack
 
-This project contains [Terraform][] templates to help you deploy [hyperion][] on [Openstack][].
+This project contains [Terraform][] templates to help you deploy [hyperion-k8s][] on [Openstack][].
 
 ## Prerequisites
 
@@ -55,4 +55,4 @@ Destroy the cluster :
 [Terraform]: https://www.terraform.io/
 [Openstack]: https://www.openstack.org
 
-[hyperion]: http://github.com/nlamirault/hyperion
+[hyperion]: http://github.com/portefaix/hyperion-k8s

@@ -1,6 +1,6 @@
 # Terraform templates for Google Cloud
 
-This project contains [Terraform][] templates to help you deploy [hyperion][] on [Google cloud][/].
+This project contains [Terraform][] templates to help you deploy [hyperion-k8s][] on [Google cloud][].
 
 ## Prerequisites
 
@@ -47,4 +47,4 @@ Destroy the cluster :
 [Terraform]: https://www.terraform.io/
 [Google cloud]: https://cloud.google.com
 
-[hyperion]: http://github.com/nlamirault/hyperion
+[hyperion-k8s]: http://github.com/portefaix/hyperion-k8s

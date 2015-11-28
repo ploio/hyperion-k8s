@@ -1,6 +1,6 @@
 # Terraform templates for Amazon Web Services
 
-This project contains [Terraform][] templates to help you deploy [hyperion][] on [AWS][].
+This project contains [Terraform][] templates to help you deploy [hyperion-k8s][] on [AWS][].
 
 ## Prerequisites
 
@@ -47,4 +47,4 @@ Destroy the cluster :
 [Terraform]: https://www.terraform.io/
 [AWS]: https://aws.amazon.com/
 
-[hyperion]: http://github.com/nlamirault/hyperion
+[hyperion-k8s]: http://github.com/portefaix/hyperion-k8s

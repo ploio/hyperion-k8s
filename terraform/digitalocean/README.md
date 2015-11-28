@@ -1,6 +1,6 @@
 # Terraform templates for DigitalOcean
 
-This project contains [Terraform][] templates to help you deploy [hyperion][] on [DigitalOcean][].
+This project contains [Terraform][] templates to help you deploy [hyperion-k8s][] on [DigitalOcean][].
 
 ## Prerequisites
 
@@ -41,4 +41,4 @@ Destroy the cluster :
 [Terraform]: https://www.terraform.io/
 [DigitalOcean]: https://www.digitalocean.com/
 
-[hyperion]: http://github.com/nlamirault/hyperion
+[hyperion-k8s]: http://github.com/portefaix/hyperion-k8s
