@@ -50,16 +50,16 @@ Create Kubernetes binaries archive :
 
 Read guides to creates the machine for a cloud provider :
 
-* [Google cloud](https://github.com/portefaix/hyperion/blob/packer/google/README.md)
+* [Google cloud](https://github.com/portefaix/hyperion-k8s/blob/packer/google/README.md)
 
 ## Cloud infratructure
 
 Read guides to creates the infrastructure :
 
-* [Google cloud](https://github.com/portefaix/hyperion/blob/infra/google/README.md)
-* [AWS](https://github.com/portefaix/hyperion/blob/infra/aws/README.md)
-* [Digitalocean](https://github.com/portefaix/hyperion/blob/infra/digitalocean/README.md)
-* [Openstack](https://github.com/portefaix/hyperion/blob/infra/openstack/README.md)
+* [Google cloud](https://github.com/portefaix/hyperion-k8s/blob/infra/google/README.md)
+* [AWS](https://github.com/portefaix/hyperion-k8s/blob/infra/aws/README.md)
+* [Digitalocean](https://github.com/portefaix/hyperion-k8s/blob/infra/digitalocean/README.md)
+* [Openstack](https://github.com/portefaix/hyperion-k8s/blob/infra/openstack/README.md)
 
 
 ## Usage
@@ -170,10 +170,10 @@ A [changelog](ChangeLog.md) is available
 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 
-[hyperion]: https://github.com/portefaixhyperion
+[hyperion]: https://github.com/portefaix/hyperion-k8s
 [hyperion-services]: https://github.com/portefaix/hyperion-services
-[LICENSE]: https://github.com/portefaix/hyperion/blob/master/LICENSE
-[Issue tracker]: https://github.com/portefaix/hyperion/issues
+[LICENSE]: https://github.com/portefaix/hyperion-k8s/blob/master/LICENSE
+[Issue tracker]: https://github.com/portefaix/hyperion-k8s/issues
 
 [kubernetes]: http://kubernetes.io/
 [etcd]: https://github.com/coreos/etcd
@@ -186,4 +186,4 @@ Nicolas Lamirault <nicolas.lamirault@gmail.com>
 [cAdvisor]: https://github.com/google/cadvisor
 
 [badge-license]: https://img.shields.io/badge/license-Apache_2-green.svg
-[badge-release]: https://img.shields.io/github/release/portefaix/hyperion.svg
+[badge-release]: https://img.shields.io/github/release/portefaix/hyperion-k8s.svg
