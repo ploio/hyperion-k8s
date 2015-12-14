@@ -5,7 +5,7 @@
         "region": "",
         "size": "",
         "kube_binaries": "https://storage.googleapis.com/portefaix/hyperion-0.8.1.tar.gz",
-        "snapshot_name": "hyperion-0-8-0 {{timestamp}}"
+        "snapshot_name": "hyperion-k8s-0-8-1 {{timestamp}}"
     },
     "builders": [
         {
