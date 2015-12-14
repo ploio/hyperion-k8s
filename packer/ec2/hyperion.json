@@ -12,7 +12,7 @@
         "region": "eu-west-1",
         "kube_binaries": "https://storage.googleapis.com/portefaix/hyperion-0.8.1.tar.gz",
         "ec2_version": "1.5.7",
-        "ami_name": "hyperion-0-8-0 {{timestamp}}",
+        "ami_name": "hyperion-k8s-0-8-0 {{timestamp}}",
         "ami_description": "Base Image for Hyperion"
     },
     "builders": [
