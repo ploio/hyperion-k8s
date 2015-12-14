@@ -1,0 +1,40 @@
+{
+    "variables": {
+    	"api_token": "",
+    	"image": "",
+        "region": "",
+        "size": "",
+        "kube_binaries": "https://storage.googleapis.com/portefaix/hyperion-0.8.1.tar.gz",
+        "snapshot_name": "hyperion-k8s-0-8-1 {{timestamp}}"
+    },
+    "builders": [
+        {
+            "type": "digitalocean",
+            "api_token": "{{user `api_token`}}",
+            "image": "{{user `image`}}",
+            "region": "{{user `region`}}",
+            "snapshot_name": "{{user `snapshot_name`}}",
+            "size": "{{user `size`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "../units",
+            "destination": "/tmp"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo mkdir -p /opt/bin",
+                "wget -N -O k8s.tar.gz {{user `kube_binaries`}}",
+                "sudo tar -xvf k8s.tar.gz -C /opt/bin",
+                "sudo chmod +x -R /opt/bin",
+                "sudo chown root:root -R /opt/bin",
+                "sudo mv /tmp/units/*.service /etc/systemd/system",
+                "sudo ls /etc/systemd/system/",
+                "rm -rf /tmp/units"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,63 @@
+{
+    "variables": {
+        "access_key": "",
+        "secret_key": "",
+        "account_id": "",
+        "key_name": "",
+        "ssh_public_key": "",
+        "ssh_private_key_file": "",
+        "ssh_user": "",
+        "source_ami": "ami-e31a6594",
+        "instance_type": "t2.micro",
+        "region": "eu-west-1",
+        "kube_binaries": "https://storage.googleapis.com/portefaix/hyperion-0.8.1.tar.gz",
+        "ec2_version": "1.5.7",
+        "ami_name": "hyperion-k8s-0-8-0 {{timestamp}}",
+        "ami_description": "Base Image for Hyperion"
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `access_key`}}",
+            "secret_key": "{{user `secret_key`}}",
+            "ami_users": ["{{user `account_id`}}"],
+            "region": "{{user `region`}}",
+            "source_ami": "{{user `source_ami`}}",
+            "instance_type": "{{user `instance_type`}}",
+            "ssh_username": "{{user `ssh_user`}}",
+            "ami_name": "{{user `ami_name`}}",
+            "ami_description": "{{user `ami_description`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "../units",
+            "destination": "/tmp"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get update",
+                "sudo apt-get install -y ruby unzip kpartx parted grub",
+                "wget http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip",
+                "sudo mkdir -p /usr/local/ec2",
+                "sudo unzip ec2-ami-tools.zip -d /usr/local/ec2",
+                "sudo mv /usr/local/ec2/ec2-ami-tools-* /usr/local/ec2/ec2-ami-tools"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo mkdir -p /opt/bin",
+                "wget -N -O k8s.tar.gz {{user `kube_binaries`}}",
+                "sudo tar -xvf k8s.tar.gz -C /opt/bin",
+                "sudo chmod +x -R /opt/bin",
+                "sudo chown root:root -R /opt/bin",
+                "sudo mv /tmp/units/*.service /etc/systemd/system",
+                "sudo ls /etc/systemd/system/",
+                "rm -rf /tmp/units"
+            ]
+        }
+    ]
+}

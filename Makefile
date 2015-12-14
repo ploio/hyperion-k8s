@@ -13,7 +13,7 @@
 # limitations under the License.
 
 APP = hyperion
-VERSION = 0.2.0
+VERSION = 0.8.1
 
 SHELL := /bin/bash
 
@@ -34,9 +34,14 @@ K8S_BINARIES = \
 ETCD_URI=https://github.com/coreos/etcd/releases/download
 ETCD_VERSION=2.1.1
 
-TERRAFORM_URI=https://dl.bintray.com/mitchellh/terraform
-TERRAFORM_VERSION=0.6.3
-TERRAFORM_ARCH=linux_amd64
+DOCKER_URI=https://get.docker.com/builds/Linux/x86_64
+DOCKER_VERSION=1.6.2
+
+FLANNEL_URI=https://github.com/coreos/flannel/releases/download
+FLANNEL_VERSION=0.4.1
+
+PACKER ?= packer
+TERRAFORM = ?= terraform
 
 NO_COLOR=\033[0m
 OK_COLOR=\033[32;01m
@@ -49,20 +54,18 @@ all: help
 
 help:
 	@echo -e "$(OK_COLOR) ==== [$(APP)] [$(VERSION)]====$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - init$(NO_COLOR)                        : Initialize environment$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - create$(NO_COLOR)                      : Creates the cluster [vagrant]$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - destroy$(NO_COLOR)                     : Destroy the cluster [vagrant]$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - vagrant-master$(NO_COLOR)              : Configure the master [vagrant]$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - vagrant-nodes$(NO_COLOR)               : Configure the nodes [vagrant]$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - master inventory=<filename>$(NO_COLOR) : Configure the master $(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)  - nodes inventory=<filename>$(NO_COLOR)  : Configure the nodes$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- init$(NO_COLOR)    : Initialize environment$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- archive$(NO_COLOR) : Build K8S binaries archive$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- build provider=xxx$(NO_COLOR)   : Build box for provider$(NO_COLOR)"
 
+clean:
+	rm -fr output hyperion-*.tar.gz
 
 configure:
 	@mkdir -p ./bin
 
 etcd: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Etcd$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Download Etcd$(NO_COLOR)"
 	@curl --silent -L -o /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz $(ETCD_URI)/v$(ETCD_VERSION)/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz && \
 		tar zxf /tmp/etcd-v$(ETCD_VERSION)-linux-amd64.tar.gz -C /tmp/ && \
 		cp -f /tmp/etcd-v$(ETCD_VERSION)-linux-amd64/etcdctl bin && \
@@ -71,62 +74,53 @@ etcd: configure
 
 .PHONY: k8s
 k8s: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Kubernetes$(NO_COLOR)"
+	@echo -e "$(OK_COLOR)[$(APP)] Download Kubernetes$(NO_COLOR)"
 	for i in $(K8S_BINARIES); do \
 		curl --silent -o $(OUTPUT)/$$i -L ${K8S_URI}/v${K8S_VERSION}/bin/$(K8S_ARCH)/$$i; \
 		chmod +x $(OUTPUT)/$$i; \
 	done
 
-.PHONY: terraform
-terraform: configure
-	@echo -e "$(OK_COLOR)[$(APP)] Install Terraform$(NO_COLOR)"
-	curl --silent -o /tmp/terraform-v${TERRAFORM_VERSION}.zip -L ${TERRAFORM_URI}/terraform_${TERRAFORM_VERSION}_$(TERRAFORM_ARCH).zip && \
-		unzip /tmp/terraform-v${TERRAFORM_VERSION}.zip -d $(OUTPUT) && \
-		rm -rf /tmp/terraform-v${TERRAFORM_VERSION}.zip
+.PHONY: docker
+docker: configure
+	@echo -e "$(OK_COLOR)[$(APP)] Download Docker$(NO_COLOR)"
+	curl --silent -o $(OUTPUT)/docker -L ${DOCKER_URI}/docker-${DOCKER_VERSION}
+	chmod +x $(OUTPUT)/docker
+
+.PHONY: flannel
+flannel: configure
+	@echo -e "$(OK_COLOR)[$(APP)] Download Flannel$(NO_COLOR)"
+	curl --silent -o /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -L ${FLANNEL_URI}/v${FLANNEL_VERSION}/flannel-${FLANNEL_VERSION}-linux-amd64.tar.gz && \
+		tar zxvf /tmp/flannel-v${FLANNEL_VERSION}.tar.gz -C /tmp/ && \
+		cp /tmp/flannel-${FLANNEL_VERSION}/flanneld $(OUTPUT)/flanneld && \
+		rm -fr /tmp/flannel-${FLANNEL_VERSION} /tmp/flannel-v${FLANNEL_VERSION}.tar.gz
 
 .PHONY: prepare
 prepare:
 	cp $(OUTPUT)/etcd ansible/roles/master/files/
+	cp $(OUTPUT)/etcdctl ansible/roles/master/files/
 	cp $(OUTPUT)/kube-apiserver ansible/roles/master/files/
 	cp $(OUTPUT)/kube-controller-manager ansible/roles/master/files/
 	cp $(OUTPUT)/kube-scheduler ansible/roles/master/files/
 	cp $(OUTPUT)/kube-proxy ansible/roles/minion/files/
 	cp $(OUTPUT)/kubelet ansible/roles/minion/files/
+	cp $(OUTPUT)/flanneld ansible/roles/minion/files/
 
 .PHONY: init
-init: etcd k8s terraform prepare
+init: etcd k8s terraform docker flannel prepare
 
-.PHONY: create
-create:
-	@echo -e "$(OK_COLOR)[$(APP)] Create Kubernetes cluster$(NO_COLOR)"
-	@vagrant up
-
-.PHONY: destroy
-destroy:
-	@echo -e "$(OK_COLOR)[$(APP)] Destroy Kubernetes cluster$(NO_COLOR)"
-	@vagrant destroy -f
-
-.PHONY: vagrant-master
-vagrant-master:
-	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
-	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/master.yml
-
-.PHONY: vagrant-nodes
-vagrant-nodes:
-	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes nodes$(NO_COLOR)"
-	@ansible-playbook -vvvv -i ansible/hyperion --private-key=$(HOME)/.vagrant.d/insecure_private_key -u vagrant ansible/nodes.yml
-
-.PHONY: master
-master:
-	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes master$(NO_COLOR)"
-	@ansible-playbook -vvvv --private-key=/home/nlamirault/.ssh/id_rsa -i $(inventory)  ansible/master.yml
-
-.PHONY: nodes
-nodes:
-	@echo -e "$(OK_COLOR)[$(APP)] Configure Kubernetes nodes$(NO_COLOR)"
-	@ansible-playbook -vvvv --private-key=/home/nlamirault/.ssh/id_rsa -i $(inventory) ansible/nodes.yml
-
-.PHONY: test
-test:
-	@echo -e "$(OK_COLOR)[$(APP)] Test Kubernetes $(NO_COLOR)"
-	@ansible-playbook -vvvv --private-key=/home/nlamirault/.ssh/id_rsa -i $(inventory) ansible/test.yml
+.PHONY: archive
+archive:
+	@echo -e "$(OK_COLOR)[$(APP)] Create Kubernetes binaries archive$(NO_COLOR)"
+	rm -rf output && mkdir -p output
+	cp $(OUTPUT)/etcd output
+	cp $(OUTPUT)/etcdctl output
+	cp $(OUTPUT)/kubectl output
+	cp $(OUTPUT)/kube-apiserver output
+	cp $(OUTPUT)/kube-controller-manager output
+	cp $(OUTPUT)/kube-scheduler output
+	cp $(OUTPUT)/kube-proxy output
+	cp $(OUTPUT)/kubelet output
+	cp $(OUTPUT)/docker output
+	cp $(OUTPUT)/flanneld output
+	cd output && sha256sum * > CHECKSUM
+	tar -zcvf hyperion-$(VERSION).tar.gz -C output .

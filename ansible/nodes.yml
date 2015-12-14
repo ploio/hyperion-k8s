@@ -1,7 +1,0 @@
----
-- hosts: nodes
-  sudo: yes
-  roles:
-    - docker
-    - kubernetes
-    - minion
