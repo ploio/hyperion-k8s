@@ -13,7 +13,7 @@
 # limitations under the License.
 
 APP = hyperion
-VERSION = 0.9.0
+VERSION = 0.10.0
 
 SHELL := /bin/bash
 
