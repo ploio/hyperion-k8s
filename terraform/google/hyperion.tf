@@ -1,12 +1,19 @@
 resource "template_file" "kubernetes" {
-  filename = "../kubernetes.env"
+  template = "../kubernetes.env"
   vars {
-    api_servers = "http://${var.cluster_name}-hyperion-master.c.${var.gce_project}.internal:8080"
-    etcd_servers = "http://${var.cluster_name}-hyperion-master.c.${var.gce_project}.internal:2379"
+    api_servers = "http://${var.cluster_name}-master.c.${var.gce_project}.internal:8080"
+    etcd_servers = "http://${var.cluster_name}-master.c.${var.gce_project}.internal:4001"
     flannel_backend = "${var.flannel_backend}"
     flannel_network = "${var.flannel_network}"
     portal_net = "${var.portal_net}"
   }
+}
+
+resource "template_file" "etcd" {
+    template = "../etcd.env"
+    vars {
+        cluster_token = "${var.cluster_name}"
+    }
 }
 
 resource "google_compute_network" "hyperion-network" {
@@ -14,21 +21,45 @@ resource "google_compute_network" "hyperion-network" {
   ipv4_range = "${var.gce_ipv4_range}"
 }
 
-resource "google_compute_firewall" "hyperion-network" {
-  name = "hyperion"
+# Firewall
+resource "google_compute_firewall" "hyperion-firewall-external" {
+  name = "hyperion-firewall-external"
   network = "${google_compute_network.hyperion-network.name}"
   source_ranges = ["0.0.0.0/0"]
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports = [
+      "22",   # SSH
+      "80",   # HTTP
+      "443",  # HTTPS
+      "6443", # Kubernetes secured server
+      "8080", # Kubernetes unsecure server
+    ]
+  }
+
+}
+
+resource "google_compute_firewall" "hyperion-firewall-internal" {
+  name = "hyperion-firewall-internal"
+  network = "${google_compute_network.hyperion-network.name}"
+  source_ranges = ["${google_compute_network.hyperion-network.ipv4_range}"]
+
   allow {
     protocol = "tcp"
     ports = ["1-65535"]
   }
+
   allow {
     protocol = "udp"
     ports = ["1-65535"]
   }
-  target_tags = ["hyperion"]
-
 }
+
 resource "google_compute_address" "hyperion-master" {
   name = "hyperion-master"
 }
@@ -36,12 +67,9 @@ resource "google_compute_address" "hyperion-master" {
 resource "google_compute_instance" "hyperion-master" {
   zone = "${var.gce_zone}"
   name = "${var.cluster_name}-master"
-  tags = ["kubernetes"]
   description = "Kubernetes master"
   machine_type = "${var.gce_machine_type_master}"
-  tags {
-    Name = "${var.cluster_name}-master"
-  }
+
   disk {
     image = "${var.gce_image}"
     auto_delete = true
@@ -63,13 +91,11 @@ resource "google_compute_instance" "hyperion-master" {
   provisioner "remote-exec" {
     inline = [
       "sudo cat <<'EOF' > /tmp/kubernetes.env\n${template_file.kubernetes.rendered}\nEOF",
-      "sudo mv /tmp/kubernetes.env /etc/kubernetes.env",
-      "echo 'ETCD_NAME=${self.name}' >> /tmp/etcd.env",
-      "echo 'ETCD_DATA=DIR=/var/lib/etcd' >> /tmp/etcd.env",
-      "echo 'ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379' >> /tmp/etcd.env",
-      "echo 'ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379' >> /tmp/etcd.env",
-      "sudo mv /tmp/etcd.env /etc/etcd.env",
+      "sudo cat <<'EOF' > /tmp/etcd.env\n${template_file.etcd.rendered}\nEOF",
       "sudo mkdir -p /etc/kubernetes",
+      "sudo mv /tmp/kubernetes.env /etc/kubernetes.env",
+      "sudo mv /tmp/etcd.env /etc/etcd.env",
+      "echo 'ETCD_NAME=${self.name}' >> /etc/etcd.env",
       "sudo systemctl enable etcd",
       "sudo systemctl enable flannel",
       "sudo systemctl enable docker",
@@ -94,11 +120,8 @@ resource "google_compute_instance" "hyperion-nodes" {
   zone = "${var.gce_zone}"
   name = "${var.cluster_name}-node-${count.index}" // => `xxx-node-{0,1,2}`
   description = "Kubernetes node ${count.index}"
-  tags = ["kubernetes"]
   machine_type = "${var.gce_machine_type_node}"
-  tags {
-    Name = "${var.cluster_name}-nodes-${count.index}"
-  }
+
   disk {
     image = "${var.gce_image}"
     auto_delete = true
@@ -120,6 +143,7 @@ resource "google_compute_instance" "hyperion-nodes" {
   provisioner "remote-exec" {
     inline = [
       "sudo cat <<'EOF' > /tmp/kubernetes.env\n${template_file.kubernetes.rendered}\nEOF",
+      "sudo mkdir -p /etc/kubernetes",
       "sudo mv /tmp/kubernetes.env /etc/kubernetes.env",
       "sudo systemctl enable flannel",
       "sudo systemctl enable docker",
