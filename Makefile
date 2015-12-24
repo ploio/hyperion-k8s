@@ -13,7 +13,7 @@
 # limitations under the License.
 
 APP = hyperion
-VERSION = 0.8.1
+VERSION = 0.9.0
 
 SHELL := /bin/bash
 
@@ -21,7 +21,7 @@ VAGRANT = vagrant
 DOCKER = "docker"
 
 K8S_URI=https://storage.googleapis.com/kubernetes-release/release
-K8S_VERSION=1.0.3
+K8S_VERSION=1.1.3
 K8S_ARCH=linux/amd64
 K8S_BINARIES = \
 	kube-apiserver \
@@ -35,10 +35,10 @@ ETCD_URI=https://github.com/coreos/etcd/releases/download
 ETCD_VERSION=2.1.1
 
 DOCKER_URI=https://get.docker.com/builds/Linux/x86_64
-DOCKER_VERSION=1.6.2
+DOCKER_VERSION=1.9.1
 
 FLANNEL_URI=https://github.com/coreos/flannel/releases/download
-FLANNEL_VERSION=0.4.1
+FLANNEL_VERSION=0.5.5
 
 PACKER ?= packer
 TERRAFORM = ?= terraform
@@ -54,9 +54,9 @@ all: help
 
 help:
 	@echo -e "$(OK_COLOR) ==== [$(APP)] [$(VERSION)]====$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)- init$(NO_COLOR)    : Initialize environment$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)- archive$(NO_COLOR) : Build K8S binaries archive$(NO_COLOR)"
-	@echo -e "$(WARN_COLOR)- build provider=xxx$(NO_COLOR)   : Build box for provider$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- binaries$(NO_COLOR)           : Download binaries$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- archive$(NO_COLOR)            : Build K8S binaries archive$(NO_COLOR)"
+	@echo -e "$(WARN_COLOR)- build provider=xxx$(NO_COLOR) : Build box for provider$(NO_COLOR)"
 
 clean:
 	rm -fr output hyperion-*.tar.gz
@@ -94,19 +94,8 @@ flannel: configure
 		cp /tmp/flannel-${FLANNEL_VERSION}/flanneld $(OUTPUT)/flanneld && \
 		rm -fr /tmp/flannel-${FLANNEL_VERSION} /tmp/flannel-v${FLANNEL_VERSION}.tar.gz
 
-.PHONY: prepare
-prepare:
-	cp $(OUTPUT)/etcd ansible/roles/master/files/
-	cp $(OUTPUT)/etcdctl ansible/roles/master/files/
-	cp $(OUTPUT)/kube-apiserver ansible/roles/master/files/
-	cp $(OUTPUT)/kube-controller-manager ansible/roles/master/files/
-	cp $(OUTPUT)/kube-scheduler ansible/roles/master/files/
-	cp $(OUTPUT)/kube-proxy ansible/roles/minion/files/
-	cp $(OUTPUT)/kubelet ansible/roles/minion/files/
-	cp $(OUTPUT)/flanneld ansible/roles/minion/files/
-
-.PHONY: init
-init: etcd k8s terraform docker flannel prepare
+.PHONY: binaries
+binaries: etcd k8s terraform docker flannel
 
 .PHONY: archive
 archive:
@@ -123,4 +112,4 @@ archive:
 	cp $(OUTPUT)/docker output
 	cp $(OUTPUT)/flanneld output
 	cd output && sha256sum * > CHECKSUM
-	tar -zcvf hyperion-$(VERSION).tar.gz -C output .
+	tar -zcvf hyperion-k8s-$(VERSION).tar.gz -C output .
