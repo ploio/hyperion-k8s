@@ -1,8 +1,8 @@
 [Unit]
 Description=flannel is an etcd backed network fabric for containers
 Documentation=https://github.com/coreos/flannel
-After=network-online.target
-Wants=network-online.target
+Requires=etcd.service
+After=etcd.service
 
 [Service]
 Type=notify
