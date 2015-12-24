@@ -36,7 +36,8 @@
 - kubelet : Processes a container manifest so the containers are launched according to
 how they are described.
 
-## Initialization
+
+## Local
 
 Initialize environment:
 
@@ -46,13 +47,18 @@ Create Kubernetes binaries archive :
 
     $ make archive
 
-## Machine image
+
+## Cloud
+
+### Images
 
 Read guides to creates the machine for a cloud provider :
 
 * [Google cloud](https://github.com/portefaix/hyperion-k8s/blob/packer/google/README.md)
+* [AWS](https://github.com/portefaix/hyperion-k8s/blob/packer/ec2/README.md)
+* [Digitalocean](https://github.com/portefaix/hyperion-k8s/blob/packer/digitalocean/README.md)
 
-## Cloud infratructure
+### Infratructure
 
 Read guides to creates the infrastructure :
 
