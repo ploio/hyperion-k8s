@@ -63,7 +63,7 @@ Read guides to creates the machine for a cloud provider :
 Read guides to creates the infrastructure :
 
 * [Google cloud](https://github.com/portefaix/hyperion-k8s/blob/infra/google/README.md)
-* [AWS](https://github.com/portefaix/hyperion-k8s/blob/infra/aws/README.md)
+* [AWS](https://github.com/portefaix/hyperion-k8s/blob/infra/ec2/README.md)
 * [Digitalocean](https://github.com/portefaix/hyperion-k8s/blob/infra/digitalocean/README.md)
 * [Openstack](https://github.com/portefaix/hyperion-k8s/blob/infra/openstack/README.md)
 
