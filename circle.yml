@@ -1,0 +1,21 @@
+machine:
+  timezone: Europe/Berlin
+
+  environment:
+    PACKER_VERSION: 0.8.6
+
+dependencies:
+  pre:
+    - >
+      sudo apt-get install -qq wget unzip &&
+      pushd /usr/bin &&
+      echo "Downloading packer ${PACKER_VERSION}..." &&
+      sudo wget --no-verbose https://dl.bintray.com/mitchellh/packer/packer_${PACKER_VERSION}_linux_amd64.zip &&
+      echo "Installing packer ${PACKER_VERSION}..." &&
+      sudo unzip packer_${PACKER_VERSION}_linux_amd64.zip &&
+      sudo rm packer_${PACKER_VERSION}_linux_amd64.zip
+
+test:
+  override:
+    - packer version
+    - cd packer/google/ && packer validate hyperion.json
