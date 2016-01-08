@@ -24,6 +24,6 @@ try to follow these guidelines when you do so.
   and description in grammatically correct, complete sentences.
 
 
-[1]: https://github.com/nlamirault/go-scaleway/issues
+[1]: https://github.com/portefaix/hyperion-k8s/issues
 [2]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 [3]: https://help.github.com/articles/using-pull-requests
