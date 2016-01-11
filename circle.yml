@@ -17,7 +17,7 @@ dependencies:
       sudo rm packer_${PACKER_VERSION}_linux_amd64.zip &&
       sudo wget --no-verbose https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&
       sudo unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&
-      sudo rm terraform_${PACKER_VERSION}_linux_amd64.zip &&
+      sudo rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 test:
   override:
