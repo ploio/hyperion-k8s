@@ -18,4 +18,4 @@ dependencies:
 test:
   override:
     - packer version
-    - cd packer/google/ && packer validate hyperion.json
+    - cd packer/google/ && packer validate --var-file=settings.json hyperion.json
