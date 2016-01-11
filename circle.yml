@@ -37,4 +37,4 @@ test:
     - cd packer/ec2 && packer validate --var-file=settings.json hyperion.json
     - cd packer/digitalocean && packer validate --var-file=settings.json hyperion.json
     - cd terraform/google && terraform plan --var-file=/etc/gcloud/var.tf
-    - cd terraform/ec2 && terraform plan --var-file=/etc/gcloud/var.tf
+    - cd terraform/ec2 && terraform plan --var-file=/etc/ec2/var.tf
