@@ -23,3 +23,5 @@ test:
       sudo mv /tmp/account.json /etc/gcloud/
     - packer version
     - cd packer/google/ && packer validate --var-file=settings.json hyperion.json
+    - cd packet/ec2 && packer validate --var-file=settings.json hyperion.json
+    - cd packet/digitalocean && packer validate --var-file=settings.json hyperion.json
