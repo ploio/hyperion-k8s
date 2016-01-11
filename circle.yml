@@ -25,3 +25,4 @@ test:
     - cd packer/google/ && packer validate --var-file=settings.json hyperion.json
     - cd packer/ec2 && packer validate --var-file=settings.json hyperion.json
     - cd packer/digitalocean && packer validate --var-file=settings.json hyperion.json
+    - cd terraform/google && terraform plan --var-file=variables.tf
