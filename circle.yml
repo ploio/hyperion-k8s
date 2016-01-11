@@ -30,7 +30,7 @@ test:
       sudo mv /tmp/account.json /etc/gcloud/
       echo -e "gce_credentials=\"/etc/gcloud/account.json\"\ngce_project=\"hyperion-k8s\"\ngce_ssh_user=\"user\"\ngce_ssh_public_key = \"/home/ubuntu/.ssh/id_rsa.pub\"\ngce_ssh_private_key_file=\"/home/ubuntu/.ssh/id_rsa\"\nhyperion_nb_nodes = \"2\"\ngce_region = \"us-central1\"\ngce_cluster_name = \"hyperion-k8s\"\n" > /tmp/var.tf
       sudo mv /tmp/var.tf /etc/gcloud/
-      echo -e "aws_access_key = "xxxxxxxxxxxxxxx"\naws_secret_key = "xxxxxxxx"\naws_region = "eu-west-1"\naws_key_name = "hyperion"\naws_ssh_public_key = \"/home/ubuntu/.ssh/id_rsa.pub\"\naws_ssh_private_key_file=\"/home/ubuntu/.ssh/id_rsa\"\nhyperion_nb_nodes = \"2\"\naws_image = "ami-e31a6594"\naws_ssh_user = "admin"\naws_instance_type_master = "t2.micro"\naws_instance_type_node = "t2.micro"\n" > /tmp/ec2.tf
+      echo -e "aws_access_key = \"xxxxxxxxxxxxxxx\"\naws_secret_key = \"xxxxxxxx\"\naws_region = \"eu-west-1\"\naws_key_name = \"hyperion\"\naws_ssh_public_key = \\"/home/ubuntu/.ssh/id_rsa.pub\\"\naws_ssh_private_key_file=\\"/home/ubuntu/.ssh/id_rsa\\"\nhyperion_nb_nodes = \\"2\\"\naws_image = \"ami-e31a6594\"\naws_ssh_user = \"admin\"\naws_instance_type_master = \"t2.micro\"\naws_instance_type_node = \"t2.micro\"\n" > /tmp/ec2.tf
       sudo mv /tmp/ec2.tf /etc/ec2/var.tf
     - packer version
     - cd packer/google/ && packer validate --var-file=settings.json hyperion.json
