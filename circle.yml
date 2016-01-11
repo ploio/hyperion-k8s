@@ -19,7 +19,7 @@ test:
   override:
     - |
       sudo mkdir -p /etc/gcloud
-      echo "{\"type\": \"service_account\", \"project_id\": \"hyperion-k8s\", \"private_key_id\": \"xxxxxxxxxx\", \"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxxxxn-----END PRIVATE KEY-----\n\",  \"client_email\": \"hyperion-k8s\", \"client_id\": \"1xxxxxxx\", \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\", \"token_uri\": \"https://accounts.google.com/o/oauth2/token\", \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\", \"client_x509_cert_url\": \"https://www.googleapis.com/\" }\" > /tmp/account.json
+      echo "{\"type\": \"service_account\", \"project_id\": \"hyperion-k8s\", \"private_key_id\": \"xxxxxxxxxx\", \"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxxxxn-----END PRIVATE KEY-----\n\",  \"client_email\": \"hyperion-k8s\", \"client_id\": \"1xxxxxxx\", \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\", \"token_uri\": \"https://accounts.google.com/o/oauth2/token\", \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\", \"client_x509_cert_url\": \"https://www.googleapis.com/\" }" > /tmp/account.json
       sudo mv /tmp/account.json /etc/gcloud/
     - packer version
     - cd packer/google/ && packer validate --var-file=settings.json hyperion.json
