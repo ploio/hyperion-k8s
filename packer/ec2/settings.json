@@ -1,6 +1,6 @@
 {
     "access_key": "xxx",
-    "secret_key": "xxx"
+    "secret_key": "xxx",
     "account_id": "xxx",
     "s3_bucket": "xxx",
     "key_name": "xxx",
