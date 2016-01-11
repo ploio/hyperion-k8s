@@ -3,7 +3,7 @@ machine:
 
   environment:
     PACKER_VERSION: 0.8.6
-    TERRAFORM_VERSION:
+    TERRAFORM_VERSION: 0.6.9
 
 dependencies:
   pre:
