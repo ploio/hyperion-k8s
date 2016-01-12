@@ -26,15 +26,21 @@ test:
       sudo mkdir -p /etc/gcloud
       sudo mkdir -p /etc/ec2
       sudo mkdir -p /etc/do
+    - |
       echo "{\"type\": \"service_account\", \"project_id\": \"hyperion-k8s\", \"private_key_id\": \"xxxxxxxxxx\", \"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxxxxn-----END PRIVATE KEY-----\n\",  \"client_email\": \"hyperion-k8s\", \"client_id\": \"1xxxxxxx\", \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\", \"token_uri\": \"https://accounts.google.com/o/oauth2/token\", \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\", \"client_x509_cert_url\": \"https://www.googleapis.com/\" }" > /tmp/account.json
       sudo mv /tmp/account.json /etc/gcloud/
       echo -e "gce_credentials=\"/etc/gcloud/account.json\"\ngce_project=\"hyperion-k8s\"\ngce_ssh_user=\"user\"\ngce_ssh_public_key = \"/home/ubuntu/.ssh/id_rsa.pub\"\ngce_ssh_private_key_file=\"/home/ubuntu/.ssh/id_rsa\"\nhyperion_nb_nodes = \"2\"\ngce_region = \"us-central1\"\ngce_cluster_name = \"hyperion-k8s\"\n" > /tmp/var.tf
       sudo mv /tmp/var.tf /etc/gcloud/
+    - |
       echo -e "aws_access_key = \"xxxxxxxxxxxxxxx\"\naws_secret_key = \"xxxxxxxx\"\naws_region = \"eu-west-1\"\naws_key_name = \"hyperion\"\naws_ssh_public_key = \"/home/ubuntu/.ssh/id_rsa.pub\"\naws_ssh_private_key_file=\"/home/ubuntu/.ssh/id_rsa\"\nhyperion_nb_nodes = \"2\"\naws_image = \"ami-e31a6594\"\naws_ssh_user = \"admin\"\naws_instance_type_master = \"t2.micro\"\naws_instance_type_node = \"t2.micro\"\n" > /tmp/ec2.tf
       sudo mv /tmp/ec2.tf /etc/ec2/var.tf
+    - |
+      echo -e "do_token = \"xxxxxxxxxxxxxxx\"\ndo_ssh_fingerprint = \"xx:xx:xx:10:22:aa:45:45:84:5a:02:b5:81:ae:58:94\"\ndo_pub_key = \"/home/ubuntu/.ssh/id_rsa.pub\"\ndo_pvt_key = \"/home/ubuntu/.ssh/id_rsa\"\n" > /tmp/settings.tf
+      sudo mv /tmp/do.tf /etc/do/var.tf
     - packer version
     - cd packer/google/ && packer validate --var-file=settings.json hyperion.json
     - cd packer/ec2 && packer validate --var-file=settings.json hyperion.json
     - cd packer/digitalocean && packer validate --var-file=settings.json hyperion.json
     - cd terraform/google && terraform plan --var-file=/etc/gcloud/var.tf
     - cd terraform/ec2 && terraform plan --var-file=/etc/ec2/var.tf
+    - cd terraform/digitalocean && terraform plan --var-file=/etc/do/var.tf
