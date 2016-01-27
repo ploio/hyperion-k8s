@@ -1,6 +1,11 @@
 Hyperion ChangeLog
 ======================
 
+# Version 0.10.0 (01/27/2016)
+
+- Add EC2 provider for Terraform
+- Add Digital Ocean provider for Terraform
+
 # Version 0.9.0 (08/18/2015)
 
 - ``FIX`` Terraform deployment for Google Compute Engine
