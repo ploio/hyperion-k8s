@@ -5,6 +5,8 @@
 
 ## Description
 
+![Image of components](https://github.com/portefaix/hyperion-k8s/raw/master/docs/hyperion-k8s.png "Hyperion Kubernetes")
+
 [hyperion][] creates a Cloud environment :
 
 - Identical machine images creation is performed using [Packer][]
