@@ -13,7 +13,7 @@
 # limitations under the License.
 
 APP = hyperion
-VERSION = 0.10.0
+VERSION = 0.11.0
 
 SHELL := /bin/bash
 
@@ -21,7 +21,7 @@ VAGRANT = vagrant
 DOCKER = "docker"
 
 K8S_URI=https://storage.googleapis.com/kubernetes-release/release
-K8S_VERSION=1.1.3
+K8S_VERSION=1.2.0
 K8S_ARCH=linux/amd64
 K8S_BINARIES = \
 	kube-apiserver \
@@ -32,10 +32,10 @@ K8S_BINARIES = \
 	kubectl
 
 ETCD_URI=https://github.com/coreos/etcd/releases/download
-ETCD_VERSION=2.1.1
+ETCD_VERSION=2.3.0
 
 DOCKER_URI=https://get.docker.com/builds/Linux/x86_64
-DOCKER_VERSION=1.9.1
+DOCKER_VERSION=1.10.3
 
 FLANNEL_URI=https://github.com/coreos/flannel/releases/download
 FLANNEL_VERSION=0.5.5
