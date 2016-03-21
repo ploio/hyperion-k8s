@@ -30,7 +30,7 @@ Edit *settings.json* and setup your data.
 
 Build the image :
 
-	$ packer build --var-file=settings.json hyperion.json
+	$ packer build -var-file=settings.json hyperion.json
 
 
 

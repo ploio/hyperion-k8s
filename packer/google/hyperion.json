@@ -7,8 +7,8 @@
         "source_image": "",
         "machine_type": "",
         "cluster_name": "",
-        "kube_binaries": "https://storage.googleapis.com/hyperion-k8s/hyperion-k8s-0.9.0.tar.gz",
-        "image_name": "hyperion-0-9-4-v20151224",
+        "kube_binaries": "https://storage.googleapis.com/portefaix-k8s/hyperion-k8s-0.11.0.tar.gz",
+        "image_name": "hyperion-0-11-0-v20160321",
         "image_description": "Kubernetes Base Image for Hyperion"
     },
     "builders": [

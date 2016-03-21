@@ -10,9 +10,9 @@
         "source_ami": "ami-e31a6594",
         "instance_type": "t2.micro",
         "region": "eu-west-1",
-        "kube_binaries": "https://storage.googleapis.com/hyperion-k8s/hyperion-k8s-0.9.0.tar.gz",
+        "kube_binaries": "https://storage.googleapis.com/portefaix-k8s/hyperion-k8s-0.11.0.tar.gz",
         "ec2_version": "1.5.7",
-        "ami_name": "hyperion-k8s-0-9-0 {{timestamp}}",
+        "ami_name": "hyperion-k8s-0-11-0 {{timestamp}}",
         "ami_description": "Base Image for Hyperion"
     },
     "builders": [
