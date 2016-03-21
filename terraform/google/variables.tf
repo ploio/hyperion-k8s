@@ -40,7 +40,7 @@ variable "gce_ipv4_range" {
 
 variable "gce_image" {
   description = "The name of the image to base the launched instances."
-  default = "hyperion-0-9-4-v20151224"
+  default = "hyperion-0-11-0-v20160321"
 }
 
 variable "gce_machine_type_master" {
